@@ -5,18 +5,21 @@
 #ifndef ZJ_FHE_LIB_BigInteger_H
 #define ZJ_FHE_LIB_BigInteger_H
 
-#include "integer_interface.h"
 #include "../util/exception.h"
-#include <string>
-#include <iosfwd>
-#include <vector>
+#include "integer_interface.h"
 #include <cstdint>
+#include <iosfwd>
+#include <string>
+#include <vector>
 
 namespace zhejiangfhe {
     template<typename NativeInt>
     class BigInteger : public IntegerInterface<BigInteger<NativeInt>> {
 
     public:
+        // CONSTRUCTORS
+        BigInteger();
+
         BigInteger(const std::string &strValue) {
             AssignVal(strValue);
         }
@@ -46,12 +49,15 @@ namespace zhejiangfhe {
             return BigInteger("0");
         }
 
-
         const std::string ConvertToString() {
             return "BigInteger test";
         }
 
-        NativeInt UintInBinaryToDecimal(uint8_t* a) {
+        NativeInt ConvertToLimb() {
+            return value[0];
+        }
+
+        NativeInt UintInBinaryToDecimal(uint8_t *a) {
             NativeInt Val = 0;
             NativeInt one = 1;
             for (int i = m_limbBitLength - 1; i >= 0; i--) {
@@ -77,15 +83,15 @@ namespace zhejiangfhe {
             v.erase(0, v.find_first_not_of(' '));
             if (v.size() == 0) {
                 // caustic case of input string being all zeros
-                v = "0";  // set to one zero
+                v = "0";// set to one zero
             }
 
             size_t arrSize = v.length();
             // todo smartpointer
-            uint8_t* DecValue = new uint8_t[arrSize];  // array of decimal values
+            uint8_t *DecValue = new uint8_t[arrSize];// array of decimal values
 
-            for (size_t i = 0; i < arrSize; i++)  // store the string to decimal array
-                DecValue[i] = (uint8_t)stoi(v.substr(i, 1));
+            for (size_t i = 0; i < arrSize; i++)// store the string to decimal array
+                DecValue[i] = (uint8_t) stoi(v.substr(i, 1));
 
             // clear the current value of m_value;
             value.clear();
@@ -93,7 +99,7 @@ namespace zhejiangfhe {
             size_t zptr = 0;
             // index of highest non-zero number in decimal number
             // define  bit register array
-            uint8_t* bitArr = new uint8_t[m_limbBitLength]();  // todo smartpointer
+            uint8_t *bitArr = new uint8_t[m_limbBitLength]();// todo smartpointer
 
             int cnt = m_limbBitLength - 1;
             // cnt is a pointer to the bit position in bitArr, when bitArr is compelete it
@@ -108,21 +114,21 @@ namespace zhejiangfhe {
                 DecValue[arrSize - 1] >>= 1;
                 // division ends here
                 cnt--;
-                if (cnt == -1) {  // cnt = -1 indicates bitArr is ready for transfer
+                if (cnt == -1) {// cnt = -1 indicates bitArr is ready for transfer
                     cnt = m_limbBitLength - 1;
                     value.push_back(UintInBinaryToDecimal(bitArr));
                 }
                 if (DecValue[zptr] == 0) {
-                    zptr++;  // division makes Most significant digit zero, hence we increment
+                    zptr++; // division makes Most significant digit zero, hence we increment
                             // zptr to next value
                 }
                 if (zptr == arrSize && DecValue[arrSize - 1] == 0) {
-                    value.push_back(UintInBinaryToDecimal(bitArr));  // Value assignment
+                    value.push_back(UintInBinaryToDecimal(bitArr));// Value assignment
                 }
             }
 
             delete[] bitArr;
-            delete[] DecValue;  // deallocate memory
+            delete[] DecValue;// deallocate memory
         }
 
 
@@ -133,11 +139,10 @@ namespace zhejiangfhe {
     };
 
 
-    template <typename NativeInt>
+    template<typename NativeInt>
     const uint32_t BigInteger<NativeInt>::m_limbBitLength = sizeof(NativeInt) * 8;
 
-}
-
+}// namespace zhejiangfhe
 
 
 #endif//ZJ_FHE_LIB_BigInteger_H
