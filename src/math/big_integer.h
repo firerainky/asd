@@ -29,25 +29,25 @@ namespace zhejiangfhe {
             return BigInteger("0");
         }
         const BigInteger<NativeInt> &AddEq(const BigInteger<NativeInt> &b) {
-            return BigInteger("0");
+            return *this;
         }
         BigInteger<NativeInt> Sub(const BigInteger<NativeInt> &b) const {
             return BigInteger("0");
         }
         const BigInteger<NativeInt> &SubEq(const BigInteger<NativeInt> &b) {
-            return BigInteger("0");
+            return *this;
         }
         BigInteger<NativeInt> Mul(const BigInteger<NativeInt> &b) const {
             return BigInteger("0");
         }
         const BigInteger<NativeInt> &MulEq(const BigInteger<NativeInt> &b) {
-            return BigInteger("0");
+            return *this;
         }
         BigInteger<NativeInt> DividedBy(const BigInteger<NativeInt> &b) const {
             return BigInteger("0");
         }
         const BigInteger<NativeInt> &DividedByEq(const BigInteger<NativeInt> &b) {
-            return BigInteger("0");
+            return *this;
         }
 
         const std::string ConvertToString();
