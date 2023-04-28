@@ -14,7 +14,7 @@ include_directories(src/util)
 add_executable(zj_fhe_lib main.cpp)
 target_link_libraries(zj_fhe_lib MathFunctions)
 
-# Get third libraries: just googletest for now.
+# Get third libraries: just googletest & googlebenchmark for now.
 include(FetchContent)
 
 FetchContent_Declare(
@@ -27,5 +27,16 @@ FetchContent_MakeAvailable(googletest)
 add_library(GTest::GTest INTERFACE IMPORTED)
 target_link_libraries(GTest::GTest INTERFACE gtest_main)
 
+# Disable the Google Benchmark requirement on Google Test
+set(BENCHMARK_ENABLE_TESTING NO)
+
+FetchContent_Declare(
+    googlebenchmark
+    GIT_REPOSITORY https://github.com/google/benchmark.git
+    GIT_TAG        v1.7.1
+)
+FetchContent_MakeAvailable(googlebenchmark)
+
 # Add test sub directory
 add_subdirectory(test)
+add_subdirectory(benchmark)
