@@ -49,13 +49,9 @@ namespace zhejiangfhe {
             return BigInteger("0");
         }
 
-        const std::string ConvertToString() {
-            return "BigInteger test";
-        }
+        const std::string ConvertToString();
 
-        NativeInt ConvertToLimb() {
-            return value[0];
-        }
+        NativeInt ConvertToLimb();
 
         NativeInt UintInBinaryToDecimal(uint8_t *a) {
             NativeInt Val = 0;
