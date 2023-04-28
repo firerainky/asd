@@ -120,7 +120,7 @@ namespace zhejiangfhe {
 
     private:
         std::vector<NativeInt> value;
-        bool sign;
+        bool sign = false;
         static const uint32_t m_limbBitLength;
     };
 

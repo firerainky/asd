@@ -12,6 +12,14 @@ namespace zhejiangfhe {
 
     template<typename NativeInt>
     const std::string BigInteger<NativeInt>::ConvertToString() {
+        bool negative = sign;
+        if (value.size() == 1) {
+            if (value[0] == 0) {
+                negative = false;
+            }
+            return std::string(negative ? "-" : "").append(std::to_string(value[0]));
+        }
+
         std::vector<uint8_t> decimalArr;
         decimalArr.push_back(0);
 
@@ -53,12 +61,16 @@ namespace zhejiangfhe {
         }
 
         // std::cout << printValue << "\n";
-        return printValue;
+        return std::string(negative ? "-" : "").append(printValue);
     }
 
     template<typename NativeInt>
     NativeInt BigInteger<NativeInt>::ConvertToLimb() {
-        return value[0];
+        if (sign) {
+            return -value[0];
+        } else {
+            return value[0];
+        }
     }
 
     template class zhejiangfhe::BigInteger<u_int32_t>;
