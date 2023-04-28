@@ -6,6 +6,7 @@
 #define ZJ_FHE_LIB_INTEGER_INTERFACE_H
 
 #include <iosfwd>
+#include <iostream>
 
 namespace zhejiangfhe {
     template<typename T>
@@ -17,7 +18,6 @@ namespace zhejiangfhe {
          * @return
          */
         T Add(const T &b);
-
 
 
         const T &AddEq(const T &b);
@@ -77,6 +77,6 @@ namespace zhejiangfhe {
             }
         }
     };
-}
+}// namespace zhejiangfhe
 
 #endif//ZJ_FHE_LIB_INTEGER_INTERFACE_H
