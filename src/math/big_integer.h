@@ -11,6 +11,7 @@
 #include <iosfwd>
 #include <string>
 #include <vector>
+#include <memory>
 
 namespace zhejiangfhe {
     template<typename NativeInt>
@@ -72,59 +73,48 @@ namespace zhejiangfhe {
                 sign = true;
                 v = str.substr(1);
             }
-            // Todo: eliminate m_limbBitLength, make dynamic instead
-            // strip off leading zeros from the input string
             v.erase(0, v.find_first_not_of('0'));
-            // strip off leading spaces from the input string
             v.erase(0, v.find_first_not_of(' '));
-            if (v.size() == 0) {
-                // caustic case of input string being all zeros
-                v = "0";// set to one zero
+            if (v.empty()) {
+                v = "0";  // set to one zero
             }
-
-            size_t arrSize = v.length();
-            // todo smartpointer
-            uint8_t *DecValue = new uint8_t[arrSize];// array of decimal values
-
-            for (size_t i = 0; i < arrSize; i++)// store the string to decimal array
-                DecValue[i] = (uint8_t) stoi(v.substr(i, 1));
+            size_t arr_size = v.length();
+            std::unique_ptr<u_int8_t[]> dec_arr = std::make_unique<u_int8_t[]>(arr_size);
+            for (size_t i = 0; i < arr_size; i++)  // store the string to decimal array
+                dec_arr[i] = (uint8_t)stoi(v.substr(i, 1));
 
             // clear the current value of m_value;
             value.clear();
 
-            size_t zptr = 0;
+            size_t zero_ptr = 0;
             // index of highest non-zero number in decimal number
             // define  bit register array
-            uint8_t *bitArr = new uint8_t[m_limbBitLength]();// todo smartpointer
-
+            std::unique_ptr<u_int8_t[]> bit_arr = std::make_unique<u_int8_t[]>(m_limbBitLength);
             int cnt = m_limbBitLength - 1;
-            // cnt is a pointer to the bit position in bitArr, when bitArr is compelete it
+            // cnt is a pointer to the bit position in bit_arr, when bit_arr is complete it
             // is ready to be transfered to Value
-            while (zptr != arrSize) {
-                bitArr[cnt] = DecValue[arrSize - 1] % 2;
+            while (zero_ptr != arr_size) {
+                bit_arr[cnt] = dec_arr[arr_size - 1] % 2;
                 // start divide by 2 in the DecValue array
-                for (size_t i = zptr; i < arrSize - 1; i++) {
-                    DecValue[i + 1] = (DecValue[i] % 2) * 10 + DecValue[i + 1];
-                    DecValue[i] >>= 1;
+                for (size_t i = zero_ptr; i < arr_size - 1; i++) {
+                    dec_arr[i + 1] = (dec_arr[i] % 2) * 10 + dec_arr[i + 1];
+                    dec_arr[i] >>= 1;
                 }
-                DecValue[arrSize - 1] >>= 1;
+                dec_arr[arr_size - 1] >>= 1;
                 // division ends here
                 cnt--;
-                if (cnt == -1) {// cnt = -1 indicates bitArr is ready for transfer
+                if (cnt == -1) {// cnt = -1 indicates bit_arr is ready for transfer
                     cnt = m_limbBitLength - 1;
-                    value.push_back(UintInBinaryToDecimal(bitArr));
+                    value.push_back(UintInBinaryToDecimal(bit_arr.get()));
                 }
-                if (DecValue[zptr] == 0) {
-                    zptr++; // division makes Most significant digit zero, hence we increment
-                            // zptr to next value
+                if (dec_arr[zero_ptr] == 0) {
+                    zero_ptr++; // division makes Most significant digit zero, hence we increment
+                            // zero_ptr to next value
                 }
-                if (zptr == arrSize && DecValue[arrSize - 1] == 0) {
-                    value.push_back(UintInBinaryToDecimal(bitArr));// Value assignment
+                if (zero_ptr == arr_size && dec_arr[arr_size - 1] == 0) {
+                    value.push_back(UintInBinaryToDecimal(bit_arr.get()));  // Value assignment
                 }
             }
-
-            delete[] bitArr;
-            delete[] DecValue;// deallocate memory
         }
 
 

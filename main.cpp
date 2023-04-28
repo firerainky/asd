@@ -14,7 +14,7 @@ int main() {
     std::cout << ans.ConvertToString().c_str() << std::endl;
 
 
-    BigInteger<u_int32_t> testBigIntA("123456789123");
+    BigInteger<u_int32_t> testBigIntA("52");
     std::cout << testBigIntA.ConvertToString().c_str() << std::endl;
 
     return 0;
