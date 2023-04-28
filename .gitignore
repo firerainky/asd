@@ -1,60 +1,145 @@
-### C++ template
+################################
+###########  FILES  ############
+################################
+*.pptx
+*.pdf
+
+################################
+########### FOLDERS ############
+################################
+build/
+html/
+
+################################
+############ C/C++ #############
+################################
+# Prerequisites
+*.d
 # Compiled Object files
 *.slo
 *.lo
 *.o
 *.obj
-
+*.ko
+*.elf
 # Precompiled Headers
 *.gch
 *.pch
-
 # Compiled Dynamic libraries
 *.so
 *.dylib
 *.dll
-
 # Fortran module files
 *.mod
-
+*.smod
 # Compiled Static libraries
 *.lai
 *.la
 *.a
 *.lib
-
 # Executables
+*.i*86
+*.x86_64
+*.hex
+*.app
+*.stackdump
 *.exe
 *.out
-*.app
+# Linker output
+*.ilk
+*.map
+*.exp
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
 
-### JetBrains template
-# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
-# Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
+################################
+########### VS CODE ############
+################################
+.vscode
+*.code-workspace
+.history
 
-# User-specific stuff:
-.idea/*
+################################
+###########   VS    ############
+################################
 
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
 
-## File-based project format:
-*.iws
+# User-specific files (MonoDevelop/Xamarin Studio)
+*.userprefs
 
-## Plugin-specific files:
+# Mono auto generated files
+mono_crash.*
 
-# IntelliJ
-/out/
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
 
-# mpeltonen/sbt-idea plugin
-.idea_modules/
+# Files built by Visual Studio
+*_i.c
+*_p.c
+*_h.h
+*.meta
+*.iobj
+*.ipdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*_wpftmp.csproj
+*.log
+*.tlog
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
 
-# JIRA plugin
-atlassian-ide-plugin.xml
+# Chutzpah Test files
+_Chutzpah*
 
-# Crashlytics plugin (for Android Studio and IntelliJ)
-com_crashlytics_export_strings.xml
-crashlytics.properties
-crashlytics-build.properties
-fabric.properties
-/cmake-build-debug/
+# Visual C++ cache files
+ipch/
+*.aps
+*.ncb
+*.opendb
+*.opensdf
+*.sdf
+*.cachefile
+*.VC.db
+*.VC.VC.opendb
 
-.DS_Store
+# Visual Studio profiler
+*.psess
+*.vsp
+*.vspx
+*.sap
+
+# Visual Studio Trace Files
+*.e2e
