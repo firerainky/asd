@@ -1,8 +1,8 @@
 
-#include "src/math/big_integer.h"
-#include "src/math/native_integer.h"
-#include <iostream>
+#include "big_integer.h"
+#include "native_integer.h"
 #include <iosfwd>
+#include <iostream>
 
 using namespace zhejiangfhe;
 int main() {
