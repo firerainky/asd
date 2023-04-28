@@ -22,13 +22,16 @@ html/
 *.obj
 *.ko
 *.elf
+
 # Precompiled Headers
 *.gch
 *.pch
+
 # Compiled Dynamic libraries
 *.so
 *.dylib
 *.dll
+
 # Fortran module files
 *.mod
 *.smod
@@ -37,6 +40,7 @@ html/
 *.la
 *.a
 *.lib
+
 # Executables
 *.i*86
 *.x86_64
@@ -45,6 +49,9 @@ html/
 *.stackdump
 *.exe
 *.out
+*.app
+
+
 # Linker output
 *.ilk
 *.map
@@ -62,11 +69,12 @@ html/
 *.code-workspace
 .history
 
-################################
-###########   VS    ############
-################################
+### JetBrains template
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
+# Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
-# User-specific files
+# User-specific stuff:
+.idea/*
 *.rsuser
 *.suo
 *.user
@@ -76,8 +84,15 @@ html/
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
+
+## File-based project format:
+*.iws
+
+
 # Mono auto generated files
 mono_crash.*
+
+## Plugin-specific files:
 
 # Build results
 [Dd]ebug/
@@ -94,6 +109,10 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
+
+# IntelliJ
+/out/
+
 
 # Files built by Visual Studio
 *_i.c
@@ -121,8 +140,14 @@ bld/
 *.svclog
 *.scc
 
+# mpeltonen/sbt-idea plugin
+.idea_modules/
+
 # Chutzpah Test files
 _Chutzpah*
+
+# JIRA plugin
+atlassian-ide-plugin.xml
 
 # Visual C++ cache files
 ipch/
@@ -135,6 +160,13 @@ ipch/
 *.VC.db
 *.VC.VC.opendb
 
+# Crashlytics plugin (for Android Studio and IntelliJ)
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
+/cmake-build-debug/
+
 # Visual Studio profiler
 *.psess
 *.vsp
@@ -143,3 +175,5 @@ ipch/
 
 # Visual Studio Trace Files
 *.e2e
+
+.DS_Store
