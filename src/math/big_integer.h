@@ -9,11 +9,13 @@
 #include "integer_interface.h"
 #include <cstdint>
 #include <iosfwd>
+#include <memory>
 #include <string>
 #include <vector>
-#include <memory>
 
 namespace zhejiangfhe {
+
+
     template<typename NativeInt>
     class BigInteger : public IntegerInterface<BigInteger<NativeInt>> {
 
@@ -25,14 +27,76 @@ namespace zhejiangfhe {
             AssignVal(strValue);
         }
 
-        BigInteger<NativeInt> Add(const BigInteger<NativeInt> &b) {
-            return BigInteger("0");
+
+        BigInteger(const std::vector<NativeInt> vals) {
+            value = vals;
+        }
+
+        std::size_t length() const {
+            return value.size();
+        }
+        uint8_t addWithCarry(NativeInt operand1, NativeInt operand2, uint8_t carry, NativeInt *result) const {
+            operand1 += operand2;
+            *result = operand1 + carry;
+            return (operand1 < operand2) || (~operand1 < carry);
+        }
+        uint8_t subWithBorrow(NativeInt operand1, NativeInt operand2, uint8_t borrow, NativeInt *result) const {
+            auto diff = operand1 - operand2;
+            *result = diff - (borrow != 0);
+            return (diff > operand1) || (diff < borrow);
+        }
+
+
+        BigInteger<NativeInt> Add(const BigInteger<NativeInt> &num) const{
+            if(num.sign==true){
+                return Sub(num);
+            }
+            std::vector<NativeInt> resultVectors;
+
+            uint8_t carry = 0;
+            NativeInt currentLimb;
+            int i = 0;
+            while (i < length() && i < num.length()) {
+                carry = addWithCarry(value[i], num.value[i], carry, &currentLimb);
+                resultVectors.push_back(currentLimb);
+                ++i;
+            }
+            while (i < length()) {
+                carry = addWithCarry(value[i], 0, carry, &currentLimb);
+                resultVectors.push_back(currentLimb);
+                ++i;
+            }
+            while (i < num.length()) {
+                carry = addWithCarry(0, num.value[i], carry, &currentLimb);
+                resultVectors.push_back(currentLimb);
+                ++i;
+            }
+
+            return BigInteger(resultVectors);
         }
         const BigInteger<NativeInt> &AddEq(const BigInteger<NativeInt> &b) {
             return *this;
         }
-        BigInteger<NativeInt> Sub(const BigInteger<NativeInt> &b) const {
-            return BigInteger("0");
+        BigInteger<NativeInt> Sub(const BigInteger<NativeInt> &num) const {
+            if(num.sign==true){
+                return Add(num);
+            }
+            std::vector<NativeInt> resultVectors;
+
+            uint8_t borrow = 0;
+            NativeInt currentLimb;
+
+            for (int i = 0; i < length(); ++i) {
+                if (i >= num.length()) {
+                    borrow = subWithBorrow(value[i], 0, borrow, &currentLimb);
+                    resultVectors.push_back(currentLimb);
+                } else {
+                    borrow = subWithBorrow(value[i], num.value[i], borrow, &currentLimb);
+                    resultVectors.push_back(currentLimb);
+                }
+            }
+
+            return BigInteger(resultVectors);
         }
         const BigInteger<NativeInt> &SubEq(const BigInteger<NativeInt> &b) {
             return *this;
@@ -76,14 +140,14 @@ namespace zhejiangfhe {
             v.erase(0, v.find_first_not_of('0'));
             v.erase(0, v.find_first_not_of(' '));
             if (v.empty()) {
-                v = "0";  // set to one zero
+                v = "0";// set to one zero
             }
             size_t arr_size = v.length();
             std::unique_ptr<u_int8_t[]> dec_arr = std::make_unique<u_int8_t[]>(arr_size);
-            for (size_t i = 0; i < arr_size; i++)  // store the string to decimal array
-                dec_arr[i] = (uint8_t)stoi(v.substr(i, 1));
+            for (size_t i = 0; i < arr_size; i++)// store the string to decimal array
+                dec_arr[i] = (uint8_t) stoi(v.substr(i, 1));
 
-            // clear the current value of m_value;
+            // clear the current value of value;
             value.clear();
 
             size_t zero_ptr = 0;
@@ -108,11 +172,11 @@ namespace zhejiangfhe {
                     value.push_back(UintInBinaryToDecimal(bit_arr.get()));
                 }
                 if (dec_arr[zero_ptr] == 0) {
-                    zero_ptr++; // division makes Most significant digit zero, hence we increment
-                            // zero_ptr to next value
+                    zero_ptr++;// division makes Most significant digit zero, hence we increment
+                               // zero_ptr to next value
                 }
                 if (zero_ptr == arr_size && dec_arr[arr_size - 1] == 0) {
-                    value.push_back(UintInBinaryToDecimal(bit_arr.get()));  // Value assignment
+                    value.push_back(UintInBinaryToDecimal(bit_arr.get()));// Value assignment
                 }
             }
         }

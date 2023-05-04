@@ -72,6 +72,5 @@ namespace zhejiangfhe {
             return value[0];
         }
     }
-
     template class zhejiangfhe::BigInteger<u_int32_t>;
 }// namespace zhejiangfhe
