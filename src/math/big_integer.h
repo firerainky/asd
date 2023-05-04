@@ -25,6 +25,14 @@ namespace zhejiangfhe {
             AssignVal(strValue);
         }
 
+        /**
+         * @brief Compare the current BigInteger with another one
+         * 
+         * @param another is the BigInteger to be compared with. 
+         * @return int -1 for strictly less than, 0 for equal to and 1 for strictly greater than conditions.
+         */
+        int Compare(const BigInteger<NativeInt> &another) const;
+
         BigInteger<NativeInt> Add(const BigInteger<NativeInt> &b) {
             return BigInteger("0");
         }
@@ -76,12 +84,12 @@ namespace zhejiangfhe {
             v.erase(0, v.find_first_not_of('0'));
             v.erase(0, v.find_first_not_of(' '));
             if (v.empty()) {
-                v = "0";  // set to one zero
+                v = "0";// set to one zero
             }
             size_t arr_size = v.length();
             std::unique_ptr<u_int8_t[]> dec_arr = std::make_unique<u_int8_t[]>(arr_size);
-            for (size_t i = 0; i < arr_size; i++)  // store the string to decimal array
-                dec_arr[i] = (uint8_t)stoi(v.substr(i, 1));
+            for (size_t i = 0; i < arr_size; i++)// store the string to decimal array
+                dec_arr[i] = (uint8_t) stoi(v.substr(i, 1));
 
             // clear the current value of m_value;
             value.clear();
@@ -112,7 +120,12 @@ namespace zhejiangfhe {
                             // zero_ptr to next value
                 }
                 if (zero_ptr == arr_size && dec_arr[arr_size - 1] == 0) {
-                    value.push_back(UintInBinaryToDecimal(bit_arr.get()));  // Value assignment
+                    NativeInt lastValue = UintInBinaryToDecimal(bit_arr.get());
+                    m_MSB = value.size() * m_limbBitLength;
+                    if (lastValue > 0) {
+                        value.push_back(lastValue);// Value assignment
+                        m_MSB += m_limbBitLength - cnt;
+                    }
                 }
             }
         }
@@ -122,6 +135,7 @@ namespace zhejiangfhe {
         std::vector<NativeInt> value;
         bool sign = false;
         static const uint32_t m_limbBitLength;
+        uint32_t m_MSB = 0;
     };
 
 

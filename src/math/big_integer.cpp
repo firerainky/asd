@@ -11,6 +11,35 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
+    int BigInteger<NativeInt>::Compare(const BigInteger<NativeInt> &another) const {
+        if (!sign && another.sign) {
+            return 1;
+        }
+        if (sign && !another.sign) {
+            return -1;
+        }
+
+        int absoluteCompare = 0;
+        if (m_MSB < another.m_MSB) {
+            absoluteCompare = -1;
+        } else if (m_MSB > another.m_MSB) {
+            absoluteCompare = 1;
+        } else {
+            for (int i = value.size() - 1; i >= 0; i--) {
+                if (value[i] > another.value[i]) {
+                    absoluteCompare = 1;
+                    break;
+                } else if (value[i] < another.value[i]) {
+                    absoluteCompare = -1;
+                    break;
+                }
+            }
+        }
+
+        return sign ? -absoluteCompare : absoluteCompare;
+    }
+
+    template<typename NativeInt>
     const std::string BigInteger<NativeInt>::ConvertToString() {
         bool negative = sign;
         if (value.size() == 1) {
