@@ -93,4 +93,18 @@ TEST(big_integer_tests, CompareTwoBigInteger) {
     ASSERT_EQ(BInt("123456789012345678901234567890123456789012345678901234567890").Compare(BInt("18446744073709551615")), 1);
     ASSERT_EQ(BInt("-123456789012345678901234567890123456789012345678901234567890").Compare(BInt("-18446744073709551615")), -1);
     ASSERT_EQ(BInt("18446744073709551615").Compare(BInt("-123456789012345678901234567890123456789012345678901234567890")), 1);
+
+    std::vector<u_int32_t> vals1;
+    std::vector<u_int32_t> vals2;
+    ASSERT_EQ(BInt(vals1).Compare(BInt(vals2)), 0);
+
+    vals1.push_back(12);
+    ASSERT_EQ(BInt(vals1).Compare(BInt(vals2)), 1);
+
+    vals2.push_back(13);
+    ASSERT_EQ(BInt(vals1).Compare(BInt(vals2)), -1);
+
+    vals1.push_back(14);
+    vals2.push_back(14);
+    ASSERT_EQ(BInt(vals1).Compare(BInt(vals2)), -1);
 }
