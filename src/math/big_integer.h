@@ -204,9 +204,6 @@ namespace zhejiangfhe {
         void m_GetMSB() {
             m_MSB = (value.size() - 1) * m_limbBitLength + m_GetMSBForLimb(value.back());
         }
-        void m_GetMSB(std::vector<NativeInt> &vals) {
-            m_MSB = (vals.size() - 1) * m_limbBitLength + m_GetMSBForLimb(vals.back());
-        }
         uint32_t m_GetMSBForLimb(NativeInt x) {
             uint64_t y = ((uint64_t) x);
             return 63 - (sizeof(unsigned long) == 8 ? __builtin_clzl(y) : __builtin_clzll(y));
