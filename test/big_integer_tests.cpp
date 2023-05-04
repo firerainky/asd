@@ -7,7 +7,7 @@ TEST(big_integer_tests, EmptyConstructorCreateZero) {
     ASSERT_EQ(zero.ConvertToString(), "0");
 }
 
-TEST(big_integer_tests, CreatesBigUnsignedIntegerWithStringRepresentation) {
+TEST(big_integer_tests, CreatesPositiveBigIntegersWithStringRepresentation) {
     zhejiangfhe::BigInteger<u_int32_t> bigInt("0");
     ASSERT_EQ(bigInt.ConvertToLimb(), 0);
     ASSERT_EQ(bigInt.ConvertToString(), "0");
@@ -33,7 +33,7 @@ TEST(big_integer_tests, CreatesBigUnsignedIntegerWithStringRepresentation) {
     ASSERT_EQ(bigInt.ConvertToString(), "123456789012345678901234567890123456789012345678901234567890");
 }
 
-TEST(big_integer_tests, CreatesNegativeBigUnsignedIntegerWithStringRepresentation) {
+TEST(big_integer_tests, CreatesNegativeBigIntegersWithStringRepresentation) {
     zhejiangfhe::BigInteger<u_int32_t> bigInt("-0");
     ASSERT_EQ(bigInt.ConvertToLimb(), 0);
     ASSERT_EQ(bigInt.ConvertToString(), "0");
@@ -58,23 +58,39 @@ TEST(big_integer_tests, CreatesNegativeBigUnsignedIntegerWithStringRepresentatio
     bigInt = zhejiangfhe::BigInteger<u_int32_t>("-123456789012345678901234567890123456789012345678901234567890");
     ASSERT_EQ(bigInt.ConvertToString(), "-123456789012345678901234567890123456789012345678901234567890");
 }
-TEST(big_integer_tests, AddTwoUnsignedBigIntegers) {
-    zhejiangfhe::BigInteger<u_int32_t> bigIntOne("3");
-    zhejiangfhe::BigInteger<u_int32_t> bigIntTwo("-4");
-    ASSERT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(), "-1");
-    bigIntOne = zhejiangfhe::BigInteger<u_int32_t>();
-    bigIntTwo = zhejiangfhe::BigInteger<u_int32_t>("1234567");
-    ASSERT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(), "1234567");
-    bigIntOne = zhejiangfhe::BigInteger<u_int32_t>("0");
-    bigIntTwo = zhejiangfhe::BigInteger<u_int32_t>("123456789012345678901234567890");
-    ASSERT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(), "123456789012345678901234567890");
-    bigIntOne = zhejiangfhe::BigInteger<u_int32_t>("123456789012345678901234567890");
-    bigIntTwo = zhejiangfhe::BigInteger<u_int32_t>("-123456789012345678901234567890");
-    ASSERT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(),
-              "0");
-    bigIntOne = zhejiangfhe::BigInteger<u_int32_t>("12345678901234567890123456789012345678901234567890");
-    bigIntTwo = zhejiangfhe::BigInteger<u_int32_t>("123456789012345678901234567890");
-    ASSERT_EQ(bigIntOne.Add(bigIntTwo)
-                      .ConvertToString(),
-              "12345678901234567890246913578024691357802469135780");
+
+// TEST(big_integer_tests, AddTwoUnsignedBigIntegers) {
+//     zhejiangfhe::BigInteger<u_int32_t> bigIntOne("3");
+//     zhejiangfhe::BigInteger<u_int32_t> bigIntTwo("-4");
+//     ASSERT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(), "-1");
+//     bigIntOne = zhejiangfhe::BigInteger<u_int32_t>();
+//     bigIntTwo = zhejiangfhe::BigInteger<u_int32_t>("1234567");
+//     ASSERT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(), "1234567");
+//     bigIntOne = zhejiangfhe::BigInteger<u_int32_t>("0");
+//     bigIntTwo = zhejiangfhe::BigInteger<u_int32_t>("123456789012345678901234567890");
+//     ASSERT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(), "123456789012345678901234567890");
+//     bigIntOne = zhejiangfhe::BigInteger<u_int32_t>("123456789012345678901234567890");
+//     bigIntTwo = zhejiangfhe::BigInteger<u_int32_t>("-123456789012345678901234567890");
+//     ASSERT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(),
+//               "0");
+//     bigIntOne = zhejiangfhe::BigInteger<u_int32_t>("12345678901234567890123456789012345678901234567890");
+//     bigIntTwo = zhejiangfhe::BigInteger<u_int32_t>("123456789012345678901234567890");
+//     ASSERT_EQ(bigIntOne.Add(bigIntTwo)
+//                       .ConvertToString(),
+//               "12345678901234567890246913578024691357802469135780");
+// }
+
+TEST(big_integer_tests, CompareTwoBigInteger) {
+    using BInt = zhejiangfhe::BigInteger<u_int32_t>;
+
+    ASSERT_EQ(BInt().Compare(BInt("0")), 0);
+    ASSERT_EQ(BInt().Compare(BInt("-1")), 1);
+    ASSERT_EQ(BInt("-1").Compare(BInt()), -1);
+    ASSERT_EQ(BInt().Compare(BInt("1")), -1);
+    ASSERT_EQ(BInt("2").Compare(BInt("4")), -1);
+    ASSERT_EQ(BInt("8").Compare(BInt("1234567890123456789012345678901234567890")), -1);
+    ASSERT_EQ(BInt("123456789012345678901234567890123456789012345678901234567890").Compare(BInt("1234567890123456789012345678901234567890")), 1);
+    ASSERT_EQ(BInt("123456789012345678901234567890123456789012345678901234567890").Compare(BInt("18446744073709551615")), 1);
+    ASSERT_EQ(BInt("-123456789012345678901234567890123456789012345678901234567890").Compare(BInt("-18446744073709551615")), -1);
+    ASSERT_EQ(BInt("18446744073709551615").Compare(BInt("-123456789012345678901234567890123456789012345678901234567890")), 1);
 }

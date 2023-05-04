@@ -27,10 +27,17 @@ namespace zhejiangfhe {
             AssignVal(strValue);
         }
 
-
         BigInteger(const std::vector<NativeInt> vals) {
             value = vals;
         }
+
+        /**
+         * @brief Compare the current BigInteger with another one
+         * 
+         * @param another is the BigInteger to be compared with. 
+         * @return int -1 for strictly less than, 0 for equal to and 1 for strictly greater than conditions.
+         */
+        int Compare(const BigInteger<NativeInt> &another) const;
 
         std::size_t length() const {
             return value.size();
@@ -46,9 +53,8 @@ namespace zhejiangfhe {
             return (diff > operand1) || (diff < borrow);
         }
 
-
-        BigInteger<NativeInt> Add(const BigInteger<NativeInt> &num) const{
-            if(num.sign==true){
+        BigInteger<NativeInt> Add(const BigInteger<NativeInt> &num) const {
+            if (num.sign == true) {
                 return Sub(num);
             }
             std::vector<NativeInt> resultVectors;
@@ -74,11 +80,12 @@ namespace zhejiangfhe {
 
             return BigInteger(resultVectors);
         }
+
         const BigInteger<NativeInt> &AddEq(const BigInteger<NativeInt> &b) {
             return *this;
         }
         BigInteger<NativeInt> Sub(const BigInteger<NativeInt> &num) const {
-            if(num.sign==true){
+            if (num.sign == true) {
                 return Add(num);
             }
             std::vector<NativeInt> resultVectors;
@@ -176,7 +183,8 @@ namespace zhejiangfhe {
                                // zero_ptr to next value
                 }
                 if (zero_ptr == arr_size && dec_arr[arr_size - 1] == 0) {
-                    value.push_back(UintInBinaryToDecimal(bit_arr.get()));// Value assignment
+                    value.push_back(UintInBinaryToDecimal(bit_arr.get()));
+                    m_GetMSB();
                 }
             }
         }
@@ -186,6 +194,16 @@ namespace zhejiangfhe {
         std::vector<NativeInt> value;
         bool sign = false;
         static const uint32_t m_limbBitLength;
+        uint32_t m_MSB = 0;
+
+        // template<NativeInt>
+        void m_GetMSB() {
+            m_MSB = (value.size() - 1) * m_limbBitLength + m_GetMSBForLimb(value.back());
+        }
+        uint32_t m_GetMSBForLimb(NativeInt x) {
+            uint64_t y = ((uint64_t) x);
+            return 63 - (sizeof(unsigned long) == 8 ? __builtin_clzl(y) : __builtin_clzll(y));
+        }
     };
 
 
