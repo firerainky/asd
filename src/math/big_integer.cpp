@@ -101,5 +101,46 @@ namespace zhejiangfhe {
             return value[0];
         }
     }
+
+    template<typename NativeInt>
+    BigInteger<NativeInt> BigInteger<NativeInt>::Mul(const BigInteger<NativeInt> &b) const {
+
+        std::vector<NativeInt> values;
+        for (int i = 0; i < value.size(); ++i) {
+            for (int j = 0; j < b.value.size(); ++j) {
+                NativeInt temp_result[2];
+                MultiplyWithKaratsuba(value[i], b.value[j], temp_result);
+                uint8_t carry = 0;
+                NativeInt sum;
+                if (i + j + 1 > values.size()) {
+                    values.push_back(temp_result[0]);
+                } else {
+                    carry = addWithCarry(temp_result[0], values[i + j], carry, &sum);
+                    values[i + j] = sum;
+                    temp_result[1] += carry;
+                    carry = 0;
+                }
+
+                if (i + j + 2 > values.size()) {
+                    values.push_back(temp_result[1]);
+                } else {
+                    carry = addWithCarry(temp_result[1], values[i + j + 1], carry, &sum);
+                    values[i + j + 1] = sum;
+                    uint8_t currentIdx = i + j + 2;
+                    while (carry) {
+                        if (currentIdx > values.size()) {
+                            values.push_back(carry);
+                        } else {
+                            carry = addWithCarry(0, values[currentIdx], carry, &sum);
+                            values[currentIdx] = sum;
+                        }
+                    }
+                }
+            }
+        }
+
+        return BigInteger(values, sign ^ b.sign);
+    }
+
     template class zhejiangfhe::BigInteger<u_int32_t>;
 }// namespace zhejiangfhe
