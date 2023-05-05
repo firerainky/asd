@@ -40,7 +40,7 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
-    const std::string BigInteger<NativeInt>::ConvertToString() {
+    const std::string BigInteger<NativeInt>::ConvertToString() const {
         bool negative = sign;
         if (value.size() == 1) {
             if (value[0] == 0) {
@@ -140,6 +140,11 @@ namespace zhejiangfhe {
         }
 
         return BigInteger(values, sign ^ b.sign);
+    }
+
+    template<typename NativeInt>
+    const BigInteger<NativeInt> &BigInteger<NativeInt>::MulEq(const BigInteger<NativeInt> &b) {
+        return *this = this->Mul(b);
     }
 
     template class zhejiangfhe::BigInteger<u_int32_t>;

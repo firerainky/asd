@@ -122,10 +122,10 @@ namespace zhejiangfhe {
         const BigInteger<NativeInt> &SubEq(const BigInteger<NativeInt> &b) {
             return *this;
         }
+
         BigInteger<NativeInt> Mul(const BigInteger<NativeInt> &b) const;
-        const BigInteger<NativeInt> &MulEq(const BigInteger<NativeInt> &b) {
-            return *this;
-        }
+        const BigInteger<NativeInt> &MulEq(const BigInteger<NativeInt> &b);
+
         BigInteger<NativeInt> DividedBy(const BigInteger<NativeInt> &b) const {
             return BigInteger("0");
         }
@@ -133,7 +133,7 @@ namespace zhejiangfhe {
             return *this;
         }
 
-        const std::string ConvertToString();
+        const std::string ConvertToString() const;
 
         NativeInt ConvertToLimb();
 
