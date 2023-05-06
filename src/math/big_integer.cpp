@@ -19,7 +19,7 @@ namespace zhejiangfhe {
             return -1;
         }
 
-       return AbsoluteCompare(another);
+        return AbsoluteCompare(another);
     }
     template<typename NativeInt>
     int BigInteger<NativeInt>::AbsoluteCompare(const BigInteger<NativeInt> &another) const {
@@ -152,4 +152,5 @@ namespace zhejiangfhe {
     }
 
     template class zhejiangfhe::BigInteger<u_int32_t>;
+    template class zhejiangfhe::BigInteger<u_int64_t>;
 }// namespace zhejiangfhe
