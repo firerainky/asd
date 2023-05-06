@@ -108,6 +108,7 @@ TYPED_TEST(BigIntegerTest, CompareTwoBigInteger) {
     EXPECT_EQ(BInt(vals1).Compare(BInt(vals2)), -1);
 }
 
+
 TYPED_TEST(BigIntegerTest, AddTwoUnsignedBigIntegers) {
     using BInt = zhejiangfhe::BigInteger<TypeParam>;
 
@@ -122,10 +123,10 @@ TYPED_TEST(BigIntegerTest, AddTwoUnsignedBigIntegers) {
     EXPECT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(), "123456789012345678901234567890");
     bigIntOne = BInt("123456789012345678901234567890");
     bigIntTwo = BInt("-123456789012345678901234567890");
-    EXPECT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(),"0");
+    EXPECT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(), "0");
     bigIntOne = BInt("12345678901234567890123456789012345678901234567890");
     bigIntTwo = BInt("123456789012345678901234567890");
-    EXPECT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(),"12345678901234567890246913578024691357802469135780");
+    EXPECT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(), "12345678901234567890246913578024691357802469135780");
 }
 
 TYPED_TEST(BigIntegerTest, BiggerIntegerSubtractSmallerInteger) {
@@ -152,4 +153,50 @@ TYPED_TEST(BigIntegerTest, BiggerIntegerSubtractSmallerInteger) {
     bigIntTwo = BInt("99999999999999999999999999999999999999999999999999");
     EXPECT_EQ(bigIntOne.Sub(bigIntTwo).ConvertToString(),
               "1");
+}
+
+TYPED_TEST(BigIntegerTest, MultiplyTwoBigInteger) {
+    using BInt = zhejiangfhe::BigInteger<TypeParam>;
+
+    EXPECT_EQ(BInt().Mul(BInt("5")).ConvertToString(), "0");
+    EXPECT_EQ(BInt("3").Mul(BInt("4")).ConvertToString(), "12");
+    EXPECT_EQ(BInt("1234567").Mul(BInt()).ConvertToString(), "0");
+    EXPECT_EQ(BInt("1234567").Mul(BInt("1234567")).ConvertToString(), "1524155677489");
+    EXPECT_EQ(BInt("123456789012345678901234567890").Mul(BInt("1")).ConvertToString(),
+              "123456789012345678901234567890");
+    EXPECT_EQ(BInt("123456789012345678901234567890").Mul(BInt("0")).ConvertToString(), "0");
+    EXPECT_EQ(BInt("123456789012345678901234567890").Mul(BInt("123456789012345678901234567890")).ConvertToString(),
+              "15241578753238836750495351562536198787501905199875019052100");
+    EXPECT_EQ(BInt("999999999999999999999999999999").Mul(BInt("999999999999999999999999999999")).ConvertToString(),
+              "999999999999999999999999999998000000000000000000000000000001");
+
+    // For negative numbers
+    EXPECT_EQ(BInt().Mul(BInt("-5")).ConvertToString(), "0");
+    EXPECT_EQ(BInt("4").Mul(BInt("-5")).ConvertToString(), "-20");
+    EXPECT_EQ(BInt("-3").Mul(BInt("-5")).ConvertToString(), "15");
+    EXPECT_EQ(BInt("1234567").Mul(BInt("-1234567")).ConvertToString(), "-1524155677489");
+    EXPECT_EQ(BInt("123456789012345678901234567890").Mul(BInt("-1")).ConvertToString(),
+              "-123456789012345678901234567890");
+    EXPECT_EQ(BInt("-123456789012345678901234567890").Mul(BInt("0")).ConvertToString(), "0");
+    EXPECT_EQ(BInt("123456789012345678901234567890").Mul(BInt("-123456789012345678901234567890")).ConvertToString(),
+              "-15241578753238836750495351562536198787501905199875019052100");
+    EXPECT_EQ(BInt("-999999999999999999999999999999").Mul(BInt("-999999999999999999999999999999")).ConvertToString(),
+              "999999999999999999999999999998000000000000000000000000000001");
+}
+
+TYPED_TEST(BigIntegerTest, MultiplyEqTwoBigInteger) {
+    using BInt = zhejiangfhe::BigInteger<u_int32_t>;
+
+    EXPECT_EQ(BInt().MulEq(BInt("5")).ConvertToString(), "0");
+
+    BInt num = BInt("3");
+    num.MulEq(BInt("4"));
+    EXPECT_EQ(num.ConvertToString(), "12");
+
+    num = BInt("999999999999999999999999999999");
+    num.MulEq(BInt("999999999999999999999999999999"));
+    EXPECT_EQ(num.ConvertToString(), "999999999999999999999999999998000000000000000000000000000001");
+
+    num.MulEq(BInt("-999999999999999999999999999999"));
+    EXPECT_EQ(num.ConvertToString(), "-999999999999999999999999999997000000000000000000000000000002999999999999999999999999999999");
 }
