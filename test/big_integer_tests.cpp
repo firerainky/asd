@@ -59,26 +59,50 @@ TEST(big_integer_tests, CreatesNegativeBigIntegersWithStringRepresentation) {
     ASSERT_EQ(bigInt.ConvertToString(), "-123456789012345678901234567890123456789012345678901234567890");
 }
 
-// TEST(big_integer_tests, AddTwoUnsignedBigIntegers) {
-//     zhejiangfhe::BigInteger<u_int32_t> bigIntOne("3");
-//     zhejiangfhe::BigInteger<u_int32_t> bigIntTwo("-4");
-//     ASSERT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(), "-1");
-//     bigIntOne = zhejiangfhe::BigInteger<u_int32_t>();
-//     bigIntTwo = zhejiangfhe::BigInteger<u_int32_t>("1234567");
-//     ASSERT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(), "1234567");
-//     bigIntOne = zhejiangfhe::BigInteger<u_int32_t>("0");
-//     bigIntTwo = zhejiangfhe::BigInteger<u_int32_t>("123456789012345678901234567890");
-//     ASSERT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(), "123456789012345678901234567890");
-//     bigIntOne = zhejiangfhe::BigInteger<u_int32_t>("123456789012345678901234567890");
-//     bigIntTwo = zhejiangfhe::BigInteger<u_int32_t>("-123456789012345678901234567890");
-//     ASSERT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(),
-//               "0");
-//     bigIntOne = zhejiangfhe::BigInteger<u_int32_t>("12345678901234567890123456789012345678901234567890");
-//     bigIntTwo = zhejiangfhe::BigInteger<u_int32_t>("123456789012345678901234567890");
-//     ASSERT_EQ(bigIntOne.Add(bigIntTwo)
-//                       .ConvertToString(),
-//               "12345678901234567890246913578024691357802469135780");
-// }
+TEST(big_integer_tests, AddTwoUnsignedBigIntegers) {
+    zhejiangfhe::BigInteger<u_int32_t> bigIntOne("3");
+    zhejiangfhe::BigInteger<u_int32_t> bigIntTwo("-4");
+    ASSERT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(), "-1");
+    bigIntOne = zhejiangfhe::BigInteger<u_int32_t>();
+    bigIntTwo = zhejiangfhe::BigInteger<u_int32_t>("1234567");
+    ASSERT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(), "1234567");
+    bigIntOne = zhejiangfhe::BigInteger<u_int32_t>("0");
+    bigIntTwo = zhejiangfhe::BigInteger<u_int32_t>("123456789012345678901234567890");
+    ASSERT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(), "123456789012345678901234567890");
+    bigIntOne = zhejiangfhe::BigInteger<u_int32_t>("123456789012345678901234567890");
+    bigIntTwo = zhejiangfhe::BigInteger<u_int32_t>("-123456789012345678901234567890");
+    ASSERT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(),
+              "0");
+    bigIntOne = zhejiangfhe::BigInteger<u_int32_t>("12345678901234567890123456789012345678901234567890");
+    bigIntTwo = zhejiangfhe::BigInteger<u_int32_t>("123456789012345678901234567890");
+    ASSERT_EQ(bigIntOne.Add(bigIntTwo)
+                      .ConvertToString(),
+              "12345678901234567890246913578024691357802469135780");
+}
+TEST(UBigIntTests, BiggerIntegerSubtractSmallerInteger) {
+    zhejiangfhe::BigInteger<u_int32_t> bigIntOne("4");
+    zhejiangfhe::BigInteger<u_int32_t> bigIntTwo("3");
+    ASSERT_EQ(bigIntOne.Sub(bigIntTwo).ConvertToString(), "1");
+    bigIntOne = zhejiangfhe::BigInteger<u_int32_t>("1234567");
+    bigIntTwo = zhejiangfhe::BigInteger<u_int32_t>();
+    ASSERT_EQ(bigIntOne.Sub(bigIntTwo).ConvertToString(), "1234567");
+    bigIntOne = zhejiangfhe::BigInteger<u_int32_t>("123456789012345678901234567890");
+    bigIntTwo = zhejiangfhe::BigInteger<u_int32_t>("0");
+    
+    ASSERT_EQ(bigIntOne.Sub(bigIntTwo).ConvertToString(), "123456789012345678901234567890");
+    bigIntOne = zhejiangfhe::BigInteger<u_int32_t>("123456789012345678901234567890");
+    bigIntTwo = zhejiangfhe::BigInteger<u_int32_t>("123456789012345678901234567890");
+    ASSERT_EQ(bigIntOne.Sub(bigIntTwo).ConvertToString(),
+              "0");
+    bigIntOne = zhejiangfhe::BigInteger<u_int32_t>("12345678901234567890246913578024691357802469135780");
+    bigIntTwo = zhejiangfhe::BigInteger<u_int32_t>("123456789012345678901234567890");
+    ASSERT_EQ(bigIntOne.Sub(bigIntTwo).ConvertToString(),
+              "12345678901234567890123456789012345678901234567890");
+    bigIntOne = zhejiangfhe::BigInteger<u_int32_t>("100000000000000000000000000000000000000000000000000");
+    bigIntTwo = zhejiangfhe::BigInteger<u_int32_t>("99999999999999999999999999999999999999999999999999");
+    ASSERT_EQ(bigIntOne.Sub(bigIntTwo).ConvertToString(),
+              "1");
+}
 
 TEST(big_integer_tests, CompareTwoBigInteger) {
     using BInt = zhejiangfhe::BigInteger<u_int32_t>;

@@ -43,6 +43,31 @@ namespace zhejiangfhe {
                 sign = false;
             }
         }
+        BigInteger<NativeInt> &AssignObj(const BigInteger<NativeInt> &other) {
+            if (this != &other) {// 避免自我赋值
+                std::vector<NativeInt> resultVectors;
+                for (auto it = other.value.begin(); it != other.value.end(); ++it) {
+                    resultVectors.push_back(*it);
+                }
+                while (!resultVectors.empty() && resultVectors.back() == 0) {
+                    resultVectors.pop_back();
+                }
+                if (other.value.empty()) {
+                    value.push_back(0);
+                    return *this;
+                }
+                this->sign = sign;
+                for (auto it = resultVectors.begin(); it != resultVectors.end(); ++it) {
+                    value.push_back(*it);
+                }
+                m_MSB = (resultVectors.size() - 1) * m_limbBitLength + m_GetMSBForLimb(resultVectors.back());
+                if (m_MSB == 0) {
+                    sign = false;
+                }
+            }
+            return *this;
+        }
+
 
         /**
          * @brief Compare the current BigInteger with another one
@@ -52,6 +77,8 @@ namespace zhejiangfhe {
          */
         int
         Compare(const BigInteger<NativeInt> &another) const;
+
+        int AbsoluteCompare(const BigInteger<NativeInt> &another) const;
 
         std::size_t length() const {
             return value.size();
@@ -67,10 +94,7 @@ namespace zhejiangfhe {
             return (diff > operand1) || (diff < borrow);
         }
 
-        BigInteger<NativeInt> Add(const BigInteger<NativeInt> &num) const {
-            if (num.sign == true) {
-                return Sub(num);
-            }
+        BigInteger<NativeInt> AddWithoutSign(const BigInteger<NativeInt> &num, bool sign = false) const {
             std::vector<NativeInt> resultVectors;
 
             uint8_t carry = 0;
@@ -92,16 +116,10 @@ namespace zhejiangfhe {
                 ++i;
             }
 
-            return BigInteger(resultVectors);
+            return BigInteger(resultVectors, sign);
         }
+        BigInteger<NativeInt> SubWithoutSign(const BigInteger<NativeInt> &num, bool sign = false) const {
 
-        const BigInteger<NativeInt> &AddEq(const BigInteger<NativeInt> &b) {
-            return *this;
-        }
-        BigInteger<NativeInt> Sub(const BigInteger<NativeInt> &num) const {
-            if (num.sign == true) {
-                return Add(num);
-            }
             std::vector<NativeInt> resultVectors;
 
             uint8_t borrow = 0;
@@ -117,14 +135,74 @@ namespace zhejiangfhe {
                 }
             }
 
-            return BigInteger(resultVectors);
+
+            return BigInteger(resultVectors, sign);
+        }
+
+
+        BigInteger<NativeInt> Add(const BigInteger<NativeInt> &num) {
+            int absoluteCompare = AbsoluteCompare(num);
+            if (sign == false && num.sign == true) {
+                if (AbsoluteCompare(num) == 0) {
+                    return BigInteger<NativeInt>();
+                } else if (absoluteCompare > 0) {
+                    return SubWithoutSign(num);
+                } else {
+                    return num.SubWithoutSign(*this, true);
+                }
+            }
+            if (sign == true && num.sign == false) {
+                if (AbsoluteCompare(num) == 0) {
+                    return BigInteger<NativeInt>();
+                } else if (absoluteCompare > 0) {
+                    return SubWithoutSign(num, sign);
+                } else {
+                    return num.SubWithoutSign(*this);
+                }
+            }
+            return AddWithoutSign(num);
+        }
+
+        const BigInteger<NativeInt> &AddEq(const BigInteger<NativeInt> &num) {
+            int absoluteCompare = AbsoluteCompare(num);
+            if (sign == false && num.sign == true) {
+                if (AbsoluteCompare(num) == 0) {
+                    value.clear();
+                    value.push_back(0);
+                } else if (absoluteCompare > 0) {
+                    AssignObj(SubWithoutSign(num));
+                } else {
+                    AssignObj(num.SubWithoutSign(*this, true));
+                }
+            } else if (sign == true && num.sign == false) {
+                if (AbsoluteCompare(num) == 0) {
+                    value.clear();
+                    value.push_back(0);
+                } else if (absoluteCompare > 0) {
+                    AssignObj(SubWithoutSign(num, sign));
+                } else {
+                    AssignObj(num.SubWithoutSign(*this));
+                }
+            } else {
+                AssignObj(SubWithoutSign(num));
+            }
+            return *this;
+        }
+        BigInteger<NativeInt> Sub(const BigInteger<NativeInt> &num) {
+            if (sign == false && num.sign == true) {
+                return AddWithoutSign(num,sign);
+            }
+            if (sign == true && num.sign == false) {
+                return AddWithoutSign(num,sign);
+            }
+            return SubWithoutSign(num);
         }
         const BigInteger<NativeInt> &SubEq(const BigInteger<NativeInt> &b) {
             return *this;
         }
 
         BigInteger<NativeInt> Mul(const BigInteger<NativeInt> &b) const;
-        const BigInteger<NativeInt> &MulEq(const BigInteger<NativeInt> &b);
+         const BigInteger<NativeInt> &MulEq(const BigInteger<NativeInt> &b);
 
         BigInteger<NativeInt> DividedBy(const BigInteger<NativeInt> &b) const {
             return BigInteger("0");

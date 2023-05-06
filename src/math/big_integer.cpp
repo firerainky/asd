@@ -19,6 +19,10 @@ namespace zhejiangfhe {
             return -1;
         }
 
+       return AbsoluteCompare(another);
+    }
+    template<typename NativeInt>
+    int BigInteger<NativeInt>::AbsoluteCompare(const BigInteger<NativeInt> &another) const {
         int absoluteCompare = 0;
         if (m_MSB < another.m_MSB) {
             absoluteCompare = -1;
