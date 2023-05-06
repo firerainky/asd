@@ -13,11 +13,11 @@ TEST(big_integer_tests, CreatesPositiveBigIntegersWithStringRepresentation) {
     ASSERT_EQ(bigInt.ConvertToString(), "0");
 
     bigInt = zhejiangfhe::BigInteger<u_int32_t>("10");
-    ASSERT_EQ(bigInt.ConvertToLimb(), 10ULL);
+    ASSERT_EQ(bigInt.ConvertToLimb(), 10);
     ASSERT_EQ(bigInt.ConvertToString(), "10");
 
     bigInt = zhejiangfhe::BigInteger<u_int32_t>("275");
-    ASSERT_EQ(bigInt.ConvertToLimb(), 275ULL);
+    ASSERT_EQ(bigInt.ConvertToLimb(), 275);
     ASSERT_EQ(bigInt.ConvertToString(), "275");
 
     bigInt = zhejiangfhe::BigInteger<u_int32_t>("12345678901234567890");
@@ -79,7 +79,7 @@ TEST(big_integer_tests, AddTwoUnsignedBigIntegers) {
                       .ConvertToString(),
               "12345678901234567890246913578024691357802469135780");
 }
-TEST(UBigIntTests, BiggerIntegerSubtractSmallerInteger) {
+TEST(big_integer_tests, BiggerIntegerSubtractSmallerInteger) {
     zhejiangfhe::BigInteger<u_int32_t> bigIntOne("4");
     zhejiangfhe::BigInteger<u_int32_t> bigIntTwo("3");
     ASSERT_EQ(bigIntOne.Sub(bigIntTwo).ConvertToString(), "1");
@@ -88,7 +88,7 @@ TEST(UBigIntTests, BiggerIntegerSubtractSmallerInteger) {
     ASSERT_EQ(bigIntOne.Sub(bigIntTwo).ConvertToString(), "1234567");
     bigIntOne = zhejiangfhe::BigInteger<u_int32_t>("123456789012345678901234567890");
     bigIntTwo = zhejiangfhe::BigInteger<u_int32_t>("0");
-    
+
     ASSERT_EQ(bigIntOne.Sub(bigIntTwo).ConvertToString(), "123456789012345678901234567890");
     bigIntOne = zhejiangfhe::BigInteger<u_int32_t>("123456789012345678901234567890");
     bigIntTwo = zhejiangfhe::BigInteger<u_int32_t>("123456789012345678901234567890");
@@ -148,7 +148,7 @@ TEST(big_integer_tests, MultiplyWithKaratsuba) {
     sut.MultiplyWithKaratsuba(1, 0, result);
     ASSERT_EQ(0, result[0]);
     ASSERT_EQ(0, result[1]);
-    sut.MultiplyWithKaratsuba(1ULL, 1ULL, result);
+    sut.MultiplyWithKaratsuba(1, 1, result);
     ASSERT_EQ(1ULL, result[0]);
     ASSERT_EQ(0ULL, result[1]);
     sut.MultiplyWithKaratsuba(0x10000, 0xFABA, result);
