@@ -190,10 +190,10 @@ namespace zhejiangfhe {
         }
         BigInteger<NativeInt> Sub(const BigInteger<NativeInt> &num) {
             if (sign == false && num.sign == true) {
-                return AddWithoutSign(num,sign);
+                return AddWithoutSign(num, sign);
             }
             if (sign == true && num.sign == false) {
-                return AddWithoutSign(num,sign);
+                return AddWithoutSign(num, sign);
             }
             return SubWithoutSign(num);
         }
@@ -209,7 +209,7 @@ namespace zhejiangfhe {
         }
 
         BigInteger<NativeInt> Mul(const BigInteger<NativeInt> &b) const;
-         const BigInteger<NativeInt> &MulEq(const BigInteger<NativeInt> &b);
+        const BigInteger<NativeInt> &MulEq(const BigInteger<NativeInt> &b);
 
         BigInteger<NativeInt> DividedBy(const BigInteger<NativeInt> &b) const {
             return BigInteger("0");
@@ -234,24 +234,30 @@ namespace zhejiangfhe {
         }
 
         /**
-         * @brief Karatsuba 算法计算 uint64_t * uint64_t, 结果为一个 128 位的数
+         * @brief Karatsuba 算法计算 NativeInt * NativeInt, 结果为一个两倍于 NativeInt 长度的数
          *
          * (a * 2^n + b) * (c * 2^n + d) = ac*2^2n + (ad + bc)*2^n + bd
-         * 这里 n = 32，下面的计算时由于进位的原因，做了多次平移。
+         * 这里 n = NativeInt 长度 / 2，下面的计算时由于进位的原因，做了多次平移。
          */
         inline void MultiplyWithKaratsuba(NativeInt operand1, NativeInt operand2, NativeInt *resultTwo) const {
-            NativeInt a = operand1 >> (m_limbBitLength / 2);
-            NativeInt b = operand1 & 0x0000FFFF;
-            NativeInt c = operand2 >> (m_limbBitLength / 2);
-            NativeInt d = operand2 & 0x0000FFFF;
+            NativeInt mask = 0x0;
+            uint32_t halfLimbLength = m_limbBitLength / 2;
+            for (int i = 0; i < halfLimbLength; ++i) {
+                mask += (NativeInt) 1 << i;
+            }
+
+            NativeInt a = operand1 >> halfLimbLength;
+            NativeInt b = operand1 & mask;
+            NativeInt c = operand2 >> halfLimbLength;
+            NativeInt d = operand2 & mask;
 
             NativeInt right = b * d;
             NativeInt middle;
-            NativeInt left = a * c + (static_cast<NativeInt>(addWithCarry(a * d, b * c, 0, &middle)) << (m_limbBitLength / 2));
-            NativeInt temp_sum = (right >> (m_limbBitLength / 2)) + (middle & 0x0000FFFF);
+            NativeInt left = a * c + (static_cast<NativeInt>(addWithCarry(a * d, b * c, 0, &middle)) << halfLimbLength);
+            NativeInt temp_sum = (right >> halfLimbLength) + (middle & mask);
 
-            resultTwo[1] = left + (middle >> (m_limbBitLength / 2)) + (temp_sum >> (m_limbBitLength / 2));
-            resultTwo[0] = (temp_sum << (m_limbBitLength / 2)) | (right & 0x0000FFFF);
+            resultTwo[1] = left + (middle >> halfLimbLength) + (temp_sum >> halfLimbLength);
+            resultTwo[0] = (temp_sum << halfLimbLength) | (right & mask);
         }
 
     protected:
