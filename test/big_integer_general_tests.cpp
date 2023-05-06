@@ -107,3 +107,49 @@ TYPED_TEST(BigIntegerTest, CompareTwoBigInteger) {
     vals2.push_back(14);
     EXPECT_EQ(BInt(vals1).Compare(BInt(vals2)), -1);
 }
+
+TYPED_TEST(BigIntegerTest, AddTwoUnsignedBigIntegers) {
+    using BInt = zhejiangfhe::BigInteger<TypeParam>;
+
+    BInt bigIntOne("3");
+    BInt bigIntTwo("-4");
+    EXPECT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(), "-1");
+    bigIntOne = BInt();
+    bigIntTwo = BInt("1234567");
+    EXPECT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(), "1234567");
+    bigIntOne = BInt("0");
+    bigIntTwo = BInt("123456789012345678901234567890");
+    EXPECT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(), "123456789012345678901234567890");
+    bigIntOne = BInt("123456789012345678901234567890");
+    bigIntTwo = BInt("-123456789012345678901234567890");
+    EXPECT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(),"0");
+    bigIntOne = BInt("12345678901234567890123456789012345678901234567890");
+    bigIntTwo = BInt("123456789012345678901234567890");
+    EXPECT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(),"12345678901234567890246913578024691357802469135780");
+}
+
+TYPED_TEST(BigIntegerTest, BiggerIntegerSubtractSmallerInteger) {
+    using BInt = zhejiangfhe::BigInteger<TypeParam>;
+    BInt bigIntOne("4");
+    BInt bigIntTwo("3");
+    EXPECT_EQ(bigIntOne.Sub(bigIntTwo).ConvertToString(), "1");
+    bigIntOne = BInt("1234567");
+    bigIntTwo = BInt();
+    EXPECT_EQ(bigIntOne.Sub(bigIntTwo).ConvertToString(), "1234567");
+    bigIntOne = BInt("123456789012345678901234567890");
+    bigIntTwo = BInt("0");
+
+    EXPECT_EQ(bigIntOne.Sub(bigIntTwo).ConvertToString(), "123456789012345678901234567890");
+    bigIntOne = BInt("123456789012345678901234567890");
+    bigIntTwo = BInt("123456789012345678901234567890");
+    EXPECT_EQ(bigIntOne.Sub(bigIntTwo).ConvertToString(),
+              "0");
+    bigIntOne = BInt("12345678901234567890246913578024691357802469135780");
+    bigIntTwo = BInt("123456789012345678901234567890");
+    EXPECT_EQ(bigIntOne.Sub(bigIntTwo).ConvertToString(),
+              "12345678901234567890123456789012345678901234567890");
+    bigIntOne = BInt("100000000000000000000000000000000000000000000000000");
+    bigIntTwo = BInt("99999999999999999999999999999999999999999999999999");
+    EXPECT_EQ(bigIntOne.Sub(bigIntTwo).ConvertToString(),
+              "1");
+}

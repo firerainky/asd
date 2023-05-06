@@ -197,7 +197,14 @@ namespace zhejiangfhe {
             }
             return SubWithoutSign(num);
         }
-        const BigInteger<NativeInt> &SubEq(const BigInteger<NativeInt> &b) {
+        const BigInteger<NativeInt> &SubEq(const BigInteger<NativeInt> &num) {
+            if (sign == false && num.sign == true) {
+                AssignObj(AddWithoutSign(num,sign));
+            }
+            if (sign == true && num.sign == false) {
+                AssignObj(AddWithoutSign(num,sign));
+            }
+            AssignObj(SubWithoutSign(num));
             return *this;
         }
 
