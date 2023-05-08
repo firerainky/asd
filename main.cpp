@@ -1,5 +1,9 @@
 
+// #include "basic_math.h"
+// #include <MathFunctions/big_integer.h>
+// #include "basic_math.h"
 #include "big_integer.h"
+// #include "internal/basic_math.h"
 #include "native_integer.h"
 #include <iosfwd>
 #include <iostream>
@@ -17,5 +21,7 @@ int main() {
     BigInteger<uint32_t> testBigIntA("52");
     std::cout << testBigIntA.ConvertToString().c_str() << std::endl;
 
+    uint64_t result[2];
+    basic_math::MultiplyWithKaratsuba<uint64_t>(0, 0, result);
     return 0;
 }

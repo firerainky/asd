@@ -38,5 +38,5 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googlebenchmark)
 
 # Add test sub directory
-add_subdirectory(test)
-add_subdirectory(benchmark)
+# add_subdirectory(test)
+# add_subdirectory(benchmark)

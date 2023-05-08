@@ -5,7 +5,8 @@
 #ifndef ZJ_FHE_LIB_BigInteger_H
 #define ZJ_FHE_LIB_BigInteger_H
 
-#include "../util/exception.h"
+// #include "../util/exception.h"
+#include "../internal/basic_math.h"
 #include "integer_interface.h"
 #include <cstdint>
 #include <iosfwd>
@@ -14,7 +15,6 @@
 #include <vector>
 
 namespace zhejiangfhe {
-
 
     template<typename NativeInt>
     class BigInteger : public IntegerInterface<BigInteger<NativeInt>> {
@@ -83,11 +83,7 @@ namespace zhejiangfhe {
         std::size_t length() const {
             return value.size();
         }
-        uint8_t addWithCarry(NativeInt operand1, NativeInt operand2, uint8_t carry, NativeInt *result) const {
-            operand1 += operand2;
-            *result = operand1 + carry;
-            return (operand1 < operand2) || (~operand1 < carry);
-        }
+
         uint8_t subWithBorrow(NativeInt operand1, NativeInt operand2, uint8_t borrow, NativeInt *result) const {
             auto diff = operand1 - operand2;
             *result = diff - (borrow != 0);
@@ -101,17 +97,17 @@ namespace zhejiangfhe {
             NativeInt currentLimb;
             int i = 0;
             while (i < length() && i < num.length()) {
-                carry = addWithCarry(value[i], num.value[i], carry, &currentLimb);
+                carry = basic_math::addWithCarry(value[i], num.value[i], carry, &currentLimb);
                 resultVectors.push_back(currentLimb);
                 ++i;
             }
             while (i < length()) {
-                carry = addWithCarry(value[i], 0, carry, &currentLimb);
+                carry = basic_math::addWithCarry<NativeInt>(value[i], 0, carry, &currentLimb);
                 resultVectors.push_back(currentLimb);
                 ++i;
             }
             while (i < num.length()) {
-                carry = addWithCarry(0, num.value[i], carry, &currentLimb);
+                carry = basic_math::addWithCarry<NativeInt>(0, num.value[i], carry, &currentLimb);
                 resultVectors.push_back(currentLimb);
                 ++i;
             }
@@ -199,10 +195,10 @@ namespace zhejiangfhe {
         }
         const BigInteger<NativeInt> &SubEq(const BigInteger<NativeInt> &num) {
             if (sign == false && num.sign == true) {
-                AssignObj(AddWithoutSign(num,sign));
+                AssignObj(AddWithoutSign(num, sign));
             }
             if (sign == true && num.sign == false) {
-                AssignObj(AddWithoutSign(num,sign));
+                AssignObj(AddWithoutSign(num, sign));
             }
             AssignObj(SubWithoutSign(num));
             return *this;
@@ -231,33 +227,6 @@ namespace zhejiangfhe {
                 *(a + i) = 0;
             }
             return Val;
-        }
-
-        /**
-         * @brief Karatsuba 算法计算 NativeInt * NativeInt, 结果为一个两倍于 NativeInt 长度的数
-         *
-         * (a * 2^n + b) * (c * 2^n + d) = ac*2^2n + (ad + bc)*2^n + bd
-         * 这里 n = NativeInt 长度 / 2，下面的计算时由于进位的原因，做了多次平移。
-         */
-        inline void MultiplyWithKaratsuba(NativeInt operand1, NativeInt operand2, NativeInt *resultTwo) const {
-            NativeInt mask = 0x0;
-            uint32_t halfLimbLength = m_limbBitLength / 2;
-            for (int i = 0; i < halfLimbLength; ++i) {
-                mask += (NativeInt) 1 << i;
-            }
-
-            NativeInt a = operand1 >> halfLimbLength;
-            NativeInt b = operand1 & mask;
-            NativeInt c = operand2 >> halfLimbLength;
-            NativeInt d = operand2 & mask;
-
-            NativeInt right = b * d;
-            NativeInt middle;
-            NativeInt left = a * c + (static_cast<NativeInt>(addWithCarry(a * d, b * c, 0, &middle)) << halfLimbLength);
-            NativeInt temp_sum = (right >> halfLimbLength) + (middle & mask);
-
-            resultTwo[1] = left + (middle >> halfLimbLength) + (temp_sum >> halfLimbLength);
-            resultTwo[0] = (temp_sum << halfLimbLength) | (right & mask);
         }
 
     protected:

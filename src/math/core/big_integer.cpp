@@ -3,6 +3,7 @@
 //
 
 #include "big_integer.h"
+#include "../internal/basic_math.h"
 
 namespace zhejiangfhe {
     template<typename NativeInt>
@@ -113,13 +114,13 @@ namespace zhejiangfhe {
         for (int i = 0; i < value.size(); ++i) {
             for (int j = 0; j < b.value.size(); ++j) {
                 NativeInt temp_result[2];
-                MultiplyWithKaratsuba(value[i], b.value[j], temp_result);
+                basic_math::MultiplyWithKaratsuba(value[i], b.value[j], temp_result);
                 uint8_t carry = 0;
                 NativeInt sum;
                 if (i + j + 1 > values.size()) {
                     values.push_back(temp_result[0]);
                 } else {
-                    carry = addWithCarry(temp_result[0], values[i + j], carry, &sum);
+                    carry = basic_math::addWithCarry(temp_result[0], values[i + j], carry, &sum);
                     values[i + j] = sum;
                     temp_result[1] += carry;
                     carry = 0;
@@ -128,14 +129,14 @@ namespace zhejiangfhe {
                 if (i + j + 2 > values.size()) {
                     values.push_back(temp_result[1]);
                 } else {
-                    carry = addWithCarry(temp_result[1], values[i + j + 1], carry, &sum);
+                    carry = basic_math::addWithCarry(temp_result[1], values[i + j + 1], carry, &sum);
                     values[i + j + 1] = sum;
                     uint8_t currentIdx = i + j + 2;
                     while (carry) {
                         if (currentIdx > values.size()) {
                             values.push_back(carry);
                         } else {
-                            carry = addWithCarry(0, values[currentIdx], carry, &sum);
+                            carry = basic_math::addWithCarry<NativeInt>(0, values[currentIdx], carry, &sum);
                             values[currentIdx] = sum;
                         }
                     }
