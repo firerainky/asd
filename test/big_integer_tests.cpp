@@ -2,9 +2,9 @@
 #include <gtest/gtest.h>
 
 TEST(big_integer_tests, MultiplyWithKaratsuba) {
-    using BInt = zhejiangfhe::BigInteger<u_int32_t>;
+    using BInt = zhejiangfhe::BigInteger<uint32_t>;
     BInt sut;
-    u_int32_t result[2];
+    uint32_t result[2];
 
     sut.MultiplyWithKaratsuba(0, 0, result);
     ASSERT_EQ(0, result[0]);
@@ -30,9 +30,9 @@ TEST(big_integer_tests, MultiplyWithKaratsuba) {
 }
 
 TEST(big_integer_tests, MultiplyWithKaratsubaWithUInt64Limb) {
-    using BInt = zhejiangfhe::BigInteger<u_int64_t>;
+    using BInt = zhejiangfhe::BigInteger<uint64_t>;
     BInt sut;
-    u_int64_t result[2];
+    uint64_t result[2];
 
     sut.MultiplyWithKaratsuba(0, 0, result);
     EXPECT_EQ(0, result[0]);

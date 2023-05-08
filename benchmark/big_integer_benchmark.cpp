@@ -4,7 +4,7 @@
 
 static void BM_BigInt0Creation(benchmark::State &state) {
     for (auto _: state)
-        zhejiangfhe::BigInteger<u_int32_t> zero;
+        zhejiangfhe::BigInteger<uint32_t> zero;
 }
 // Register the function as a benchmark
 BENCHMARK(BM_BigInt0Creation);

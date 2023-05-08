@@ -11,7 +11,7 @@ template<typename T>
 class BigIntegerTest : public testing::Test {};
 
 // 需要测试的 limb_type 类型列表，目前仅需要 uint32 和 uint64
-using LimbTypes = ::testing::Types<u_int32_t, u_int64_t>;
+using LimbTypes = ::testing::Types<uint32_t, uint64_t>;
 
 // 将 test fixture 与类型列表绑定在一起，这样下面的测试就可以自动对类型列表中的每一种都执行一遍了
 TYPED_TEST_SUITE(BigIntegerTest, LimbTypes);
@@ -185,7 +185,7 @@ TYPED_TEST(BigIntegerTest, MultiplyTwoBigInteger) {
 }
 
 TYPED_TEST(BigIntegerTest, MultiplyEqTwoBigInteger) {
-    using BInt = zhejiangfhe::BigInteger<u_int32_t>;
+    using BInt = zhejiangfhe::BigInteger<uint32_t>;
 
     EXPECT_EQ(BInt().MulEq(BInt("5")).ConvertToString(), "0");
 

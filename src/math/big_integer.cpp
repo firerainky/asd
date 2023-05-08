@@ -151,6 +151,6 @@ namespace zhejiangfhe {
         return *this = this->Mul(b);
     }
 
-    template class zhejiangfhe::BigInteger<u_int32_t>;
-    template class zhejiangfhe::BigInteger<u_int64_t>;
+    template class zhejiangfhe::BigInteger<uint32_t>;
+    template class zhejiangfhe::BigInteger<uint64_t>;
 }// namespace zhejiangfhe

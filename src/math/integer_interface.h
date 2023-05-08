@@ -62,7 +62,7 @@ namespace zhejiangfhe {
         }
 
 
-        inline T Exp(u_int32_t p) {
+        inline T Exp(uint32_t p) {
             if (p == 0) {
                 return 1;
             }
