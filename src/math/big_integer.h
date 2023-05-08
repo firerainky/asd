@@ -15,6 +15,62 @@
 
 namespace zhejiangfhe {
 
+    template <typename NativeInt>
+    class BigInteger;
+
+    template <typename utype>
+    struct SignedDoubleDataType {
+        typedef void T;
+    };
+
+
+    template <>
+    struct SignedDoubleDataType<uint16_t> {
+        typedef int32_t T;
+    };
+
+    template <>
+    struct SignedDoubleDataType<uint32_t> {
+        typedef int64_t T;
+    };
+
+    template <>
+    struct SignedDoubleDataType<uint64_t> {
+        typedef __int128 T;
+    };
+
+    template <typename utype>
+    struct DoubleDataType {
+        typedef void T;
+    };
+
+    template <>
+    struct DoubleDataType<uint16_t> {
+        typedef uint32_t T;
+    };
+
+    template <>
+    struct DoubleDataType<uint32_t> {
+        typedef uint64_t T;
+    };
+
+
+    template <>
+    struct DoubleDataType<uint64_t> {
+        typedef unsigned __int128 T;
+    };
+
+    template <uint32_t N>
+    struct Log2 {
+        static const uint32_t value = 1 + Log2<N / 2>::value;
+    };
+
+
+    template <>
+    struct Log2<2> {
+        static const uint32_t value = 1;
+    };
+
     template<typename NativeInt>
     class BigInteger : public IntegerInterface<BigInteger<NativeInt>> {
 
@@ -30,6 +86,17 @@ namespace zhejiangfhe {
 
         NativeInt ConvertToLimb() const;
 
+        BigInteger(NativeInt val, bool sign = false) {
+            value.push_back(val);
+            m_MSB = m_GetMSBForLimb(val);
+        }
+
+
+        template <typename T, typename std::enable_if<!std::is_same<T, const BigInteger>::value, bool>::type = true>
+        const BigInteger& operator=(const T& val) {
+            return (*this = BigInteger(val));
+        }
+
         /**
          * @brief Compare the current BigInteger with another one
          * 
@@ -44,28 +111,81 @@ namespace zhejiangfhe {
         BigInteger<NativeInt> Sub(const BigInteger<NativeInt> &num);
         const BigInteger<NativeInt> &SubEq(const BigInteger<NativeInt> &num);
 
+        std::size_t length() const {
+            return value.size();
+        }
+
+        inline friend BigInteger<NativeInt> operator+(const BigInteger<NativeInt> &a, const NativeInt &b) {
+            return a.Add(BigInteger(b));
+        }
+
+        inline friend BigInteger<NativeInt> operator-(const BigInteger<NativeInt> &a, const NativeInt &b) {
+            return a.Sub(BigInteger(b));
+        }
+
+
+        inline friend BigInteger<NativeInt> operator*(const BigInteger<NativeInt> &a, const NativeInt &b) {
+            return a.Mul(BigInteger(b));
+        }
+
+        inline friend BigInteger<NativeInt> operator/(const BigInteger<NativeInt> &a, const NativeInt &b) {
+            return a.DividedBy(BigInteger(b));
+        }
+
         BigInteger<NativeInt> Mul(const BigInteger<NativeInt> &b) const;
+
         const BigInteger<NativeInt> &MulEq(const BigInteger<NativeInt> &b);
 
-        BigInteger<NativeInt> DividedBy(const BigInteger<NativeInt> &b) const {
-            return BigInteger("0");
-        }
+        BigInteger<NativeInt> DividedBy(const BigInteger<NativeInt> &b) const;
+
         const BigInteger<NativeInt> &DividedByEq(const BigInteger<NativeInt> &b) {
             return *this;
         }
+
+        BigInteger<NativeInt> LeftShift(uint16_t shift) const;
+
+
+        BigInteger<NativeInt> RightShift(uint16_t shift) const;
+        /**
+         *
+         * @param quotientIn 商
+         * @param remainderIn 余数
+         * @param uIn
+         * @param v
+         * @return
+         */
+        bool Divide(BigInteger& quotientIn, BigInteger& remainderIn, const BigInteger& uIn, const BigInteger& vIn) const;
+
+        inline int nlz(NativeInt x) const {
+            if (typeid(x) == typeid(uint64_t)) {
+                return nlz64(x);
+            } else if (typeid(x) == typeid(uint32_t)) {
+                return nlz32(x);
+            } else {
+                ZJFHE_THROW(zhejiangfhe::TypeException, "not support native int");
+            }
+        }
+
+        int nlz64(NativeInt x) const;
+
+        int nlz32(NativeInt x) const;
+
+    protected:
 
     private:
         std::vector<NativeInt> value;
         bool sign = false;
         static const uint32_t m_limbBitLength;
         uint32_t m_MSB = 0;
+        static const NativeInt m_MaxLimb;
+        static const uint32_t m_log2LimbBitLength;
+        typedef typename DoubleDataType<NativeInt>::T Dlimb_t;
+        typedef typename SignedDoubleDataType<NativeInt>::T SDlimb_t;
 
         void AssignVal(const std::string &str);
         BigInteger<NativeInt> &AssignObj(const BigInteger<NativeInt> &other);
-
-        void m_GetMSB() {
-            m_MSB = (value.size() - 1) * m_limbBitLength + m_GetMSBForLimb(value.back());
-        }
+        static uint32_t ceilIntByUInt(const NativeInt Number);
+        void RefreshMSB();
         uint32_t m_GetMSBForLimb(NativeInt x) {
             uint64_t y = ((uint64_t) x);
             if (y == 0) {
@@ -74,7 +194,7 @@ namespace zhejiangfhe {
                 return 64 - (sizeof(unsigned long) == 8 ? __builtin_clzl(y) : __builtin_clzll(y));
             }
         }
-
+        void NormalizeLimbs(void);
         int AbsoluteCompare(const BigInteger<NativeInt> &another) const;
 
         NativeInt UintInBinaryToDecimal(uint8_t *a);
@@ -95,8 +215,6 @@ namespace zhejiangfhe {
     };
 
 
-    template<typename NativeInt>
-    const uint32_t BigInteger<NativeInt>::m_limbBitLength = sizeof(NativeInt) * 8;
 
 }// namespace zhejiangfhe
 

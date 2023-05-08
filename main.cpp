@@ -17,5 +17,12 @@ int main() {
     BigInteger<uint32_t> testBigIntA("52");
     std::cout << testBigIntA.ConvertToString().c_str() << std::endl;
 
+
+
+    BigInteger<uint64_t> aaaa("222222");
+
+    BigInteger<uint64_t> bbbb("222222");
+    aaaa.DividedBy(bbbb);
+
     return 0;
 }

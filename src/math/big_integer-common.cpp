@@ -80,7 +80,7 @@ namespace zhejiangfhe {
             }
             if (zero_ptr == arr_size && dec_arr[arr_size - 1] == 0) {
                 value.push_back(UintInBinaryToDecimal(bit_arr.get()));
-                m_GetMSB();
+                RefreshMSB();
             }
         }
     }
@@ -219,6 +219,112 @@ namespace zhejiangfhe {
         }
         return Val;
     }
+
+    template<typename NativeInt>
+    int BigInteger<NativeInt>::nlz64(NativeInt x) const {
+        int n;
+        if (x == 0) {
+            return (64);
+        }
+
+        return __builtin_clzl(x);
+//        n = 0;
+//        if (x <= 0x000000FF) {
+//            n = n + 32;
+//            x = x << 32;
+//        }
+//        if (x <= 0x0000FFFF) {
+//            n = n + 16;
+//            x = x << 16;
+//        }
+//        if (x <= 0x00FFFFFF) {
+//            n = n + 8;
+//            x = x << 8;
+//        }
+//        if (x <= 0x0FFFFFFF) {
+//            n = n + 4;
+//            x = x << 4;
+//        }
+//        if (x <= 0x3FFFFFFF) {
+//            n = n + 2;
+//            x = x << 2;
+//        }
+//        if (x <= 0x7FFFFFFF) {
+//            n = n + 1;
+//        }
+//        return n;
+    }
+
+
+    template<typename NativeInt>
+    int BigInteger<NativeInt>::nlz32(NativeInt x) const {
+        int n;
+
+        if (x == 0) {
+            return (32);
+        }
+        n = 0;
+        if (x <= 0x0000FFFF) {
+            n = n + 16;
+            x = x << 16;
+        }
+        if (x <= 0x00FFFFFF) {
+            n = n + 8;
+            x = x << 8;
+        }
+        if (x <= 0x0FFFFFFF) {
+            n = n + 4;
+            x = x << 4;
+        }
+        if (x <= 0x3FFFFFFF) {
+            n = n + 2;
+            x = x << 2;
+        }
+        if (x <= 0x7FFFFFFF) {
+            n = n + 1;
+        }
+        return n;
+    }
+
+    template <typename NativeInt>
+    uint32_t BigInteger<NativeInt>::ceilIntByUInt(const NativeInt Number) {
+        // mask to perform bitwise AND
+        static NativeInt mask = m_limbBitLength - 1;
+
+        if (!Number) {
+            return 1;
+        }
+
+        if ((Number & mask) != 0) {
+            return (Number >> m_log2LimbBitLength) + 1;
+        } else {
+            return Number >> m_log2LimbBitLength;
+        }
+    }
+    template <typename NativeInt>
+    void BigInteger<NativeInt>::NormalizeLimbs(void) {
+        for (uint32_t i = this->value.size() - 1; i >= 1; i--) {
+            if (!this->value.back()) {
+                this->value.pop_back();
+            } else {
+                break;
+            }
+        }
+    }
+
+    template <typename NativeInt>
+    void BigInteger<NativeInt>::RefreshMSB() {
+        m_MSB = (value.size() - 1) * m_limbBitLength + m_GetMSBForLimb(value.back());
+    }
+
+    template<typename NativeInt>
+    const uint32_t BigInteger<NativeInt>::m_limbBitLength = sizeof(NativeInt) * 8;
+
+    template <typename NativeInt>
+    const NativeInt BigInteger<NativeInt>::m_MaxLimb = std::numeric_limits<NativeInt>::max();
+
+    template <typename NativeInt>
+    const uint32_t BigInteger<NativeInt>::m_log2LimbBitLength = Log2<m_limbBitLength>::value;
 
     template class zhejiangfhe::BigInteger<uint32_t>;
     template class zhejiangfhe::BigInteger<uint64_t>;

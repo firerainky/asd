@@ -209,6 +209,119 @@ namespace zhejiangfhe {
         return *this = this->Mul(b);
     }
 
+
+    template<typename NativeInt>
+    BigInteger<NativeInt> BigInteger<NativeInt>::DividedBy(const BigInteger<NativeInt> &denominator) const {
+
+        BigInteger quotientIn(0);
+        BigInteger remainderIn(0);
+        Divide(quotientIn, remainderIn, *this, denominator);
+        return quotientIn;
+    }
+
+    template<typename NativeInt>
+    bool BigInteger<NativeInt>::Divide(BigInteger& quotientIn, BigInteger& remainderIn, const BigInteger& uIn, const BigInteger& vIn) const {
+
+        std::vector<NativeInt>& quotient = quotientIn.value;
+        std::vector<NativeInt>& remainder = remainderIn.value;
+        const std::vector<NativeInt>& u = (uIn.value);
+        const std::vector<NativeInt>& v = (vIn.value);
+
+        int m = u.size();
+        int n = v.size();
+        quotient.resize(m - n + 1);
+
+        Dlimb_t qhat;  // Estimated quotient digit.
+        Dlimb_t rhat;  // remainder
+        Dlimb_t product;     // Product of two digits.
+        SDlimb_t t, k;
+        int s, i, j;
+
+        const Dlimb_t ffs = (Dlimb_t)m_MaxLimb;      // Number  (2**64)-1.
+        const Dlimb_t b   = (Dlimb_t)m_MaxLimb + 1;  // Number base (2**64).
+
+
+        if (m < n || n <= 0 || v[n - 1] == 0) {
+            std::cout << "Error in Divide m, n, v[n-1] " << m << ", " << n << ", " << v[n - 1] << std::endl;
+            return false;  // Return if invalid param.
+        }
+
+        if (n == 1) {                          // Take care of
+            k = 0;                             // the case of a
+            for (j = m - 1; j >= 0; j--) {     // single-digit
+                quotient[j] = (k * b + u[j]) / v[0];  // divisor here.
+                k    = (k * b + u[j]) - quotient[j] * v[0];
+            }
+            if (remainder.size() != 0) {
+                remainder[0] = k;
+            }
+            return true;
+        }
+
+        s = nlz(v[n - 1]);
+
+        std::vector<NativeInt> vn(n);
+        for (i = n - 1; i > 0; i--) {
+            vn[i] = (v[i] << s) | v[i - 1] >> (m_limbBitLength - s);
+        }
+        vn[0] = v[0] << s;
+
+        std::vector<NativeInt> un(m + 1);
+
+        un[m] = u[m - 1] >> (m_limbBitLength - s);
+        for (i = m - 1; i > 0; i--) {
+            un[i] = (u[i] << s) | (u[i - 1] >> (m_limbBitLength - s));
+        }
+        un[0] = u[0] << s;
+
+        // Main loop
+        for (j = m - n; j >= 0; j--) {
+            // Compute estimate qhat of q[j].
+            qhat = (un[j + n] * b + un[j + n - 1]) / vn[n - 1];
+            rhat = (un[j + n] * b + un[j + n - 1]) - qhat * vn[n - 1];
+            while (qhat >= b || qhat * vn[n - 2] > b * rhat + un[j + n - 2]) {
+                qhat = qhat - 1;
+                rhat = rhat + vn[n - 1];
+                if (rhat >= b) {
+                    break ;
+                }
+            }
+
+            // Multiply and subtract.
+            k = 0;
+            for (i = 0; i < n; i++) {
+                product = qhat * vn[i];
+                t         = un[i + j] - k - (product & ffs);
+                un[i + j] = t;
+                k         = (product >> m_limbBitLength) - (t >> m_limbBitLength);
+            }
+            t         = un[j + n] - k;
+            un[j + n] = t;
+
+
+            // Store quotient digit.
+            quotient[j] = qhat;
+            if (t < 0) {          // If we subtracted too
+                quotient[j] = quotient[j] - 1;  // much, add back.
+                k    = 0;
+                for (i = 0; i < n; i++) {
+                    t         = (Dlimb_t)un[i + j] + vn[i] + k;
+                    un[i + j] = t;
+                    k         = t >> m_limbBitLength;
+                }
+                un[j + n] = un[j + n] + k;
+            }
+        }
+
+        // store remainder
+        remainder.resize(n);
+        for (i = 0; i < n - 1; i++) {
+            remainder[i] = (un[i] >> s) | un[i + 1] << (m_limbBitLength - s);
+        }
+        remainder[n - 1] = un[n - 1] >> s;
+        return true;
+    }
+
     template class zhejiangfhe::BigInteger<uint32_t>;
     template class zhejiangfhe::BigInteger<uint64_t>;
 }// namespace zhejiangfhe

@@ -36,6 +36,14 @@ namespace zhejiangfhe {
         const T &SubEq(const T &b);
 
 
+        inline friend T operator-(const T &a, const T &b) {
+            return a.Sub(b);
+        }
+        inline friend const T &operator-=(T &a, const T &b) {
+            return a.SubEq(b);
+        }
+
+
         T Mul(const T &b) const;
 
 
@@ -59,6 +67,28 @@ namespace zhejiangfhe {
         }
         inline friend const T &operator/=(T &a, const T &b) {
             return a.DividedByEq(b);
+        }
+
+
+        //// relational operators, using Compare
+        friend bool operator==(const T& a, const T& b) {
+            return a.Compare(b) == 0;
+        }
+        friend bool operator!=(const T& a, const T& b) {
+            return a.Compare(b) != 0;
+        }
+
+        friend bool operator>(const T& a, const T& b) {
+            return a.Compare(b) > 0;
+        }
+        friend bool operator>=(const T& a, const T& b) {
+            return a.Compare(b) >= 0;
+        }
+        friend bool operator<(const T& a, const T& b) {
+            return a.Compare(b) < 0;
+        }
+        friend bool operator<=(const T& a, const T& b) {
+            return a.Compare(b) <= 0;
         }
 
 

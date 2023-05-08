@@ -200,3 +200,34 @@ TYPED_TEST(BigIntegerTest, MultiplyEqTwoBigInteger) {
     num *= BInt("-999999999999999999999999999999");
     EXPECT_EQ(num.ConvertToString(), "-999999999999999999999999999997000000000000000000000000000002999999999999999999999999999999");
 }
+
+TYPED_TEST(BigIntegerTest, DivideTwoBigInteger) {
+    using BInt = zhejiangfhe::BigInteger<TypeParam>;
+
+    EXPECT_EQ(BInt(10).DividedBy(BInt(5)).ConvertToString(), "2");
+    EXPECT_EQ(BInt("12884901888").DividedBy(BInt("4294967296")).ConvertToString(), "3");
+
+    EXPECT_EQ(BInt("99999999999999999999999999999").DividedBy(BInt("33333333333333333333333333333")).ConvertToString(), "3");
+    BInt ans = BInt("999999999999999999999999999998000000000000000000000000000001").DividedBy(BInt("999999999999999999999999999999"));
+    EXPECT_EQ(ans.ConvertToString(), "999999999999999999999999999999");
+}
+
+
+TYPED_TEST(BigIntegerTest, LeftShiftBigInteger) {
+    using BInt = zhejiangfhe::BigInteger<TypeParam>;
+    EXPECT_EQ(BInt(10).LeftShift(1).ConvertToString(), "20");
+
+    EXPECT_EQ(BInt(1024).LeftShift(1).ConvertToString(), "2048");
+
+    EXPECT_EQ(BInt("4294967297").LeftShift(1).ConvertToString(), "8589934594");
+}
+
+
+TYPED_TEST(BigIntegerTest, RightShiftBigInteger) {
+    using BInt = zhejiangfhe::BigInteger<TypeParam>;
+    EXPECT_EQ(BInt(10).RightShift(1).ConvertToString(), "5");
+
+    EXPECT_EQ(BInt(1024).RightShift(2).ConvertToString(), "256");
+    EXPECT_EQ(BInt("4294967296").RightShift(1).ConvertToString(), "2147483648");
+
+}
