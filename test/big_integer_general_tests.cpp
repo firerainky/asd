@@ -243,3 +243,11 @@ TEST(BigIntegerTest, LeadingZero) {
     EXPECT_EQ(BInt64(1).nlz(1), 63);
     EXPECT_EQ(BInt64(1).nlz(2), 62);
 }
+
+TYPED_TEST(BigIntegerTest, ExpBigInteger) {
+    using BInt = zhejiangfhe::BigInteger<TypeParam>;
+
+    EXPECT_EQ(BInt(10).Exp(1).ConvertToString(), "10");
+    EXPECT_EQ(BInt(10).Exp(2).ConvertToString(), "100");
+}
+

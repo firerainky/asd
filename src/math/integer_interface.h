@@ -11,6 +11,7 @@
 namespace zhejiangfhe {
     template<typename T>
     class IntegerInterface {
+    public:
 
         /**
          *
@@ -97,7 +98,7 @@ namespace zhejiangfhe {
                 return 1;
             }
             if (p == 1) {
-                return this;
+                return *this;
             }
             T tmp = Exp(p / 2);
             if (p % 2 == 0) {

@@ -1,7 +1,6 @@
 set(TEST_MAIN unittests)
 set(TEST_SOURCES
-  big_integer_tests.cpp
-  big_integer_general_tests.cpp
+        big_integer_general_tests.cpp
   main_tests.cpp
 )
 set(TEST_INCLUDES ./)

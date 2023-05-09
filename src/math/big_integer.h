@@ -153,6 +153,21 @@ namespace zhejiangfhe {
 
         int nlz32(NativeInt x) const;
 
+        inline BigInteger Exp(uint32_t p) {
+            if (p == 0) {
+                return BigInteger(1);
+            }
+            if (p == 1) {
+                return *this;
+            }
+            BigInteger tmp = Exp(p / 2);
+            if (p % 2 == 0) {
+                return tmp * tmp;
+            } else {
+                return tmp * tmp * (*this);
+            }
+        }
+
     protected:
 
     private:
