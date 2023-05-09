@@ -68,7 +68,11 @@ namespace zhejiangfhe {
         }
         uint32_t m_GetMSBForLimb(NativeInt x) {
             uint64_t y = ((uint64_t) x);
-            return 63 - (sizeof(unsigned long) == 8 ? __builtin_clzl(y) : __builtin_clzll(y));
+            if (y == 0) {
+                return 0;
+            } else {
+                return 64 - (sizeof(unsigned long) == 8 ? __builtin_clzl(y) : __builtin_clzll(y));
+            }
         }
 
         int AbsoluteCompare(const BigInteger<NativeInt> &another) const;
