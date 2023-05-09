@@ -7,14 +7,14 @@
 namespace zhejiangfhe {
 
     template<typename NativeInt>
-    uint8_t BigInteger<NativeInt>::addWithCarry(NativeInt operand1, NativeInt operand2, uint8_t carry, NativeInt *result) const {
+    uint8_t BigInteger<NativeInt>::addWithCarry(NativeInt operand1, NativeInt operand2, uint8_t carry, NativeInt *result) {
         operand1 += operand2;
         *result = operand1 + carry;
         return (operand1 < operand2) || (~operand1 < carry);
     }
 
     template<typename NativeInt>
-    uint8_t BigInteger<NativeInt>::subWithBorrow(NativeInt operand1, NativeInt operand2, uint8_t borrow, NativeInt *result) const {
+    uint8_t BigInteger<NativeInt>::subWithBorrow(NativeInt operand1, NativeInt operand2, uint8_t borrow, NativeInt *result) {
         auto diff = operand1 - operand2;
         *result = diff - (borrow != 0);
         return (diff > operand1) || (diff < borrow);
@@ -143,7 +143,7 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
-    void BigInteger<NativeInt>::MultiplyWithKaratsuba(NativeInt operand1, NativeInt operand2, NativeInt *resultTwo) const {
+    void BigInteger<NativeInt>::MultiplyWithKaratsuba(NativeInt operand1, NativeInt operand2, NativeInt *resultTwo) {
         NativeInt mask = 0x0;
         uint32_t halfLimbLength = m_limbBitLength / 2;
         for (int i = 0; i < halfLimbLength; ++i) {

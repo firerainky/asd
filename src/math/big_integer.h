@@ -75,8 +75,8 @@ namespace zhejiangfhe {
 
         NativeInt UintInBinaryToDecimal(uint8_t *a);
 
-        uint8_t addWithCarry(NativeInt operand1, NativeInt operand2, uint8_t carry, NativeInt *result) const;
-        uint8_t subWithBorrow(NativeInt operand1, NativeInt operand2, uint8_t borrow, NativeInt *result) const;
+        static uint8_t addWithCarry(NativeInt operand1, NativeInt operand2, uint8_t carry, NativeInt *result);
+        static uint8_t subWithBorrow(NativeInt operand1, NativeInt operand2, uint8_t borrow, NativeInt *result);
 
         BigInteger<NativeInt> AddWithoutSign(const BigInteger<NativeInt> &num, bool sign = false) const;
         BigInteger<NativeInt> SubWithoutSign(const BigInteger<NativeInt> &num, bool sign = false) const;
@@ -87,7 +87,7 @@ namespace zhejiangfhe {
          * (a * 2^n + b) * (c * 2^n + d) = ac*2^2n + (ad + bc)*2^n + bd
          * 这里 n = NativeInt 长度 / 2，下面的计算时由于进位的原因，做了多次平移。
          */
-        void MultiplyWithKaratsuba(NativeInt operand1, NativeInt operand2, NativeInt *resultTwo) const;
+        static void MultiplyWithKaratsuba(NativeInt operand1, NativeInt operand2, NativeInt *resultTwo);
     };
 
 
