@@ -115,23 +115,6 @@ namespace zhejiangfhe {
             return value.size();
         }
 
-        inline friend BigInteger<NativeInt> operator+(const BigInteger<NativeInt> &a, const NativeInt &b) {
-            return a.Add(BigInteger(b));
-        }
-
-        inline friend BigInteger<NativeInt> operator-(const BigInteger<NativeInt> &a, const NativeInt &b) {
-            return a.Sub(BigInteger(b));
-        }
-
-
-        inline friend BigInteger<NativeInt> operator*(const BigInteger<NativeInt> &a, const NativeInt &b) {
-            return a.Mul(BigInteger(b));
-        }
-
-        inline friend BigInteger<NativeInt> operator/(const BigInteger<NativeInt> &a, const NativeInt &b) {
-            return a.DividedBy(BigInteger(b));
-        }
-
         BigInteger<NativeInt> Mul(const BigInteger<NativeInt> &b) const;
 
         const BigInteger<NativeInt> &MulEq(const BigInteger<NativeInt> &b);

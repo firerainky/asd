@@ -231,3 +231,15 @@ TYPED_TEST(BigIntegerTest, RightShiftBigInteger) {
     EXPECT_EQ(BInt("4294967296").RightShift(1).ConvertToString(), "2147483648");
 
 }
+
+
+TEST(BigIntegerTest, LeadingZero) {
+    using BInt = zhejiangfhe::BigInteger<uint32_t>;
+    EXPECT_EQ(BInt(1).nlz(1), 31);
+    EXPECT_EQ(BInt(1).nlz(2), 30);
+
+
+    using BInt64 = zhejiangfhe::BigInteger<uint64_t>;
+    EXPECT_EQ(BInt64(1).nlz(1), 63);
+    EXPECT_EQ(BInt64(1).nlz(2), 62);
+}

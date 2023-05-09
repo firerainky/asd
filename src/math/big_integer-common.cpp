@@ -226,33 +226,31 @@ namespace zhejiangfhe {
         if (x == 0) {
             return (64);
         }
-
-        return __builtin_clzl(x);
-//        n = 0;
-//        if (x <= 0x000000FF) {
-//            n = n + 32;
-//            x = x << 32;
-//        }
-//        if (x <= 0x0000FFFF) {
-//            n = n + 16;
-//            x = x << 16;
-//        }
-//        if (x <= 0x00FFFFFF) {
-//            n = n + 8;
-//            x = x << 8;
-//        }
-//        if (x <= 0x0FFFFFFF) {
-//            n = n + 4;
-//            x = x << 4;
-//        }
-//        if (x <= 0x3FFFFFFF) {
-//            n = n + 2;
-//            x = x << 2;
-//        }
-//        if (x <= 0x7FFFFFFF) {
-//            n = n + 1;
-//        }
-//        return n;
+        n = 0;
+        if (x <= 0x00000000FFFFFFFF) {
+            n = n + 32;
+            x = x << 32;
+        }
+        if (x <= 0x0000FFFFFFFFFFFF) {
+            n = n + 16;
+            x = x << 16;
+        }
+        if (x <= 0x00FFFFFFFFFFFFFF) {
+            n = n + 8;
+            x = x << 8;
+        }
+        if (x <= 0x0FFFFFFFFFFFFFFF) {
+            n = n + 4;
+            x = x << 4;
+        }
+        if (x <= 0x3FFFFFFFFFFFFFFF) {
+            n = n + 2;
+            x = x << 2;
+        }
+        if (x <= 0x7FFFFFFFFFFFFFFF) {
+            n = n + 1;
+        }
+        return n;
     }
 
 
