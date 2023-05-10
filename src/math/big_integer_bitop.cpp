@@ -42,6 +42,22 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
+    BigInteger<NativeInt> BigInteger<NativeInt>::Xor(const BigInteger<NativeInt> another) const {
+        std::vector<NativeInt> vals;
+        for (auto i = 0; (i < value.size() || i < another.value.size()); ++i) {
+            if (i >= value.size()) {
+                vals.push_back(another.value[i]);
+            } else if (i >= another.value.size()) {
+                vals.push_back(value[i]);
+            } else {
+                vals.push_back(value[i] ^ another.value[i]);
+            }
+        }
+
+        return BigInteger(vals, sign ^ another.sign);
+    }
+
+    template<typename NativeInt>
     BigInteger<NativeInt> BigInteger<NativeInt>::LeftShift(uint16_t shift) const {
         if (this->m_MSB == 0) {
             return BigInteger(0);
