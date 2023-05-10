@@ -127,10 +127,19 @@ namespace zhejiangfhe {
 
         // Bit Operation
         BigInteger<NativeInt> And(const BigInteger<NativeInt>) const;
+        const BigInteger<NativeInt> &AndEq(const BigInteger<NativeInt>);
+
         BigInteger<NativeInt> Or(const BigInteger<NativeInt>) const;
+        const BigInteger<NativeInt> &OrEq(const BigInteger<NativeInt>);
+
         BigInteger<NativeInt> Not() const;
+        const BigInteger<NativeInt> &NotEq();
+
         BigInteger<NativeInt> Xor(const BigInteger<NativeInt>) const;
+        const BigInteger<NativeInt> &XorEq(const BigInteger<NativeInt>);
+
         BigInteger<NativeInt> Negate() const;
+        const BigInteger<NativeInt> &NegateEq();
 
         BigInteger<NativeInt> LeftShift(uint16_t shift) const;
         BigInteger<NativeInt> RightShift(uint16_t shift) const;

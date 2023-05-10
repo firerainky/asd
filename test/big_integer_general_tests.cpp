@@ -266,6 +266,10 @@ TYPED_TEST(BigIntegerTest, BitwiseAnd) {
     EXPECT_EQ(BInt("1234567890123456789012345678901234567891").And(BInt("-1")).ConvertToString(), "-1");
     EXPECT_EQ(BInt("1").And(BInt("-0")).ConvertToString(), "0");
     EXPECT_EQ(BInt("-1234567890123456789012345678901234567891").And(BInt("-1")).ConvertToString(), "-1");
+
+    BInt num = BInt("-1234567890123456789012345678901234567891");
+    EXPECT_TRUE(num.AndEq(BInt("-1")) == BInt("-1"));
+    EXPECT_TRUE(num == BInt("-1"));
 }
 
 TYPED_TEST(BigIntegerTest, BitwiseOr) {
@@ -281,6 +285,10 @@ TYPED_TEST(BigIntegerTest, BitwiseOr) {
     EXPECT_EQ(BInt("1234567890123456789012345678901234567890").Or(BInt("-1")).ConvertToString(), "-1234567890123456789012345678901234567891");
     EXPECT_EQ(BInt("1").Or(BInt("-0")).ConvertToString(), "-1");
     EXPECT_EQ(BInt("-1234567890123456789012345678901234567890").Or(BInt("-1")).ConvertToString(), "-1234567890123456789012345678901234567891");
+
+    BInt num = BInt("-1234567890123456789012345678901234567890");
+    EXPECT_TRUE(num.OrEq(BInt("-1")) == BInt("-1234567890123456789012345678901234567891"));
+    EXPECT_TRUE(num == BInt("-1234567890123456789012345678901234567891"));
 }
 
 template<typename T>
@@ -302,6 +310,10 @@ TYPED_TEST(BigIntegerTest, BitwiseNot) {
     std::vector<TypeParam> valsAfterNot = {2, maxT<TypeParam>(), 3};
     EXPECT_TRUE(BInt(vals).Not() == BInt(valsAfterNot));
     EXPECT_TRUE(BInt(vals, true).Not() == BInt(valsAfterNot, true));
+
+    BInt num = BInt(vals);
+    EXPECT_TRUE(num.NotEq() == BInt(valsAfterNot));
+    EXPECT_TRUE(num == BInt(valsAfterNot));
 }
 
 TYPED_TEST(BigIntegerTest, BitwiseXor) {
@@ -315,6 +327,10 @@ TYPED_TEST(BigIntegerTest, BitwiseXor) {
     EXPECT_TRUE(BInt("1234567890123456789012345678901234567890").Xor(BInt("9876543210987654321098765432109876543210")) == BInt("10429788288481127546160455888863017661496"));
     EXPECT_TRUE(BInt("1234567890123456789012345678901234567890").Xor(BInt("-9876543210987654321098765432109876543210")) == BInt("-10429788288481127546160455888863017661496"));
     EXPECT_TRUE(BInt("-1234567890123456789012345678901234567890").Xor(BInt("-9876543210987654321098765432109876543210")) == BInt("10429788288481127546160455888863017661496"));
+
+    BInt num = BInt("-1234567890123456789012345678901234567890");
+    EXPECT_TRUE(num.XorEq(BInt("-9876543210987654321098765432109876543210")) == BInt("10429788288481127546160455888863017661496"));
+    EXPECT_TRUE(num == BInt("10429788288481127546160455888863017661496"));
 }
 
 TYPED_TEST(BigIntegerTest, BitwiseNegate) {
@@ -326,4 +342,8 @@ TYPED_TEST(BigIntegerTest, BitwiseNegate) {
     std::vector<TypeParam> valsAfterNegate = {maxT<TypeParam>(), 0, 0};
     EXPECT_TRUE(BInt(vals).Negate() == BInt(valsAfterNegate));
     EXPECT_TRUE(BInt(vals, true).Negate() == BInt(valsAfterNegate, true));
+
+    BInt num = BInt(vals);
+    EXPECT_TRUE(num.NegateEq() == BInt(valsAfterNegate));
+    EXPECT_TRUE(num == BInt(valsAfterNegate));
 }

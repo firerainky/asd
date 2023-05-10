@@ -17,6 +17,11 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
+    const BigInteger<NativeInt> &BigInteger<NativeInt>::AndEq(const BigInteger<NativeInt> another) {
+        return *this = this->And(another);
+    }
+
+    template<typename NativeInt>
     BigInteger<NativeInt> BigInteger<NativeInt>::Or(const BigInteger<NativeInt> another) const {
         std::vector<NativeInt> vals;
         for (auto i = 0; (i < value.size() || i < another.value.size()); ++i) {
@@ -33,12 +38,22 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
+    const BigInteger<NativeInt> &BigInteger<NativeInt>::OrEq(const BigInteger<NativeInt> another) {
+        return *this = this->Or(another);
+    }
+
+    template<typename NativeInt>
     BigInteger<NativeInt> BigInteger<NativeInt>::Not() const {
         std::vector<NativeInt> vals;
         for (auto val: value) {
             vals.push_back(~val);
         }
         return BigInteger(vals, sign);
+    }
+
+    template<typename NativeInt>
+    const BigInteger<NativeInt> &BigInteger<NativeInt>::NotEq() {
+        return *this = this->Not();
     }
 
     template<typename NativeInt>
@@ -58,6 +73,11 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
+    const BigInteger<NativeInt> &BigInteger<NativeInt>::XorEq(const BigInteger<NativeInt> another) {
+        return *this = this->Xor(another);
+    }
+
+    template<typename NativeInt>
     BigInteger<NativeInt> BigInteger<NativeInt>::Negate() const {
         std::vector<NativeInt> vals;
         auto carry = 0;
@@ -70,6 +90,11 @@ namespace zhejiangfhe {
             vals.push_back(carry);
         }
         return BigInteger(vals, sign);
+    }
+
+    template<typename NativeInt>
+    const BigInteger<NativeInt> &BigInteger<NativeInt>::NegateEq() {
+        return *this = this->Negate();
     }
 
     template<typename NativeInt>
