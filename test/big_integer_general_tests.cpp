@@ -229,7 +229,6 @@ TYPED_TEST(BigIntegerTest, RightShiftBigInteger) {
 
     EXPECT_EQ(BInt(1024).RightShift(2).ConvertToString(), "256");
     EXPECT_EQ(BInt("4294967296").RightShift(1).ConvertToString(), "2147483648");
-
 }
 
 
@@ -251,3 +250,17 @@ TYPED_TEST(BigIntegerTest, ExpBigInteger) {
     EXPECT_EQ(BInt(10).Exp(2).ConvertToString(), "100");
 }
 
+TYPED_TEST(BigIntegerTest, BitwiseAnd) {
+    using BInt = zhejiangfhe::BigInteger<TypeParam>;
+    EXPECT_EQ(BInt("1").And(BInt()).ConvertToString(), "0");
+    EXPECT_EQ(BInt("1").And(BInt("1")).ConvertToString(), "1");
+    EXPECT_EQ(BInt("2").And(BInt("1")).ConvertToString(), "0");
+
+    EXPECT_EQ(BInt("4294967295").And(BInt("4294967295")).ConvertToString(), "4294967295");
+    EXPECT_EQ(BInt("1234567890123456789012345678901234567890").And(BInt("9876543210987654321098765432109876543210")).ConvertToString(), "340661406314991781975327611074046724802");
+    EXPECT_EQ(BInt("1234567890123456789012345678901234567891").And(BInt("1")).ConvertToString(), "1");
+
+    EXPECT_EQ(BInt("1234567890123456789012345678901234567891").And(BInt("-1")).ConvertToString(), "-1");
+    EXPECT_EQ(BInt("1").And(BInt("-0")).ConvertToString(), "0");
+    EXPECT_EQ(BInt("-1234567890123456789012345678901234567891").And(BInt("-1")).ConvertToString(), "-1");
+}

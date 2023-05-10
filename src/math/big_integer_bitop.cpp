@@ -7,6 +7,16 @@
 namespace zhejiangfhe {
 
     template<typename NativeInt>
+    BigInteger<NativeInt> BigInteger<NativeInt>::And(const BigInteger<NativeInt> another) const {
+        std::vector<NativeInt> vals;
+        for (auto i = 0; i < value.size(), i < another.value.size(); ++i) {
+            vals.push_back(value[i] & another.value[i]);
+        }
+
+        return BigInteger(vals, !(!sign & !another.sign));
+    }
+
+    template<typename NativeInt>
     BigInteger<NativeInt> BigInteger<NativeInt>::LeftShift(uint16_t shift) const {
         if (this->m_MSB == 0) {
             return BigInteger(0);
@@ -27,8 +37,8 @@ namespace zhejiangfhe {
         }
         if (shiftByLimb != 0) {
             uint32_t currentSize = ans.value.size();
-            ans.value.resize(currentSize + shiftByLimb);  // allocate more storage
-            for (int i = currentSize - 1; i >= 0; i--) {    // shift limbs required # of indicies
+            ans.value.resize(currentSize + shiftByLimb);// allocate more storage
+            for (int i = currentSize - 1; i >= 0; i--) {// shift limbs required # of indicies
                 ans.value[i + shiftByLimb] = ans.value[i];
             }
             for (int i = shiftByLimb - 1; i >= 0; i--) {
@@ -44,9 +54,9 @@ namespace zhejiangfhe {
         if (this->m_MSB == 0 || this->m_MSB <= shift) {
             return BigInteger(0);
         }
-        
+
         BigInteger ans(*this);
-        uint16_t shiftByLimb     = shift >> m_log2LimbBitLength;
+        uint16_t shiftByLimb = shift >> m_log2LimbBitLength;
         NativeInt remainingShift = (shift & (m_limbBitLength - 1));
         NativeInt negativeShift = m_limbBitLength - remainingShift;
         if (shiftByLimb != 0) {
@@ -60,10 +70,10 @@ namespace zhejiangfhe {
 
         // remainderShift bit shifts
         if (remainingShift != 0) {
-            for (uint32_t i = 0; i < ans.value.size()-1; i++) {
+            for (uint32_t i = 0; i < ans.value.size() - 1; i++) {
                 ans.value[i] = (ans.value[i] >> remainingShift) | ans.value[i + 1] << negativeShift;
             }
-            ans.value[ans.value.size()-1] = ans.value[ans.value.size()-1] >> remainingShift;
+            ans.value[ans.value.size() - 1] = ans.value[ans.value.size() - 1] >> remainingShift;
         }
         ans.RefreshMSB();
         return ans;
@@ -73,4 +83,4 @@ namespace zhejiangfhe {
     template class zhejiangfhe::BigInteger<uint32_t>;
     template class zhejiangfhe::BigInteger<uint64_t>;
 
-}
+}// namespace zhejiangfhe

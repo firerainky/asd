@@ -15,58 +15,58 @@
 
 namespace zhejiangfhe {
 
-    template <typename NativeInt>
+    template<typename NativeInt>
     class BigInteger;
 
-    template <typename utype>
+    template<typename utype>
     struct SignedDoubleDataType {
         typedef void T;
     };
 
 
-    template <>
+    template<>
     struct SignedDoubleDataType<uint16_t> {
         typedef int32_t T;
     };
 
-    template <>
+    template<>
     struct SignedDoubleDataType<uint32_t> {
         typedef int64_t T;
     };
 
-    template <>
+    template<>
     struct SignedDoubleDataType<uint64_t> {
         typedef __int128 T;
     };
 
-    template <typename utype>
+    template<typename utype>
     struct DoubleDataType {
         typedef void T;
     };
 
-    template <>
+    template<>
     struct DoubleDataType<uint16_t> {
         typedef uint32_t T;
     };
 
-    template <>
+    template<>
     struct DoubleDataType<uint32_t> {
         typedef uint64_t T;
     };
 
 
-    template <>
+    template<>
     struct DoubleDataType<uint64_t> {
         typedef unsigned __int128 T;
     };
 
-    template <uint32_t N>
+    template<uint32_t N>
     struct Log2 {
         static const uint32_t value = 1 + Log2<N / 2>::value;
     };
 
 
-    template <>
+    template<>
     struct Log2<2> {
         static const uint32_t value = 1;
     };
@@ -92,8 +92,8 @@ namespace zhejiangfhe {
         }
 
 
-        template <typename T, typename std::enable_if<!std::is_same<T, const BigInteger>::value, bool>::type = true>
-        const BigInteger& operator=(const T& val) {
+        template<typename T, typename std::enable_if<!std::is_same<T, const BigInteger>::value, bool>::type = true>
+        const BigInteger &operator=(const T &val) {
             return (*this = BigInteger(val));
         }
 
@@ -125,6 +125,9 @@ namespace zhejiangfhe {
             return *this;
         }
 
+        // Bit Operation
+        BigInteger<NativeInt> And(const BigInteger<NativeInt>) const;
+
         BigInteger<NativeInt> LeftShift(uint16_t shift) const;
 
 
@@ -137,7 +140,7 @@ namespace zhejiangfhe {
          * @param v
          * @return
          */
-        bool Divide(BigInteger& quotientIn, BigInteger& remainderIn, const BigInteger& uIn, const BigInteger& vIn) const;
+        bool Divide(BigInteger &quotientIn, BigInteger &remainderIn, const BigInteger &uIn, const BigInteger &vIn) const;
 
         inline int nlz(NativeInt x) const {
             if (typeid(x) == typeid(uint64_t)) {
@@ -169,7 +172,6 @@ namespace zhejiangfhe {
         }
 
     protected:
-
     private:
         std::vector<NativeInt> value;
         bool sign = false;
@@ -211,7 +213,6 @@ namespace zhejiangfhe {
          */
         static void MultiplyWithKaratsuba(NativeInt operand1, NativeInt operand2, NativeInt *resultTwo);
     };
-
 
 
 }// namespace zhejiangfhe
