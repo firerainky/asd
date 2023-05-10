@@ -130,6 +130,7 @@ namespace zhejiangfhe {
         BigInteger<NativeInt> Or(const BigInteger<NativeInt>) const;
         BigInteger<NativeInt> Not() const;
         BigInteger<NativeInt> Xor(const BigInteger<NativeInt>) const;
+        BigInteger<NativeInt> Negate() const;
 
         BigInteger<NativeInt> LeftShift(uint16_t shift) const;
         BigInteger<NativeInt> RightShift(uint16_t shift) const;

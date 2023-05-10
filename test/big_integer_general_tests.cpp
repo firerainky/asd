@@ -301,7 +301,7 @@ TYPED_TEST(BigIntegerTest, BitwiseNot) {
     vals = {maxT<TypeParam>() - 2, 0, maxT<TypeParam>() - 3};
     std::vector<TypeParam> valsAfterNot = {2, maxT<TypeParam>(), 3};
     EXPECT_TRUE(BInt(vals).Not() == BInt(valsAfterNot));
-    EXPECT_TRUE(BInt(vals, false).Not() == BInt(valsAfterNot, false));
+    EXPECT_TRUE(BInt(vals, true).Not() == BInt(valsAfterNot, true));
 }
 
 TYPED_TEST(BigIntegerTest, BitwiseXor) {
@@ -315,4 +315,15 @@ TYPED_TEST(BigIntegerTest, BitwiseXor) {
     EXPECT_TRUE(BInt("1234567890123456789012345678901234567890").Xor(BInt("9876543210987654321098765432109876543210")) == BInt("10429788288481127546160455888863017661496"));
     EXPECT_TRUE(BInt("1234567890123456789012345678901234567890").Xor(BInt("-9876543210987654321098765432109876543210")) == BInt("-10429788288481127546160455888863017661496"));
     EXPECT_TRUE(BInt("-1234567890123456789012345678901234567890").Xor(BInt("-9876543210987654321098765432109876543210")) == BInt("10429788288481127546160455888863017661496"));
+}
+
+TYPED_TEST(BigIntegerTest, BitwiseNegate) {
+    using BInt = zhejiangfhe::BigInteger<TypeParam>;
+    std::vector<TypeParam> vals = {0, 1};
+    EXPECT_TRUE(BInt().Negate() == BInt(vals));
+
+    vals = {1, 0, 0};
+    std::vector<TypeParam> valsAfterNegate = {maxT<TypeParam>(), 0, 0};
+    EXPECT_TRUE(BInt(vals).Negate() == BInt(valsAfterNegate));
+    EXPECT_TRUE(BInt(vals, true).Negate() == BInt(valsAfterNegate, true));
 }

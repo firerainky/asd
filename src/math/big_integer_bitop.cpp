@@ -58,6 +58,21 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
+    BigInteger<NativeInt> BigInteger<NativeInt>::Negate() const {
+        std::vector<NativeInt> vals;
+        auto carry = 0;
+        for (auto val: value) {
+            NativeInt temp_val;
+            carry = addWithCarry(~val, 1, carry, &temp_val);
+            vals.push_back(temp_val);
+        }
+        if (carry) {
+            vals.push_back(carry);
+        }
+        return BigInteger(vals, sign);
+    }
+
+    template<typename NativeInt>
     BigInteger<NativeInt> BigInteger<NativeInt>::LeftShift(uint16_t shift) const {
         if (this->m_MSB == 0) {
             return BigInteger(0);
