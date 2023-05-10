@@ -127,6 +127,7 @@ namespace zhejiangfhe {
 
         // Bit Operation
         BigInteger<NativeInt> And(const BigInteger<NativeInt>) const;
+        BigInteger<NativeInt> Or(const BigInteger<NativeInt>) const;
 
         BigInteger<NativeInt> LeftShift(uint16_t shift) const;
 

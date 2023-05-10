@@ -9,11 +9,27 @@ namespace zhejiangfhe {
     template<typename NativeInt>
     BigInteger<NativeInt> BigInteger<NativeInt>::And(const BigInteger<NativeInt> another) const {
         std::vector<NativeInt> vals;
-        for (auto i = 0; i < value.size(), i < another.value.size(); ++i) {
+        for (auto i = 0; i < value.size() && i < another.value.size(); ++i) {
             vals.push_back(value[i] & another.value[i]);
         }
 
         return BigInteger(vals, !(!sign & !another.sign));
+    }
+
+    template<typename NativeInt>
+    BigInteger<NativeInt> BigInteger<NativeInt>::Or(const BigInteger<NativeInt> another) const {
+        std::vector<NativeInt> vals;
+        for (auto i = 0; (i < value.size() || i < another.value.size()); ++i) {
+            if (i >= value.size()) {
+                vals.push_back(another.value[i]);
+            } else if (i >= another.value.size()) {
+                vals.push_back(value[i]);
+            } else {
+                vals.push_back(value[i] | another.value[i]);
+            }
+        }
+
+        return BigInteger(vals, sign | another.sign);
     }
 
     template<typename NativeInt>
