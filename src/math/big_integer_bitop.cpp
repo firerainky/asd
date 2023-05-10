@@ -33,6 +33,15 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
+    BigInteger<NativeInt> BigInteger<NativeInt>::Not() const {
+        std::vector<NativeInt> vals;
+        for (auto val: value) {
+            vals.push_back(~val);
+        }
+        return BigInteger(vals, sign);
+    }
+
+    template<typename NativeInt>
     BigInteger<NativeInt> BigInteger<NativeInt>::LeftShift(uint16_t shift) const {
         if (this->m_MSB == 0) {
             return BigInteger(0);

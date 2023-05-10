@@ -93,6 +93,9 @@ TYPED_TEST(BigIntegerTest, CompareTwoBigInteger) {
     EXPECT_EQ(BInt("-123456789012345678901234567890123456789012345678901234567890").Compare(BInt("-18446744073709551615")), -1);
     EXPECT_EQ(BInt("18446744073709551615").Compare(BInt("-123456789012345678901234567890123456789012345678901234567890")), 1);
 
+    EXPECT_TRUE(BInt("18446744073709551615") > BInt("-123456789012345678901234567890123456789012345678901234567890"));
+    EXPECT_TRUE(BInt("-123456789012345678901234567890123456789012345678901234567890") == BInt("-123456789012345678901234567890123456789012345678901234567890"));
+
     std::vector<TypeParam> vals1;
     std::vector<TypeParam> vals2;
     EXPECT_EQ(BInt(vals1).Compare(BInt(vals2)), 0);
@@ -278,4 +281,25 @@ TYPED_TEST(BigIntegerTest, BitwiseOr) {
     EXPECT_EQ(BInt("1234567890123456789012345678901234567890").Or(BInt("-1")).ConvertToString(), "-1234567890123456789012345678901234567891");
     EXPECT_EQ(BInt("1").Or(BInt("-0")).ConvertToString(), "-1");
     EXPECT_EQ(BInt("-1234567890123456789012345678901234567890").Or(BInt("-1")).ConvertToString(), "-1234567890123456789012345678901234567891");
+}
+
+template<typename T>
+T maxT() {
+    auto ret = T(0);
+    auto lengthOfT = sizeof(T) * 8;
+    for (auto i = 0; i < lengthOfT; ++i) {
+        ret += T(1) << i;
+    }
+    return ret;
+}
+
+TYPED_TEST(BigIntegerTest, BitwiseNot) {
+    using BInt = zhejiangfhe::BigInteger<TypeParam>;
+    std::vector<TypeParam> vals = {maxT<TypeParam>()};
+    EXPECT_TRUE(BInt().Not() == BInt(vals));
+
+    vals = {maxT<TypeParam>() - 2, 0, maxT<TypeParam>() - 3};
+    std::vector<TypeParam> valsAfterNot = {2, maxT<TypeParam>(), 3};
+    EXPECT_TRUE(BInt(vals).Not() == BInt(valsAfterNot));
+    EXPECT_TRUE(BInt(vals, false).Not() == BInt(valsAfterNot, false));
 }
