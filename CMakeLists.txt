@@ -37,6 +37,17 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googlebenchmark)
 
-# Add test sub directory
-add_subdirectory(test)
-add_subdirectory(benchmark)
+# If the option does not change after we changing, we can run `cmake -S . -B build -UFHE_BUILD_TEST to force cmake updating the option
+option(FHE_BUILD_TEST "IF BUILD TEST TARGET" ON)
+message(STATUS "FHE_BUILD_TEST: ${FHE_BUILD_TEST}")
+
+if(FHE_BUILD_TEST)
+  add_subdirectory(test)
+endif()
+
+option(FHE_BUILD_BENCHMARK "IF BUILD BENCHMARK TARGET" ON)
+message(STATUS "FHE_BUILD_BENCHMARK: ${FHE_BUILD_BENCHMARK}")
+
+if(FHE_BUILD_BENCHMARK)
+  add_subdirectory(benchmark)
+endif()
