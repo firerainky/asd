@@ -6,10 +6,6 @@
 #include <limits>
 
 namespace zhejiangfhe {
-    template<typename NativeInt>
-    BigInteger<NativeInt>::BigInteger() {
-        this->value.push_back(0);
-    }
 
     template<typename NativeInt>
     BigInteger<NativeInt>::BigInteger(std::vector<NativeInt> vals, bool sign) {
@@ -37,7 +33,7 @@ namespace zhejiangfhe {
     void BigInteger<NativeInt>::AssignVal(const std::string &str) {
 
         std::string v = str;
-        if (str[0] == '-') {
+        if (!str.empty() && str[0] == '-') {
             sign = true;
             v = str.substr(1);
         }

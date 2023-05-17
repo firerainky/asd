@@ -76,9 +76,8 @@ namespace zhejiangfhe {
 
     public:
         // CONSTRUCTORS
-        BigInteger();
 
-        BigInteger(const std::string &strValue);
+        BigInteger(const std::string &strValue = "");
 
         BigInteger(std::vector<NativeInt> vals, bool sign = false);
 
