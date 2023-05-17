@@ -193,6 +193,9 @@ namespace zhejiangfhe {
             }
         }
 
+        // Mod operations
+        BigInteger<NativeInt> ModMul(const BigInteger &another, const BigInteger &modulus) const;
+
     protected:
     private:
         std::vector<NativeInt> value;
