@@ -9,7 +9,7 @@ namespace zhejiangfhe {
 
     template<typename NativeInt>
     BigInteger<NativeInt>::BigInteger(std::vector<NativeInt> vals, bool sign) {
-        while (!vals.empty() && vals.back() == 0) {
+        while (!vals.empty() && !vals.back()) {
             vals.pop_back();
         }
         if (vals.empty()) {
@@ -298,6 +298,7 @@ namespace zhejiangfhe {
     }
     template<typename NativeInt>
     void BigInteger<NativeInt>::NormalizeLimbs(void) {
+
         for (uint32_t i = this->value.size() - 1; i >= 1; i--) {
             if (!this->value.back()) {
                 this->value.pop_back();
