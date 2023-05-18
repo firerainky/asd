@@ -35,7 +35,13 @@ namespace zhejiangfhe {
 
     template<typename NativeInt>
     BigInteger<NativeInt> BigInteger<NativeInt>::ModMul(const BigInteger<NativeInt> &another, const BigInteger &modulus) const {
-        return BigInteger();
+        auto mulRet = Mul(another);
+        return mulRet.ModEq(modulus);
+    }
+
+    template<typename NativeInt>
+    const BigInteger<NativeInt> BigInteger<NativeInt>::ModMulEq(const BigInteger<NativeInt> &another, const BigInteger &modulus) {
+        return *this = this->ModMul(another, modulus);
     }
 
     template class zhejiangfhe::BigInteger<uint32_t>;

@@ -306,6 +306,8 @@ namespace zhejiangfhe {
                 break;
             }
         }
+
+        RefreshMSB();
     }
 
     template<typename NativeInt>

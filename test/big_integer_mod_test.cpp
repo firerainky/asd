@@ -31,6 +31,26 @@ TYPED_TEST(BigIntegerModTest, Mod) {
 
 TYPED_TEST(BigIntegerModTest, ModMul) {
     using BInt = zhejiangfhe::BigInteger<TypeParam>;
-    BInt zero;
-    EXPECT_TRUE(zero.ModMul(BInt(), BInt()) == BInt());
+
+    // (m * n) mod modulus
+    // m == 0 || n == 0, result should be 0
+    EXPECT_TRUE(BInt("3").ModMul(BInt(), BInt("7")) == BInt());
+    EXPECT_TRUE(BInt("").ModMul(BInt("3"), BInt("7")) == BInt());
+
+    // (m * n) < modulus, result should be m * n
+    EXPECT_TRUE(BInt("3").ModMul(BInt("5"), BInt("16")) == BInt("15"));
+
+    // (m * n) > modulus
+    EXPECT_TRUE(BInt("35").ModMul(BInt("21"), BInt("16")) == BInt("15"));
+
+    // Big Integer Senario
+    EXPECT_TRUE(BInt("123456789012345678901234567890").ModMul(BInt("987654321098765432109876543210"), BInt("9999999999999999999912")) == BInt("237334552122396220044"));
+
+    // ModMul inplace
+    BInt m("123456789012345678901234567890");
+    BInt n("987654321098765432109876543210");
+    BInt modulus("9999999999999999999912");
+    BInt expectedResult("237334552122396220044");
+    EXPECT_TRUE(m.ModMulEq(n, modulus) == expectedResult);
+    EXPECT_TRUE(m == expectedResult);
 }

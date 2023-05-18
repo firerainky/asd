@@ -197,6 +197,7 @@ namespace zhejiangfhe {
         BigInteger<NativeInt> Mod(const BigInteger &modulus) const;
         const BigInteger<NativeInt> ModEq(const BigInteger &modulus);
         BigInteger<NativeInt> ModMul(const BigInteger &another, const BigInteger &modulus) const;
+        const BigInteger<NativeInt> ModMulEq(const BigInteger &another, const BigInteger &modulus);
 
     protected:
     private:

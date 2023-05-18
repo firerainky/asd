@@ -255,6 +255,7 @@ namespace zhejiangfhe {
             if (remainder.size() != 0) {
                 remainder[0] = k;
             }
+            remainderIn.NormalizeLimbs();
             return true;
         }
 
@@ -320,7 +321,6 @@ namespace zhejiangfhe {
         }
         remainder[n - 1] = un[n - 1] >> s;
         remainderIn.NormalizeLimbs();
-        remainderIn.RefreshMSB();
         return true;
     }
 
