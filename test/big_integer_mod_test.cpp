@@ -1,4 +1,5 @@
 #include "big_integer.h"
+#include "big_integer_modop.h"
 #include "big_integer_test.h"
 
 
@@ -10,7 +11,7 @@ class BigIntegerModTest : public testing::Test {};
 TYPED_TEST_SUITE(BigIntegerModTest, LimbTypes);
 
 TYPED_TEST(BigIntegerModTest, Mod) {
-    using BInt = zhejiangfhe::BigInteger<TypeParam>;
+    using BInt = zhejiangfhe::BigIntegerMod<TypeParam>;
 
     EXPECT_TRUE(BInt().Mod(BInt("1")) == BInt());
     EXPECT_TRUE(BInt().Mod(BInt("123456789012345678901234567890")) == BInt());
@@ -30,7 +31,7 @@ TYPED_TEST(BigIntegerModTest, Mod) {
 }
 
 TYPED_TEST(BigIntegerModTest, ModMul) {
-    using BInt = zhejiangfhe::BigInteger<TypeParam>;
+    using BInt = zhejiangfhe::BigIntegerMod<TypeParam>;
 
     // (m * n) mod modulus
     // m == 0 || n == 0, result should be 0

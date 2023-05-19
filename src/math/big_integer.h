@@ -193,14 +193,15 @@ namespace zhejiangfhe {
             }
         }
 
-        // Mod operations
-        BigInteger<NativeInt> Mod(const BigInteger &modulus) const;
-        const BigInteger<NativeInt> ModEq(const BigInteger &modulus);
-        BigInteger<NativeInt> ModMul(const BigInteger &another, const BigInteger &modulus) const;
-        const BigInteger<NativeInt> ModMulEq(const BigInteger &another, const BigInteger &modulus);
+        uint32_t GetMSB() {
+            return m_MSB;
+        }
+
+        std::vector<NativeInt> GetValue() {
+            return value;
+        }
 
     protected:
-    private:
         std::vector<NativeInt> value;
         bool sign = false;
         static const uint32_t m_limbBitLength;
@@ -209,6 +210,8 @@ namespace zhejiangfhe {
         static const uint32_t m_log2LimbBitLength;
         typedef typename DoubleDataType<NativeInt>::T Dlimb_t;
         typedef typename SignedDoubleDataType<NativeInt>::T SDlimb_t;
+
+    private:
 
         void AssignVal(const std::string &str);
         BigInteger<NativeInt> &AssignObj(const BigInteger<NativeInt> &other);
