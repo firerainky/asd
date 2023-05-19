@@ -28,6 +28,10 @@ namespace zhejiangfhe {
         // Mod operations
         BigInteger<NativeInt> Mod(const Modulus<NativeInt> &modulus) const;
         const BigInteger<NativeInt> ModEq(const Modulus<NativeInt> &modulus);
+
+        BigInteger<NativeInt> ModSub(const BigInteger<NativeInt> &another, const Modulus<NativeInt> &modulus) const;
+        const BigInteger<NativeInt> ModSubEq(const BigInteger<NativeInt> &another, const Modulus<NativeInt> &modulus);
+
         BigInteger<NativeInt> ModMul(const BigInteger<NativeInt> &another, const Modulus<NativeInt> &modulus) const;
         const BigInteger<NativeInt> ModMulEq(const BigInteger<NativeInt> &another, const Modulus<NativeInt> &modulus);
         BigInteger<NativeInt> ModAdd(const BigIntegerMod<NativeInt> &b, const Modulus<NativeInt> &modulus) const;

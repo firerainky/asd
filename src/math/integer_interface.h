@@ -18,7 +18,7 @@ namespace zhejiangfhe {
          * @param b
          * @return
          */
-        T Add(const T &b);
+        T Add(const T &b) const;
 
 
         const T &AddEq(const T &b);

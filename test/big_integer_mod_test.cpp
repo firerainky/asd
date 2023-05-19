@@ -49,6 +49,31 @@ TYPED_TEST(BigIntegerModTest, ModAdd) {
 }
 
 
+
+TYPED_TEST(BigIntegerModTest, ModSub) {
+    using BInt = zhejiangfhe::BigIntegerMod<TypeParam>;
+
+    // (operand1 - operand2) == modulus
+    EXPECT_TRUE(BInt("3").ModSub(BInt("1"), BInt("2")) == BInt());
+
+    // (operand1 - operand2) > modulus
+    EXPECT_TRUE(BInt("6").ModSub(BInt("1"), BInt("2")) == BInt(1));
+
+    // (operand1 - operand2) < ~modulus
+    EXPECT_TRUE(BInt("1").ModSub(BInt("3"), BInt("3")) == BInt(1));
+
+
+
+    // operand1 - operand2 = 0
+    EXPECT_TRUE(BInt("3").ModSub(BInt("3"), BInt("3")) == BInt());
+
+
+    // operand1 - operand2 = 0
+    EXPECT_EQ(BInt("122233444322332244332222").ModSub(BInt("456434678665445567"), BInt("3456789")).ConvertToString(), "1632671");
+
+}
+
+
 TYPED_TEST(BigIntegerModTest, ModMul) {
     using BInt = zhejiangfhe::BigIntegerMod<TypeParam>;
 

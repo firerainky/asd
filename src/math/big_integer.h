@@ -104,10 +104,10 @@ namespace zhejiangfhe {
          */
         int Compare(const BigInteger<NativeInt> &another) const;
 
-        BigInteger<NativeInt> Add(const BigInteger<NativeInt> &num);
+        BigInteger<NativeInt> Add(const BigInteger<NativeInt> &num) const;
         const BigInteger<NativeInt> &AddEq(const BigInteger<NativeInt> &num);
 
-        BigInteger<NativeInt> Sub(const BigInteger<NativeInt> &num);
+        BigInteger<NativeInt> Sub(const BigInteger<NativeInt> &num) const;
         const BigInteger<NativeInt> &SubEq(const BigInteger<NativeInt> &num);
 
         std::size_t length() const {
@@ -201,6 +201,10 @@ namespace zhejiangfhe {
 
         std::vector<NativeInt> GetValue() {
             return value;
+        }
+
+        bool GetSign() {
+            return sign;
         }
 
     protected:

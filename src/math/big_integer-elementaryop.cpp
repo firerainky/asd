@@ -69,7 +69,7 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
-    BigInteger<NativeInt> BigInteger<NativeInt>::Add(const BigInteger<NativeInt> &num) {
+    BigInteger<NativeInt> BigInteger<NativeInt>::Add(const BigInteger<NativeInt> &num) const {
         int absoluteCompare = AbsoluteCompare(num);
         if (sign == false && num.sign == true) {
             if (AbsoluteCompare(num) == 0) {
@@ -120,7 +120,7 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
-    BigInteger<NativeInt> BigInteger<NativeInt>::Sub(const BigInteger<NativeInt> &num) {
+    BigInteger<NativeInt> BigInteger<NativeInt>::Sub(const BigInteger<NativeInt> &num) const {
         int absoluteCompare = AbsoluteCompare(num);
         if (sign == false && num.sign == true) {
             return AddWithoutSign(num, sign);

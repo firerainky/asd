@@ -69,11 +69,34 @@ namespace zhejiangfhe {
         return *this;
     }
 
+
+    template<typename NativeInt>
+    BigInteger<NativeInt> BigIntegerMod<NativeInt>::ModSub(const BigInteger<NativeInt> &another, const Modulus<NativeInt> &modulus) const {
+        BigInteger difference = this->Sub(another);
+        BigInteger<NativeInt> modulusValue = modulus.GetValue();
+        BigInteger negativeModulus(modulusValue.GetValue(), true);
+        if (difference == modulusValue) {
+            return BigInteger<NativeInt>();
+        } else if (difference < negativeModulus || difference > modulusValue) {
+            BigIntegerMod<NativeInt> diff(difference);
+            return diff.Mod(modulusValue);
+        } else {
+            BigInteger<NativeInt> borrowTag(-static_cast<std::int64_t>(difference.GetSign()));
+            return difference + modulusValue.And(borrowTag);
+        }
+    }
+
+    template<typename NativeInt>
+    const BigInteger<NativeInt> BigIntegerMod<NativeInt>::ModSubEq(const BigInteger<NativeInt> &another, const Modulus<NativeInt> &modulus) {
+        return *this = this->ModSub(another, modulus);
+    }
+
     template<typename NativeInt>
     BigInteger<NativeInt> BigIntegerMod<NativeInt>::ModMul(const BigInteger<NativeInt> &another, const Modulus<NativeInt> &modulus) const {
         BigIntegerMod<NativeInt> mulRet(this->Mul(another));
         return mulRet.Mod(modulus);
     }
+
 
     template<typename NativeInt>
     const BigInteger<NativeInt> BigIntegerMod<NativeInt>::ModMulEq(const BigInteger<NativeInt> &another, const Modulus<NativeInt> &modulus) {
