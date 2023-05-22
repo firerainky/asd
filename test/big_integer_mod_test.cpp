@@ -75,6 +75,16 @@ TYPED_TEST(BigIntegerModTest, ModSub) {
 }
 
 
+TYPED_TEST(BigIntegerModTest, ModBarret) {
+    using BInt = zhejiangfhe::BigIntegerMod<TypeParam>;
+
+    BInt result = BInt("11").ModBarrett(3);
+    EXPECT_TRUE(result == BInt("2")) << "Expected mod result is 1, got " << result.ConvertToString() << " instead.";
+
+    result = BInt("11").ModBarrett(5);
+    EXPECT_TRUE(result == BInt("1")) << "Expected mod result is 1, got " << result.ConvertToString() << " instead.";
+}
+
 TYPED_TEST(BigIntegerModTest, ModMul) {
     using BInt = zhejiangfhe::BigIntegerMod<TypeParam>;
 

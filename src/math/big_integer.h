@@ -196,6 +196,11 @@ namespace zhejiangfhe {
         std::vector<NativeInt> GetValue() {
             return value;
         }
+        // Mod operations
+        BigInteger<NativeInt> Mod(const BigInteger &modulus) const;
+        const BigInteger<NativeInt> ModEq(const BigInteger &modulus);
+        BigInteger<NativeInt> ModMul(const BigInteger &another, const BigInteger &modulus) const;
+        const BigInteger<NativeInt> ModMulEq(const BigInteger &another, const BigInteger &modulus);
 
         bool GetSign() {
             return sign;
@@ -212,7 +217,6 @@ namespace zhejiangfhe {
         typedef typename SignedDoubleDataType<NativeInt>::T SDlimb_t;
 
     private:
-
         void AssignVal(const std::string &str);
         BigInteger<NativeInt> &AssignObj(const BigInteger<NativeInt> &other);
         static uint32_t ceilIntByUInt(const NativeInt Number);

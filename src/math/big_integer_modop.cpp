@@ -1,8 +1,8 @@
 //
 // Created by Zheng Kanyan on 2023/5/17.
 //
-#include "big_integer.h"
 #include "big_integer_modop.h"
+#include "big_integer.h"
 #include "modulus.h"
 #include <limits>
 
@@ -36,6 +36,23 @@ namespace zhejiangfhe {
         } else {
             return f.second;
         }
+    }
+
+    template<typename NativeInt>
+    BigInteger<NativeInt> BigIntegerMod<NativeInt>::ModBarrett(NativeInt modulus) {
+        // Precomputation
+        BigInteger<NativeInt> power(std::vector<NativeInt>({0, 0, 1}));
+        BigInteger<NativeInt> quotient;
+        BigInteger<NativeInt> remainder;
+        this->Divide(quotient, remainder, power, modulus);
+        BigInteger bigA = *this * quotient;
+        bigA = bigA.RightShift(2 * this->m_limbBitLength);
+        bigA *= modulus;
+        bigA = this->Sub(bigA);
+        if (bigA > modulus) {
+            bigA -= modulus;
+        }
+        return bigA;
     }
 
     template<typename NativeInt>

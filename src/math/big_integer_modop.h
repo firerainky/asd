@@ -14,15 +14,12 @@ namespace zhejiangfhe {
     class BigIntegerMod : public BigInteger<NativeInt> {
 
     public:
-        BigIntegerMod(const BigInteger<NativeInt> bigInteger): BigInteger<NativeInt>(bigInteger) {
-
+        BigIntegerMod(const BigInteger<NativeInt> bigInteger) : BigInteger<NativeInt>(bigInteger) {
         }
-        BigIntegerMod(const std::string &strValue = ""): BigInteger<NativeInt>(strValue) {
-
+        BigIntegerMod(const std::string &strValue = "") : BigInteger<NativeInt>(strValue) {
         }
 
-        BigIntegerMod(std::vector<NativeInt> vals, bool sign = false): BigInteger<NativeInt>(vals, sign) {
-
+        BigIntegerMod(std::vector<NativeInt> vals, bool sign = false) : BigInteger<NativeInt>(vals, sign) {
         }
 
         // Mod operations
@@ -32,11 +29,12 @@ namespace zhejiangfhe {
         BigInteger<NativeInt> ModSub(const BigInteger<NativeInt> &another, const Modulus<NativeInt> &modulus) const;
         const BigInteger<NativeInt> ModSubEq(const BigInteger<NativeInt> &another, const Modulus<NativeInt> &modulus);
 
+        BigInteger<NativeInt> ModBarrett(NativeInt modulus);
         BigInteger<NativeInt> ModMul(const BigInteger<NativeInt> &another, const Modulus<NativeInt> &modulus) const;
         const BigInteger<NativeInt> ModMulEq(const BigInteger<NativeInt> &another, const Modulus<NativeInt> &modulus);
         BigInteger<NativeInt> ModAdd(const BigIntegerMod<NativeInt> &b, const Modulus<NativeInt> &modulus) const;
         const BigInteger<NativeInt> &ModAddEq(const BigIntegerMod<NativeInt> &b, const Modulus<NativeInt> &modulus);
         BigInteger<NativeInt> ModIncrement(const Modulus<NativeInt> &modulus) const;
     };
-}
+}// namespace zhejiangfhe
 #endif//ZJ_FHE_LIB_BIG_INTEGER_MODOP_H
