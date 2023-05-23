@@ -113,6 +113,8 @@ namespace zhejiangfhe {
         std::size_t length() const {
             return value.size();
         }
+        std::vector<NativeInt> getValue() const { return value; }
+        bool getSign() const { return sign; }
 
         BigInteger<NativeInt> Mul(const BigInteger<NativeInt> &b) const;
 

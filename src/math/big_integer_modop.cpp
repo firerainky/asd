@@ -35,6 +35,39 @@ namespace zhejiangfhe {
     const BigInteger<NativeInt> BigIntegerMod<NativeInt>::ModEq(const Modulus<NativeInt> &modulus) {
         return *this = this->Mod(modulus.GetValue());
     }
+    template<typename NativeInt>
+    BigInteger<NativeInt> BigIntegerMod<NativeInt>::ModIncrement(const Modulus<NativeInt> &modulus) const {
+         BigInteger<NativeInt> a("1");
+        return this->ModAdd(a, modulus);
+    }
+
+    template<typename NativeInt>
+    BigInteger<NativeInt> BigIntegerMod<NativeInt>::ModAdd(const BigIntegerMod<NativeInt> &b, const Modulus<NativeInt> &modulus) const {
+        BigIntegerMod<NativeInt> a(this->value, this->sign);
+        BigIntegerMod<NativeInt> b_op(b.getValue(), b.getSign());
+        if (*this >= modulus.GetValue()) {
+            a.ModEq(modulus);
+        }
+        if (b >= modulus.GetValue()) {
+            b_op.ModEq(modulus);
+        }
+        a.AddEq(b_op);
+        return a.ModEq(modulus);
+    }
+
+    template<typename NativeInt>
+    const BigInteger<NativeInt> &BigIntegerMod<NativeInt>::ModAddEq(const BigIntegerMod<NativeInt> &b, const Modulus<NativeInt> &modulus) {
+         BigIntegerMod<NativeInt> b_op(b.getValue(), b.getSign());
+        if (*this >= modulus.GetValue()) {
+            this->ModEq(modulus);
+        }
+        if (b >= modulus.GetValue()) {
+            b_op.ModEq(modulus);
+        }
+        this->AddEq(b_op);
+        this->ModEq(modulus);
+        return *this;
+    }
 
     template<typename NativeInt>
     BigInteger<NativeInt> BigIntegerMod<NativeInt>::ModMul(const BigInteger<NativeInt> &another, const Modulus<NativeInt> &modulus) const {
