@@ -85,6 +85,7 @@ namespace zhejiangfhe {
     template<typename NativeInt>
     BigInteger<NativeInt> &BigInteger<NativeInt>::AssignObj(const BigInteger<NativeInt> &other) {
         if (this != &other) {// 避免自我赋值
+        value.clear();
             std::vector<NativeInt> resultVectors;
             for (auto it = other.value.begin(); it != other.value.end(); ++it) {
                 resultVectors.push_back(*it);
@@ -94,9 +95,10 @@ namespace zhejiangfhe {
             }
             if (other.value.empty()) {
                 value.push_back(0);
+                sign=false;
                 return *this;
             }
-            this->sign = sign;
+            this->sign = other.sign;
             for (auto it = resultVectors.begin(); it != resultVectors.end(); ++it) {
                 value.push_back(*it);
             }

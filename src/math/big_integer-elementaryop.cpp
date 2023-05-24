@@ -114,31 +114,47 @@ namespace zhejiangfhe {
                 AssignObj(num.SubWithoutSign(*this));
             }
         } else {
-            AssignObj(SubWithoutSign(num));
+            AssignObj(AddWithoutSign(num));
         }
         return *this;
     }
 
     template<typename NativeInt>
     BigInteger<NativeInt> BigInteger<NativeInt>::Sub(const BigInteger<NativeInt> &num) {
+        int absoluteCompare = AbsoluteCompare(num);
         if (sign == false && num.sign == true) {
             return AddWithoutSign(num, sign);
-        }
-        if (sign == true && num.sign == false) {
+        }else if (sign == true && num.sign == false) {
             return AddWithoutSign(num, sign);
+        }else{
+            if (AbsoluteCompare(num) == 0) {
+                return BigInteger<NativeInt>();
+            } else if (absoluteCompare > 0) {
+                return SubWithoutSign(num);
+            } else {
+                return num.SubWithoutSign(*this, true);
+            }
         }
-        return SubWithoutSign(num);
+       
     }
 
     template<typename NativeInt>
     const BigInteger<NativeInt> &BigInteger<NativeInt>::SubEq(const BigInteger<NativeInt> &num) {
+        int absoluteCompare = AbsoluteCompare(num);
         if (sign == false && num.sign == true) {
             AssignObj(AddWithoutSign(num, sign));
-        }
-        if (sign == true && num.sign == false) {
+        } else if (sign == true && num.sign == false) {
             AssignObj(AddWithoutSign(num, sign));
+        }else{
+            if (AbsoluteCompare(num) == 0) {
+                value.clear();
+                value.push_back(0);
+            } else if (absoluteCompare > 0) {
+                AssignObj(SubWithoutSign(num));
+            } else {
+                AssignObj(num.SubWithoutSign(*this, true));
+            }
         }
-        AssignObj(SubWithoutSign(num));
         return *this;
     }
 

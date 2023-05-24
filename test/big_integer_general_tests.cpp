@@ -126,9 +126,9 @@ TYPED_TEST(BigIntegerTest, AddTwoUnsignedBigIntegers) {
 
 TYPED_TEST(BigIntegerTest, BiggerIntegerSubtractSmallerInteger) {
     using BInt = zhejiangfhe::BigInteger<TypeParam>;
-    BInt bigIntOne("4");
-    BInt bigIntTwo("3");
-    EXPECT_EQ(bigIntOne.Sub(bigIntTwo).ConvertToString(), "1");
+    BInt bigIntOne("3");
+    BInt bigIntTwo("4");
+    EXPECT_EQ(bigIntOne.Sub(bigIntTwo).ConvertToString(), "-1");
     bigIntOne = BInt("1234567");
     bigIntTwo = BInt();
     EXPECT_EQ(bigIntOne.Sub(bigIntTwo).ConvertToString(), "1234567");
