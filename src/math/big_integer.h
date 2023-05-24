@@ -239,8 +239,8 @@ namespace zhejiangfhe {
         static uint8_t addWithCarry(NativeInt operand1, NativeInt operand2, uint8_t carry, NativeInt *result);
         static uint8_t subWithBorrow(NativeInt operand1, NativeInt operand2, uint8_t borrow, NativeInt *result);
 
-        BigInteger<NativeInt> AddWithoutSign(const BigInteger<NativeInt> &num, bool sign = false) const;
-        BigInteger<NativeInt> SubWithoutSign(const BigInteger<NativeInt> &num, bool sign = false) const;
+        BigInteger<NativeInt> AddWithSameSign(const BigInteger<NativeInt> &num, bool sign = false) const;
+        BigInteger<NativeInt> SubWithSameSign(const BigInteger<NativeInt> &num, bool sign = false) const;
 
         /**
          * @brief Karatsuba 算法计算 NativeInt * NativeInt, 结果为一个两倍于 NativeInt 长度的数

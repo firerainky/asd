@@ -21,7 +21,7 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
-    BigInteger<NativeInt> BigInteger<NativeInt>::AddWithoutSign(const BigInteger<NativeInt> &num, bool sign) const {
+    BigInteger<NativeInt> BigInteger<NativeInt>::AddWithSameSign(const BigInteger<NativeInt> &num, bool sign) const {
         std::vector<NativeInt> resultVectors;
 
         uint8_t carry = 0;
@@ -47,7 +47,7 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
-    BigInteger<NativeInt> BigInteger<NativeInt>::SubWithoutSign(const BigInteger<NativeInt> &num, bool sign) const {
+    BigInteger<NativeInt> BigInteger<NativeInt>::SubWithSameSign(const BigInteger<NativeInt> &num, bool sign) const {
 
         std::vector<NativeInt> resultVectors;
 
@@ -75,21 +75,21 @@ namespace zhejiangfhe {
             if (AbsoluteCompare(num) == 0) {
                 return BigInteger<NativeInt>();
             } else if (absoluteCompare > 0) {
-                return SubWithoutSign(num);
+                return SubWithSameSign(num);
             } else {
-                return num.SubWithoutSign(*this, true);
+                return num.SubWithSameSign(*this, true);
             }
         }
         if (sign == true && num.sign == false) {
             if (AbsoluteCompare(num) == 0) {
                 return BigInteger<NativeInt>();
             } else if (absoluteCompare > 0) {
-                return SubWithoutSign(num, sign);
+                return SubWithSameSign(num, sign);
             } else {
-                return num.SubWithoutSign(*this);
+                return num.SubWithSameSign(*this);
             }
         }
-        return AddWithoutSign(num);
+        return AddWithSameSign(num);
     }
 
     template<typename NativeInt>
@@ -100,21 +100,21 @@ namespace zhejiangfhe {
                 value.clear();
                 value.push_back(0);
             } else if (absoluteCompare > 0) {
-                AssignObj(SubWithoutSign(num));
+                AssignObj(SubWithSameSign(num));
             } else {
-                AssignObj(num.SubWithoutSign(*this, true));
+                AssignObj(num.SubWithSameSign(*this, true));
             }
         } else if (sign == true && num.sign == false) {
             if (AbsoluteCompare(num) == 0) {
                 value.clear();
                 value.push_back(0);
             } else if (absoluteCompare > 0) {
-                AssignObj(SubWithoutSign(num, sign));
+                AssignObj(SubWithSameSign(num, sign));
             } else {
-                AssignObj(num.SubWithoutSign(*this));
+                AssignObj(num.SubWithSameSign(*this));
             }
         } else {
-            AssignObj(AddWithoutSign(num));
+            AssignObj(AddWithSameSign(num));
         }
         return *this;
     }
@@ -123,16 +123,16 @@ namespace zhejiangfhe {
     BigInteger<NativeInt> BigInteger<NativeInt>::Sub(const BigInteger<NativeInt> &num) const {
         int absoluteCompare = AbsoluteCompare(num);
         if (sign == false && num.sign == true) {
-            return AddWithoutSign(num, sign);
+            return AddWithSameSign(num, sign);
         }else if (sign == true && num.sign == false) {
-            return AddWithoutSign(num, sign);
+            return AddWithSameSign(num, sign);
         }else{
             if (AbsoluteCompare(num) == 0) {
                 return BigInteger<NativeInt>();
             } else if (absoluteCompare > 0) {
-                return SubWithoutSign(num);
+                return SubWithSameSign(num);
             } else {
-                return num.SubWithoutSign(*this, true);
+                return num.SubWithSameSign(*this, true);
             }
         }
        
@@ -142,17 +142,17 @@ namespace zhejiangfhe {
     const BigInteger<NativeInt> &BigInteger<NativeInt>::SubEq(const BigInteger<NativeInt> &num) {
         int absoluteCompare = AbsoluteCompare(num);
         if (sign == false && num.sign == true) {
-            AssignObj(AddWithoutSign(num, sign));
+            AssignObj(AddWithSameSign(num, sign));
         } else if (sign == true && num.sign == false) {
-            AssignObj(AddWithoutSign(num, sign));
+            AssignObj(AddWithSameSign(num, sign));
         }else{
             if (AbsoluteCompare(num) == 0) {
                 value.clear();
                 value.push_back(0);
             } else if (absoluteCompare > 0) {
-                AssignObj(SubWithoutSign(num));
+                AssignObj(SubWithSameSign(num));
             } else {
-                AssignObj(num.SubWithoutSign(*this, true));
+                AssignObj(num.SubWithSameSign(*this, true));
             }
         }
         return *this;
