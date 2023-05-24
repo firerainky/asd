@@ -78,6 +78,8 @@ TYPED_TEST(BigIntegerTest, CompareTwoBigInteger) {
     EXPECT_EQ(BInt().Compare(BInt("-1")), 1);
     EXPECT_EQ(BInt("-1").Compare(BInt()), -1);
     EXPECT_EQ(BInt().Compare(BInt("1")), -1);
+    EXPECT_EQ(BInt("-2").Compare(BInt("3")), -1);
+    EXPECT_EQ(BInt("-2").Compare(BInt("-3")), 1);
     EXPECT_EQ(BInt("2").Compare(BInt("4")), -1);
     EXPECT_EQ(BInt("8").Compare(BInt("1234567890123456789012345678901234567890")), -1);
     EXPECT_EQ(BInt("123456789012345678901234567890123456789012345678901234567890").Compare(BInt("1234567890123456789012345678901234567890")), 1);

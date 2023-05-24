@@ -118,30 +118,26 @@ namespace zhejiangfhe {
         if (sign && !another.sign) {
             return -1;
         }
-
-        return AbsoluteCompare(another);
+        int absoluteCompare = AbsoluteCompare(another);
+        return sign ? -absoluteCompare : absoluteCompare;
     }
 
     template<typename NativeInt>
     int BigInteger<NativeInt>::AbsoluteCompare(const BigInteger<NativeInt> &another) const {
-        int absoluteCompare = 0;
         if (m_MSB < another.m_MSB) {
-            absoluteCompare = -1;
+            return -1;
         } else if (m_MSB > another.m_MSB) {
-            absoluteCompare = 1;
+            return 1;
         } else {
             for (int i = value.size() - 1; i >= 0; i--) {
                 if (value[i] > another.value[i]) {
-                    absoluteCompare = 1;
-                    break;
+                    return 1;
                 } else if (value[i] < another.value[i]) {
-                    absoluteCompare = -1;
-                    break;
+                    return -1;
                 }
             }
+            return 0;
         }
-
-        return sign ? -absoluteCompare : absoluteCompare;
     }
 
     template<typename NativeInt>
