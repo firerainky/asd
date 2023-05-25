@@ -12,7 +12,8 @@ TYPED_TEST_SUITE(BigIntegerModTest, LimbTypes);
 
 TYPED_TEST(BigIntegerModTest, Mod) {
     using BInt = zhejiangfhe::BigIntegerMod<TypeParam>;
-
+    EXPECT_EQ(BInt("-2").Mod(BInt("3")).ConvertToString(), "1");
+    EXPECT_EQ(BInt("-7").Mod(BInt("3")).ConvertToString(), "2");
     EXPECT_TRUE(BInt().Mod(BInt("1")) == BInt());
     EXPECT_TRUE(BInt().Mod(BInt("123456789012345678901234567890")) == BInt());
     EXPECT_TRUE(BInt("10").Mod(BInt("1")) == BInt());

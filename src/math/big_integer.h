@@ -88,6 +88,7 @@ namespace zhejiangfhe {
         BigInteger(NativeInt val, bool sign = false) {
             value.push_back(val);
             m_MSB = m_GetMSBForLimb(val);
+            this->sign = sign;
         }
 
 
@@ -103,6 +104,8 @@ namespace zhejiangfhe {
          * @return int -1 for strictly less than, 0 for equal to and 1 for strictly greater than conditions.
          */
         int Compare(const BigInteger<NativeInt> &another) const;
+
+        int AbsoluteCompare(const BigInteger<NativeInt> &another) const;
 
         BigInteger<NativeInt> Add(const BigInteger<NativeInt> &num) const;
         const BigInteger<NativeInt> &AddEq(const BigInteger<NativeInt> &num);
@@ -120,7 +123,7 @@ namespace zhejiangfhe {
 
         const BigInteger<NativeInt> &MulEq(const BigInteger<NativeInt> &b);
 
-        BigInteger<NativeInt> DividedBy(const BigInteger<NativeInt> &b) const;
+        std::pair<BigInteger<NativeInt>, BigInteger<NativeInt>> DividedBy(const BigInteger<NativeInt> &b) const;
 
         const BigInteger<NativeInt> &DividedByEq(const BigInteger<NativeInt> &b) {
             return *this;
@@ -156,15 +159,6 @@ namespace zhejiangfhe {
 
         BigInteger<NativeInt> LeftShift(uint16_t shift) const;
         BigInteger<NativeInt> RightShift(uint16_t shift) const;
-        /**
-         *
-         * @param quotientIn 商
-         * @param remainderIn 余数
-         * @param uIn
-         * @param v
-         * @return
-         */
-        bool Divide(BigInteger &quotientIn, BigInteger &remainderIn, const BigInteger &uIn, const BigInteger &vIn) const;
 
         inline int nlz(NativeInt x) const {
             if (typeid(x) == typeid(uint64_t)) {
@@ -232,7 +226,6 @@ namespace zhejiangfhe {
             }
         }
         void NormalizeLimbs(void);
-        int AbsoluteCompare(const BigInteger<NativeInt> &another) const;
 
         NativeInt UintInBinaryToDecimal(uint8_t *a);
 
@@ -241,6 +234,16 @@ namespace zhejiangfhe {
 
         BigInteger<NativeInt> AddWithSameSign(const BigInteger<NativeInt> &num, bool sign = false) const;
         BigInteger<NativeInt> SubWithSameSign(const BigInteger<NativeInt> &num, bool sign = false) const;
+
+        /**
+         *
+         * @param quotientIn 商
+         * @param remainderIn 余数
+         * @param uIn
+         * @param v
+         * @return
+         */
+        bool Divide(BigInteger &quotientIn, BigInteger &remainderIn, const BigInteger &uIn, const BigInteger &vIn) const;
 
         /**
          * @brief Karatsuba 算法计算 NativeInt * NativeInt, 结果为一个两倍于 NativeInt 长度的数

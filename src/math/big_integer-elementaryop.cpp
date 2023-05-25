@@ -227,12 +227,14 @@ namespace zhejiangfhe {
 
 
     template<typename NativeInt>
-    BigInteger<NativeInt> BigInteger<NativeInt>::DividedBy(const BigInteger<NativeInt> &denominator) const {
+    std::pair<BigInteger<NativeInt>, BigInteger<NativeInt>> BigInteger<NativeInt>::DividedBy(const BigInteger<NativeInt> &denominator) const {
 
-        BigInteger quotientIn(0);
-        BigInteger remainderIn(0);
+        bool finalSign = sign xor denominator.sign;
+
+        BigInteger quotientIn(0, finalSign);
+        BigInteger remainderIn(0, finalSign);
         Divide(quotientIn, remainderIn, *this, denominator);
-        return quotientIn;
+        return std::make_pair(quotientIn, remainderIn);
     }
 
     template<typename NativeInt>

@@ -10,11 +10,16 @@ namespace zhejiangfhe {
     template<typename NativeInt>
     BigInteger<NativeInt> BigIntegerMod<NativeInt>::Mod(const Modulus<NativeInt> &modulus) const {
         BigInteger<NativeInt> modulusValue = modulus.GetValue();
-        if (this->m_MSB < modulusValue.GetMSB()) {
-            return BigInteger<NativeInt>(this->value, this->sign);
+        if (this->m_MSB < modulusValue.GetMSB() || this->m_MSB == modulusValue.GetMSB() && this->AbsoluteCompare(modulusValue) < 0) {
+            if (this->sign) {
+                return *this + modulusValue;
+            } else {
+                return BigInteger<NativeInt>(this->value, this->sign);
+            }
         }
-        if (this->m_MSB == modulusValue.GetMSB() && *this < modulusValue) {
-            return BigInteger<NativeInt>(this->value, this->sign);
+
+        if (this->m_MSB == modulusValue.GetMSB() && this->AbsoluteCompare(modulusValue) == 0) {
+            return BigInteger<NativeInt>();
         }
 
         // use simple masking operation if modulus is 2
@@ -25,10 +30,12 @@ namespace zhejiangfhe {
                 return BigInteger<NativeInt>("1");
             }
         }
-        BigInteger<NativeInt> quotient;
-        BigInteger<NativeInt> remainder;
-        auto f = this->Divide(quotient, remainder, *this, modulusValue);
-        return remainder;
+        auto f = this->DividedBy(modulusValue);
+        if (this->sign) {
+            return f.second + modulusValue;
+        } else {
+            return f.second;
+        }
     }
 
     template<typename NativeInt>

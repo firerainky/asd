@@ -19,7 +19,7 @@ namespace zhejiangfhe {
 
         } else {
             value = input;
-            const_ratio = numerator.DividedBy(input);
+            const_ratio = numerator.DividedBy(input).first;
         }
     }
 

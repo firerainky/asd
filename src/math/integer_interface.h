@@ -57,7 +57,7 @@ namespace zhejiangfhe {
             return a.MulEq(b);
         }
 
-        T DividedBy(const T &b) const;
+        std::pair<T, T> DividedBy(const T &b) const;
 
 
         const T &DividedByEq(const T &b);

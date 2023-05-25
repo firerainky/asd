@@ -201,12 +201,12 @@ TYPED_TEST(BigIntegerTest, MultiplyEqTwoBigInteger) {
 TYPED_TEST(BigIntegerTest, DivideTwoBigInteger) {
     using BInt = zhejiangfhe::BigInteger<TypeParam>;
 
-    EXPECT_EQ(BInt(10).DividedBy(BInt(5)).ConvertToString(), "2");
-    EXPECT_EQ(BInt("12884901888").DividedBy(BInt("4294967296")).ConvertToString(), "3");
+    EXPECT_EQ(BInt(10).DividedBy(BInt(5)).first.ConvertToString(), "2");
+    EXPECT_EQ(BInt("12884901888").DividedBy(BInt("4294967296")).first.ConvertToString(), "3");
 
-    EXPECT_EQ(BInt("99999999999999999999999999999").DividedBy(BInt("33333333333333333333333333333")).ConvertToString(), "3");
-    BInt ans = BInt("999999999999999999999999999998000000000000000000000000000001").DividedBy(BInt("999999999999999999999999999999"));
-    EXPECT_EQ(ans.ConvertToString(), "999999999999999999999999999999");
+    EXPECT_EQ(BInt("99999999999999999999999999999").DividedBy(BInt("33333333333333333333333333333")).first.ConvertToString(), "3");
+    std::pair<BInt, BInt> ans = BInt("999999999999999999999999999998000000000000000000000000000001").DividedBy(BInt("999999999999999999999999999999"));
+    EXPECT_EQ(ans.first.ConvertToString(), "999999999999999999999999999999");
 }
 
 
