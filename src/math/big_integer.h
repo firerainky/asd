@@ -6,6 +6,7 @@
 #define ZJ_FHE_LIB_BigInteger_H
 
 #include "../util/exception.h"
+#include "basic_arithmatic.h"
 #include "integer_interface.h"
 #include <cstdint>
 #include <iosfwd>
@@ -22,7 +23,6 @@ namespace zhejiangfhe {
     struct SignedDoubleDataType {
         typedef void T;
     };
-
 
     template<>
     struct SignedDoubleDataType<uint16_t> {
@@ -212,7 +212,6 @@ namespace zhejiangfhe {
         typedef typename SignedDoubleDataType<NativeInt>::T SDlimb_t;
 
     private:
-
         void AssignVal(const std::string &str);
         BigInteger<NativeInt> &AssignObj(const BigInteger<NativeInt> &other);
         static uint32_t ceilIntByUInt(const NativeInt Number);

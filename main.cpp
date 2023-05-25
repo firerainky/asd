@@ -1,4 +1,5 @@
 
+#include "basic_arithmatic.h"
 #include "big_integer.h"
 #include "native_integer.h"
 #include <iosfwd>
@@ -18,11 +19,12 @@ int main() {
     std::cout << testBigIntA.ConvertToString().c_str() << std::endl;
 
 
-
     BigInteger<uint64_t> aaaa("222222");
 
     BigInteger<uint64_t> bbbb("222222");
     aaaa.DividedBy(bbbb);
+
+    std::cout << zhejiangfhe::basic_arithmatic::nlz(1) << std::endl;
 
     return 0;
 }
