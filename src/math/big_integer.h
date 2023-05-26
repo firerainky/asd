@@ -79,17 +79,13 @@ namespace zhejiangfhe {
 
         BigInteger(const std::string &strValue = "");
 
+        BigInteger(uint64_t val, bool sign = false);
+
         BigInteger(std::vector<NativeInt> vals, bool sign = false);
 
         const std::string ConvertToString() const;
 
         NativeInt ConvertToLimb() const;
-
-        BigInteger(NativeInt val, bool sign = false) {
-            value.push_back(val);
-            m_MSB = m_GetMSBForLimb(val);
-            this->sign = sign;
-        }
 
 
         template<typename T, typename std::enable_if<!std::is_same<T, const BigInteger>::value, bool>::type = true>
@@ -117,6 +113,9 @@ namespace zhejiangfhe {
             return value.size();
         }
         std::vector<NativeInt> getValue() const { return value; }
+
+        NativeInt getValueOfIndex(uint32_t index) const { return value[index]; }
+
         bool getSign() const { return sign; }
 
         BigInteger<NativeInt> Mul(const BigInteger<NativeInt> &b) const;

@@ -1,6 +1,7 @@
 #include "big_integer.h"
 #include "big_integer_modop.h"
 #include "big_integer_test.h"
+#include "modulus.h"
 
 
 namespace zhejiangfhe {
@@ -117,6 +118,7 @@ namespace zhejiangfhe {
 
     TEST(BigIntegerTest, ModSub) {
         using BInt = zhejiangfhe::BigInteger<uint32_t>;
+        using Modulus = zhejiangfhe::Modulus<uint32_t>;
 
         // (operand1 - operand2), modulus
         BInt operand1 = BInt("3");
@@ -183,5 +185,53 @@ namespace zhejiangfhe {
         operand2 = BInt("987654321098765432109876543210");
         modulus = Modulus(BInt("9999999999999999999912"));
         EXPECT_EQ(ModMul(operand1, operand2, modulus), BInt("237334552122396220044"));
+    }
+
+
+
+    TEST(BigIntegerModTest, ModExp) {
+        using BInt = zhejiangfhe::BigInteger<uint32_t>;
+
+        BInt operand = BInt("2");
+        BInt exponent = BInt();
+        Modulus modulus = Modulus(BInt("3"));
+        EXPECT_EQ(ModExp(operand, exponent, modulus), BInt(1));
+
+        operand = BInt("2");
+        exponent = BInt("1");
+        modulus = Modulus(BInt("3"));
+        EXPECT_EQ(ModExp(operand, exponent, modulus), BInt(2));
+
+        operand = BInt("2");
+        exponent = BInt("2");
+        modulus = Modulus(BInt("3"));
+        EXPECT_EQ(ModExp(operand, exponent, modulus), BInt(1));
+
+
+        operand = BInt("1");
+        exponent = BInt(0xFFFFFFFFFFFFFFFFLL, false);
+        modulus = Modulus(BInt("5"));
+        EXPECT_EQ(ModExp(operand, exponent, modulus), BInt(1));
+
+
+        operand = BInt("2");
+        EXPECT_EQ(ModExp(operand, exponent, modulus), BInt(3));
+
+
+        operand = BInt("2");
+        exponent = BInt("60");
+        modulus = Modulus(BInt(0x1000000000000000ULL, false));
+        EXPECT_EQ(ModExp(operand, exponent, modulus), BInt());
+
+
+        operand = BInt("2");
+        exponent = BInt("59");
+        modulus = Modulus(BInt(0x1000000000000000ULL, false));
+        EXPECT_EQ(ModExp(operand, exponent, modulus), BInt((1ULL << 59), false));
+
+        operand = BInt("2424242424");
+        exponent = BInt("16");
+        modulus = Modulus(BInt("131313131313"));
+        EXPECT_EQ(ModExp(operand, exponent, modulus), BInt(39418477653));
     }
 }

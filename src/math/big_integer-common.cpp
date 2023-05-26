@@ -30,6 +30,23 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
+    BigInteger<NativeInt>::BigInteger(uint64_t val, bool signVal) {
+        sign = signVal;
+        if (std::is_same<uint64_t, NativeInt>::value) {
+            value.push_back(val);
+        } else if (std::is_same<uint32_t, NativeInt>::value) {
+            if (val >= (1LL << 32)) {
+                value.push_back(val & m_MaxLimb);
+                value.push_back(val >> 32);
+            } else {
+                value.push_back(val);
+            }
+        }
+        RefreshMSB();
+    }
+
+
+    template<typename NativeInt>
     void BigInteger<NativeInt>::AssignVal(const std::string &str) {
 
         std::string v = str;

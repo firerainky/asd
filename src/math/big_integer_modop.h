@@ -55,5 +55,38 @@ namespace zhejiangfhe {
         BigInteger<NativeInt> mulRes = operand.Mul(another);
         return Mod(mulRes, modulus);
     }
-}// namespace zhejiangfhe
+
+    template<typename NativeInt>
+    BigInteger<NativeInt> ModExp(BigInteger<NativeInt> &operand, BigInteger<NativeInt> &exponent, Modulus<NativeInt> &modulus) {
+        BigInteger<NativeInt> modulusValue = modulus.GetValue();
+        BigInteger<NativeInt> mid = Mod(operand, modulus);
+        BigInteger<NativeInt> product(1);
+        BigInteger<NativeInt> exp(exponent);
+
+        if (exponent == 0)
+        {
+            return 1;
+        }
+
+        if (exponent == 1 || operand == 1)
+        {
+            return operand;
+        }
+        while (true) {
+            if (exp.getValueOfIndex(0) % 2 == 1) {
+                product = product * mid;
+            }
+            if (product >= modulusValue) {
+                product = Mod(product, modulus);
+            }
+            exp = exp.RightShift(1);
+            if (exp == 0) {
+                break;
+            }
+            mid = mid * mid;
+            mid = Mod(mid, modulus);
+        }
+        return product;
+    }
+}
 #endif//ZJ_FHE_LIB_BIG_INTEGER_MODOP_H

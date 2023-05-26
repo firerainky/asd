@@ -100,7 +100,7 @@ namespace zhejiangfhe {
     template<typename NativeInt>
     BigInteger<NativeInt> BigInteger<NativeInt>::LeftShift(uint16_t shift) const {
         if (this->m_MSB == 0) {
-            return BigInteger(0);
+            return BigInteger();
         }
         BigInteger ans(*this);
         // compute the number of whole limb shifts
@@ -133,7 +133,7 @@ namespace zhejiangfhe {
     template<typename NativeInt>
     BigInteger<NativeInt> BigInteger<NativeInt>::RightShift(uint16_t shift) const {
         if (this->m_MSB == 0 || this->m_MSB <= shift) {
-            return BigInteger(0);
+            return BigInteger();
         }
 
         BigInteger ans(*this);
@@ -155,6 +155,9 @@ namespace zhejiangfhe {
                 ans.value[i] = (ans.value[i] >> remainingShift) | ans.value[i + 1] << negativeShift;
             }
             ans.value[ans.value.size() - 1] = ans.value[ans.value.size() - 1] >> remainingShift;
+        }
+        while (!ans.value.back()) {
+            ans.value.pop_back();
         }
         ans.RefreshMSB();
         return ans;

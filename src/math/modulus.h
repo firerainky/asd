@@ -18,6 +18,12 @@ namespace zhejiangfhe {
             set_value(value);
         }
 
+
+        Modulus(uint64_t val)
+        {
+            set_value(BigInteger<NativeInt>(val));
+        }
+
         inline const BigInteger<NativeInt> GetConstRatio(){
             return const_ratio;
         };
