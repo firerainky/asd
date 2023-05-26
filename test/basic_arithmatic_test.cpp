@@ -1,4 +1,4 @@
-#include "basic_arithmatic.h"
+#include "internal/basic_arithmatic.h"
 #include <gtest/gtest.h>
 
 TEST(BasicArithmaticTest, nlzTest) {

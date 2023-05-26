@@ -1,6 +1,6 @@
 
-#include "basic_arithmatic.h"
 #include "big_integer.h"
+#include "internal/basic_arithmatic.h"
 #include "native_integer.h"
 #include <iosfwd>
 #include <iostream>

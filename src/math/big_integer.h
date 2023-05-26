@@ -6,8 +6,8 @@
 #define ZJ_FHE_LIB_BigInteger_H
 
 #include "../util/exception.h"
-#include "basic_arithmatic.h"
 #include "integer_interface.h"
+#include "internal/basic_arithmatic.h"
 #include <cstdint>
 #include <iosfwd>
 #include <memory>
