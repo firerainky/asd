@@ -1,6 +1,8 @@
 
 #include "big_integer.h"
 #include "native_integer.h"
+#include "big_integer_modop.h"
+#include "modulus.h"
 #include <iosfwd>
 #include <iostream>
 
@@ -24,5 +26,14 @@ int main() {
     BigInteger<uint64_t> bbbb("222222");
     aaaa.DividedBy(bbbb);
 
+
+    Modulus<uint64_t> modulus(BigInteger<uint64_t>("3"));
+    BigInteger<uint64_t> operand("4");
+    std::cout << Mod(operand, modulus).ConvertToString() << std::endl;
+    BigInteger<uint64_t> another("2");
+    std::cout << ModMul(operand, another, modulus).ConvertToString() << std::endl;
+
+
+    ModSub(operand, another, modulus);
     return 0;
 }

@@ -3,100 +3,185 @@
 #include "big_integer_test.h"
 
 
-// 创建继承自 Test 的 test fixture
-template<typename T>
-class BigIntegerModTest : public testing::Test {};
+namespace zhejiangfhe {
+    // 创建继承自 Test 的 test fixture
+    template<typename T>
+    class BigIntegerTest : public testing::Test {};
 
-// 将 test fixture 与类型列表绑定在一起，这样下面的测试就可以自动对类型列表中的每一种都执行一遍了
-TYPED_TEST_SUITE(BigIntegerModTest, LimbTypes);
+    // 将 test fixture 与类型列表绑定在一起，这样下面的测试就可以自动对类型列表中的每一种都执行一遍了
+    TYPED_TEST_SUITE(BigIntegerTest, LimbTypes);
 
-TYPED_TEST(BigIntegerModTest, Mod) {
-    using BInt = zhejiangfhe::BigIntegerMod<TypeParam>;
-    EXPECT_EQ(BInt("-2").Mod(BInt("3")).ConvertToString(), "1");
-    EXPECT_EQ(BInt("-7").Mod(BInt("3")).ConvertToString(), "2");
-    EXPECT_TRUE(BInt().Mod(BInt("1")) == BInt());
-    EXPECT_TRUE(BInt().Mod(BInt("123456789012345678901234567890")) == BInt());
-    EXPECT_TRUE(BInt("10").Mod(BInt("1")) == BInt());
-    EXPECT_TRUE(BInt("1").Mod(BInt("2")) == BInt("1"));
-    EXPECT_TRUE(BInt("123456789012345678901234567890").Mod(BInt("1234567890123456789012345678903")) == BInt("123456789012345678901234567890"));
-    EXPECT_TRUE(BInt("123456789012345678901234567890").Mod(BInt("1234567890123456789012345678901")) == BInt("123456789012345678901234567890"));
-    EXPECT_TRUE(BInt("2").Mod(BInt("3")) == BInt("2"));
+    TEST(BigIntegerTest, Mod) {
+        using BInt = zhejiangfhe::BigInteger<uint32_t>;
 
-    EXPECT_TRUE(BInt("123456789012345678901234567891").Mod(BInt("2")) == BInt("1"));
-    EXPECT_TRUE(BInt("1234567890123456789012345678903").Mod(BInt("1234567890123456789012345678900")) == BInt("3"));
-    EXPECT_TRUE(BInt("12345678901234567890123456789031234567890123456789012345678903").Mod(BInt("1234567890123456789012345678900")) == BInt("370370637037037063703703706403"));
+        BInt operand = BInt("-2");
+        Modulus modulus = Modulus(BInt("3"));
+        EXPECT_EQ(Mod(operand, modulus), BInt("1"));
 
-    BInt num("12345678901234567890123456789031234567890123456789012345678903");
-    num.ModEq(BInt("1234567890123456789012345678900"));
-    EXPECT_TRUE(num == BInt("370370637037037063703703706403"));
-}
-TYPED_TEST(BigIntegerModTest, ModAdd) {
-    using BInt = zhejiangfhe::BigIntegerMod<TypeParam>;
+        operand = BInt("-7");
+        EXPECT_EQ(Mod(operand, modulus).ConvertToString(), "2");
 
-    EXPECT_TRUE(BInt().ModIncrement(BInt("1")) == BInt());
-    EXPECT_TRUE(BInt("1").ModIncrement(BInt("2")) == BInt());
-    EXPECT_TRUE(BInt().ModIncrement(BInt("123456789012345678901234567890")) == BInt("1"))<<BInt().ModIncrement(BInt("123456789012345678901234567890")).ConvertToString().c_str();
-    EXPECT_TRUE(BInt("123456789012345678901234567889").ModIncrement(BInt("123456789012345678901234567890")) == BInt())<<BInt("123456789012345678901234567889").ModIncrement(BInt("123456789012345678901234567890")).ConvertToString().c_str();
-    EXPECT_TRUE(BInt("1").ModAdd(BInt("2"),BInt("2")) == BInt("1"))<<BInt("1").ModAdd(BInt("2"),BInt("2")).ConvertToString().c_str();
-    EXPECT_TRUE(BInt("123456789012345678901234567889").ModAdd(BInt("1"),BInt("1234567890123456789012345678903")) == BInt("123456789012345678901234567890"))<<BInt("123456789012345678901234567889").ModAdd(BInt("1"),BInt("1234567890123456789012345678903")).ConvertToString().c_str();
-    EXPECT_TRUE(BInt("123456789012345678901234567890").ModAdd(BInt("1234567890123456789012345678901"),BInt("1234567890123456789012345678901")) == BInt("123456789012345678901234567890"))<<BInt("123456789012345678901234567890").ModAdd(BInt("1234567890123456789012345678901"),BInt("1234567890123456789012345678901")).ConvertToString().c_str();
-    EXPECT_TRUE(BInt("2").ModAdd(BInt("3"),BInt("3")) == BInt("2"))<<BInt("2").ModAdd(BInt("3"),BInt("3")).ConvertToString().c_str();
+        operand = BInt();
+        modulus = Modulus(BInt("1"));
+        EXPECT_EQ(Mod(operand, modulus), BInt());
 
-    EXPECT_TRUE(BInt("123456789012345678901234567890").ModAdd(BInt("1"),BInt("2")) == BInt("1"))<<BInt("2").ModAdd(BInt("3"),BInt("3")).ConvertToString().c_str();
-
-    BInt num("12345678901234567890123456789031234567890123456789012345678900");
-    num.ModAddEq(BInt("2"),BInt("1234567890123456789012345678900"));
-    // EXPECT_TRUE(num == BInt("370370637037037063703703706403"))<<num.ConvertToString().c_str();
-}
+        modulus = Modulus(BInt("123456789012345678901234567890"));
+        EXPECT_EQ(Mod(operand, modulus), BInt());
 
 
-
-TYPED_TEST(BigIntegerModTest, ModSub) {
-    using BInt = zhejiangfhe::BigIntegerMod<TypeParam>;
-
-    // (operand1 - operand2) == modulus
-    EXPECT_TRUE(BInt("3").ModSub(BInt("1"), BInt("2")) == BInt());
-
-    // (operand1 - operand2) > modulus
-    EXPECT_TRUE(BInt("6").ModSub(BInt("1"), BInt("2")) == BInt(1));
-
-    // (operand1 - operand2) < ~modulus
-    EXPECT_TRUE(BInt("1").ModSub(BInt("3"), BInt("3")) == BInt(1));
+        operand = BInt("10");
+        modulus = Modulus(BInt("1"));
+        EXPECT_EQ(Mod(operand, modulus), BInt());
 
 
+        operand = BInt("1");
+        modulus = Modulus(BInt("2"));
+        EXPECT_EQ(Mod(operand, modulus), BInt("1"));
 
-    // operand1 - operand2 = 0
-    EXPECT_TRUE(BInt("3").ModSub(BInt("3"), BInt("3")) == BInt());
-
-
-    // operand1 - operand2 = 0
-    EXPECT_EQ(BInt("122233444322332244332222").ModSub(BInt("456434678665445567"), BInt("3456789")).ConvertToString(), "1632671");
-
-}
+        operand = BInt("2");
+        modulus = Modulus(BInt("3"));
+        EXPECT_EQ(Mod(operand,modulus), BInt("2"));
 
 
-TYPED_TEST(BigIntegerModTest, ModMul) {
-    using BInt = zhejiangfhe::BigIntegerMod<TypeParam>;
+        operand = BInt("123456789012345678901234567890");
+        modulus = Modulus(BInt("1234567890123456789012345678903"));
+        EXPECT_EQ(Mod(operand, modulus), BInt("123456789012345678901234567890"));
 
-    // (m * n) mod modulus
-    // m == 0 || n == 0, result should be 0
-    EXPECT_TRUE(BInt("3").ModMul(BInt(), BInt("7")) == BInt());
-    EXPECT_TRUE(BInt("").ModMul(BInt("3"), BInt("7")) == BInt());
+        operand = BInt("123456789012345678901234567890");
+        modulus = Modulus(BInt("1234567890123456789012345678901"));
+        EXPECT_EQ(Mod(operand, modulus), BInt("123456789012345678901234567890"));
 
-    // (m * n) < modulus, result should be m * n
-    EXPECT_TRUE(BInt("3").ModMul(BInt("5"), BInt("16")) == BInt("15"));
 
-    // (m * n) > modulus
-    EXPECT_TRUE(BInt("35").ModMul(BInt("21"), BInt("16")) == BInt("15"));
+        operand = BInt("123456789012345678901234567891");
+        modulus = Modulus(BInt("2"));
+        EXPECT_EQ(Mod(operand, modulus), BInt("1"));
 
-    // Big Integer Senario
-    EXPECT_TRUE(BInt("123456789012345678901234567890").ModMul(BInt("987654321098765432109876543210"), BInt("9999999999999999999912")) == BInt("237334552122396220044"));
+        operand = BInt("1234567890123456789012345678903");
+        modulus = Modulus(BInt("1234567890123456789012345678900"));
+        EXPECT_EQ(Mod(operand, modulus), BInt("3"));
 
-    // ModMul inplace
-    BInt m("123456789012345678901234567890");
-    BInt n("987654321098765432109876543210");
-    BInt modulus("9999999999999999999912");
-    BInt expectedResult("237334552122396220044");
-    EXPECT_TRUE(m.ModMulEq(n, modulus) == expectedResult);
-    EXPECT_TRUE(m == expectedResult);
+        operand = BInt("12345678901234567890123456789031234567890123456789012345678903");
+        modulus = Modulus(BInt("1234567890123456789012345678900"));
+        EXPECT_EQ(Mod(operand, modulus), BInt("370370637037037063703703706403"));
+
+    }
+
+    TEST(BigIntegerTest, ModAdd) {
+        using BInt = zhejiangfhe::BigInteger<uint32_t>;
+        BInt operand = BInt();
+        Modulus modulus = Modulus(BInt("1"));
+        EXPECT_EQ(ModIncrement(operand, modulus), BInt());
+
+        operand = BInt("1");
+        modulus = Modulus(BInt("2"));
+        EXPECT_EQ(ModIncrement(operand, modulus), BInt());
+
+        operand = BInt();
+        modulus = Modulus(BInt("123456789012345678901234567890"));
+        EXPECT_EQ(ModIncrement(operand, modulus), BInt("1"));
+
+        operand = BInt("123456789012345678901234567889");
+        modulus = Modulus(BInt("123456789012345678901234567890"));
+        EXPECT_EQ(ModIncrement(operand, modulus), BInt());
+
+        BInt operand1 = BInt("1");
+        BInt operand2 = BInt("2");
+        modulus = Modulus(BInt("2"));
+        EXPECT_EQ(ModAdd(operand1, operand2, modulus), BInt("1"));
+
+
+        operand1 = BInt("123456789012345678901234567889");
+        operand2 = BInt("1");
+        modulus = Modulus(BInt("1234567890123456789012345678903"));
+        EXPECT_EQ(ModAdd(operand1, operand2, modulus), BInt("123456789012345678901234567890"));
+
+
+        operand1 = BInt("123456789012345678901234567890");
+        operand2 = BInt("1234567890123456789012345678901");
+        modulus = Modulus(BInt("1234567890123456789012345678901"));
+        EXPECT_EQ(ModAdd(operand1, operand2, modulus), BInt("123456789012345678901234567890"));
+
+
+        operand1 = BInt("2");
+        operand2 = BInt("3");
+        modulus = Modulus(BInt("4"));
+        EXPECT_EQ(ModAdd(operand1, operand2, modulus), BInt("1"));
+
+
+        operand1 = BInt("123456789012345678901234567890");
+        operand2 = BInt("1");
+        modulus = Modulus(BInt("2"));
+        EXPECT_EQ(ModAdd(operand1, operand2, modulus), BInt("1"));
+    }
+
+
+    TEST(BigIntegerTest, ModSub) {
+        using BInt = zhejiangfhe::BigInteger<uint32_t>;
+
+        // (operand1 - operand2), modulus
+        BInt operand1 = BInt("3");
+        BInt operand2 = BInt("1");
+        Modulus modulus = Modulus(BInt("2"));
+        EXPECT_EQ(ModSub(operand1, operand2, modulus), BInt());
+
+        // (operand1 - operand2) > modulus
+        operand1 = BInt("6");
+        operand2 = BInt("1");
+        modulus = Modulus(BInt("2"));
+        EXPECT_EQ(ModSub(operand1, operand2, modulus), BInt(1));
+
+        // (operand1 - operand2) < ~modulus
+        operand1 = BInt("1");
+        operand2 = BInt("3");
+        modulus = Modulus(BInt("3"));
+        EXPECT_EQ(ModSub(operand1, operand2, modulus), BInt(1));
+
+
+        // operand1 - operand2 = 0
+        operand1 = BInt("2");
+        operand2 = BInt("3");
+        modulus = Modulus(BInt("4"));
+        EXPECT_EQ(ModSub(operand1, operand2, modulus), BInt(3));
+
+
+        // operand1 - operand2 = 0
+        operand1 = BInt("122233444322332244332222");
+        operand2 = BInt("456434678665445567");
+        modulus = Modulus(BInt("3456789"));
+        EXPECT_EQ(ModSub(operand1, operand2, modulus), BInt("1632671"));
+    }
+
+
+    TEST(BigIntegerTest, ModMul) {
+        using BInt = zhejiangfhe::BigInteger<uint32_t>;
+
+        // (m * n) mod modulus
+        // m, 0 || n, 0, result should be 0
+        BInt operand1 = BInt("3");
+        BInt operand2 = BInt();
+        Modulus modulus = Modulus(BInt("7"));
+        EXPECT_EQ(ModMul(operand1, operand2, modulus), BInt());
+
+        operand1 = BInt();
+        operand2 = BInt("3");
+        EXPECT_EQ(ModMul(operand1, operand2, modulus), BInt());
+
+        // (m * n) < modulus, result should be m * n
+        operand1 = BInt("3");
+        operand2 = BInt("5");
+        modulus = Modulus(BInt("16"));
+        EXPECT_EQ(ModMul(operand1, operand2, modulus), BInt("15"));
+
+        // (m * n) > modulus
+        operand1 = BInt("35");
+        operand2 = BInt("21");
+        modulus = Modulus(BInt("16"));
+        EXPECT_EQ(ModMul(operand1, operand2, modulus), BInt("15"));
+
+        // Big Integer Senario
+        operand1 = BInt("123456789012345678901234567890");
+        operand2 = BInt("987654321098765432109876543210");
+        modulus = Modulus(BInt("9999999999999999999912"));
+        EXPECT_EQ(ModMul(operand1, operand2, modulus), BInt("237334552122396220044"));
+    }
 }
