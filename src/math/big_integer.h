@@ -129,6 +129,10 @@ namespace zhejiangfhe {
             return *this;
         }
 
+        // Mod
+        BigInteger<NativeInt> operator%(const BigInteger<NativeInt> &modulus) const;
+        const BigInteger<NativeInt> &operator%=(const BigInteger<NativeInt> &modulus);
+
         // Bit Operation
         BigInteger<NativeInt> And(const BigInteger<NativeInt>) const;
         const BigInteger<NativeInt> &AndEq(const BigInteger<NativeInt>);
@@ -189,11 +193,11 @@ namespace zhejiangfhe {
             }
         }
 
-        uint32_t GetMSB() {
+        uint32_t GetMSB() const {
             return m_MSB;
         }
 
-        std::vector<NativeInt> GetValue() {
+        std::vector<NativeInt> GetValue() const {
             return value;
         }
 
@@ -212,7 +216,6 @@ namespace zhejiangfhe {
         typedef typename SignedDoubleDataType<NativeInt>::T SDlimb_t;
 
     private:
-
         void AssignVal(const std::string &str);
         BigInteger<NativeInt> &AssignObj(const BigInteger<NativeInt> &other);
         static uint32_t ceilIntByUInt(const NativeInt Number);

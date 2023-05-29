@@ -124,9 +124,9 @@ namespace zhejiangfhe {
         int absoluteCompare = AbsoluteCompare(num);
         if (sign == false && num.sign == true) {
             return AddWithSameSign(num, sign);
-        }else if (sign == true && num.sign == false) {
+        } else if (sign == true && num.sign == false) {
             return AddWithSameSign(num, sign);
-        }else{
+        } else {
             if (AbsoluteCompare(num) == 0) {
                 return BigInteger<NativeInt>();
             } else if (absoluteCompare > 0) {
@@ -135,7 +135,6 @@ namespace zhejiangfhe {
                 return num.SubWithSameSign(*this, true);
             }
         }
-       
     }
 
     template<typename NativeInt>
@@ -145,7 +144,7 @@ namespace zhejiangfhe {
             AssignObj(AddWithSameSign(num, sign));
         } else if (sign == true && num.sign == false) {
             AssignObj(AddWithSameSign(num, sign));
-        }else{
+        } else {
             if (AbsoluteCompare(num) == 0) {
                 value.clear();
                 value.push_back(0);
@@ -340,6 +339,41 @@ namespace zhejiangfhe {
         remainder[n - 1] = un[n - 1] >> s;
         remainderIn.NormalizeLimbs();
         return true;
+    }
+
+    template<typename NativeInt>
+    BigInteger<NativeInt> BigInteger<NativeInt>::operator%(const BigInteger<NativeInt> &modulus) const {
+        if (GetMSB() < modulus.GetMSB() || GetMSB() == modulus.GetMSB() && AbsoluteCompare(modulus) < 0) {
+            if (getSign()) {
+                return *this + modulus;
+            } else {
+                return BigInteger<NativeInt>(GetValue());
+            }
+        }
+
+        if (GetMSB() == modulus.GetMSB() && AbsoluteCompare(modulus) == 0) {
+            return BigInteger<NativeInt>();
+        }
+
+        // use simple masking operation if modulus is 2
+        if (modulus.GetMSB() == 2 && modulus.GetValue()[0] == 2) {
+            if (GetValue()[0] % 2 == 0) {
+                return BigInteger<NativeInt>();
+            } else {
+                return BigInteger<NativeInt>("1");
+            }
+        }
+        auto f = DividedBy(modulus);
+        if (getSign()) {
+            return f.second + modulus;
+        } else {
+            return f.second;
+        }
+    }
+
+    template<typename NativeInt>
+    const BigInteger<NativeInt> &BigInteger<NativeInt>::operator%=(const BigInteger<NativeInt> &modulus) {
+        return *this = *this % modulus;
     }
 
     template class zhejiangfhe::BigInteger<uint32_t>;

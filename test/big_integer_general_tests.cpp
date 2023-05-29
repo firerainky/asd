@@ -349,3 +349,18 @@ TYPED_TEST(BigIntegerTest, BitwiseNegate) {
     EXPECT_TRUE(num.NegateEq() == BInt(valsAfterNegate));
     EXPECT_TRUE(num == BInt(valsAfterNegate));
 }
+
+TYPED_TEST(BigIntegerTest, OperatorMod) {
+    using BInt = zhejiangfhe::BigInteger<TypeParam>;
+
+    EXPECT_EQ(BInt() % BInt("1"), BInt());
+    EXPECT_EQ(BInt("-2") % BInt("3"), BInt("1"));
+
+    BInt operand("12345678901234567890123456789031234567890123456789012345678903");
+    BInt modulus("1234567890123456789012345678900");
+    EXPECT_EQ(operand % modulus, BInt("370370637037037063703703706403"));
+
+    EXPECT_EQ(operand, BInt("12345678901234567890123456789031234567890123456789012345678903"));
+    operand %= modulus;
+    EXPECT_EQ(operand, BInt("370370637037037063703703706403"));
+}
