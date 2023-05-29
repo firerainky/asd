@@ -74,7 +74,7 @@ namespace zhejiangfhe {
 
     template<typename NativeInt>
     const BigInteger<NativeInt> &BigInteger<NativeInt>::XorEq(const BigInteger<NativeInt> another) {
-        return *this = this->Xor(another);
+        return *this = Xor(another);
     }
 
     template<typename NativeInt>

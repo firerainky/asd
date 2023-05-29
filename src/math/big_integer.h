@@ -138,11 +138,17 @@ namespace zhejiangfhe {
         BigInteger<NativeInt> operator&(const BigInteger<NativeInt> &another) const {
             return And(another);
         }
+        BigInteger<NativeInt> operator&=(const BigInteger<NativeInt> &another) {
+            return *this = And(another);
+        }
 
         BigInteger<NativeInt> Or(const BigInteger<NativeInt>) const;
         const BigInteger<NativeInt> &OrEq(const BigInteger<NativeInt>);
         BigInteger<NativeInt> operator|(const BigInteger<NativeInt> &another) const {
             return Or(another);
+        }
+        const BigInteger<NativeInt> operator|=(const BigInteger<NativeInt> &another) {
+            return *this = Or(another);
         }
 
         BigInteger<NativeInt> Not() const;
@@ -156,12 +162,27 @@ namespace zhejiangfhe {
         BigInteger<NativeInt> operator^(const BigInteger<NativeInt> &another) const {
             return Xor(another);
         }
+        const BigInteger<NativeInt> operator^=(const BigInteger<NativeInt> &another) {
+            return *this = Xor(another);
+        }
 
         BigInteger<NativeInt> Negate() const;
         const BigInteger<NativeInt> &NegateEq();
 
         BigInteger<NativeInt> LeftShift(uint16_t shift) const;
+        BigInteger<NativeInt> operator<<(uint16_t shift) const {
+            return LeftShift(shift);
+        }
+        const BigInteger<NativeInt> &operator<<=(uint16_t shift) {
+            return *this = this->LeftShift(shift);
+        }
         BigInteger<NativeInt> RightShift(uint16_t shift) const;
+        BigInteger<NativeInt> operator>>(uint16_t shift) const {
+            return RightShift(shift);
+        }
+        const BigInteger<NativeInt> &operator>>=(uint16_t shift) {
+            return *this = this->RightShift(shift);
+        }
 
         inline int nlz(NativeInt x) const {
             if (typeid(x) == typeid(uint64_t)) {

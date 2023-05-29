@@ -217,6 +217,12 @@ TYPED_TEST(BigIntegerTest, LeftShiftBigInteger) {
     EXPECT_EQ(BInt(1024).LeftShift(1).ConvertToString(), "2048");
 
     EXPECT_EQ(BInt("4294967297").LeftShift(1).ConvertToString(), "8589934594");
+
+    EXPECT_EQ(BInt("4294967297") << 1, BInt("8589934594"));
+
+    BInt num("4294967297");
+    num <<= 1;
+    EXPECT_EQ(num, BInt("8589934594"));
 }
 
 
@@ -226,6 +232,12 @@ TYPED_TEST(BigIntegerTest, RightShiftBigInteger) {
 
     EXPECT_EQ(BInt(1024).RightShift(2).ConvertToString(), "256");
     EXPECT_EQ(BInt("4294967296").RightShift(1).ConvertToString(), "2147483648");
+
+    EXPECT_EQ(BInt("4294967296") >> 1, BInt("2147483648"));
+
+    BInt num("4294967296");
+    num >>= 1;
+    EXPECT_EQ(num, BInt("2147483648"));
 }
 
 
@@ -312,8 +324,11 @@ TYPED_TEST(BigIntegerTest, BitwiseNot) {
     BInt num = BInt(vals);
     EXPECT_TRUE(num.NotEq() == BInt(valsAfterNot));
     EXPECT_TRUE(num == BInt(valsAfterNot));
-
     EXPECT_TRUE(~BInt(vals) == BInt(valsAfterNot));
+
+    num = BInt(vals);
+    num = ~num;
+    EXPECT_EQ(num, BInt(valsAfterNot));
 }
 
 TYPED_TEST(BigIntegerTest, BitwiseXor) {
@@ -333,6 +348,12 @@ TYPED_TEST(BigIntegerTest, BitwiseXor) {
     EXPECT_TRUE(num == BInt("10429788288481127546160455888863017661496"));
 
     EXPECT_TRUE((BInt("-1234567890123456789012345678901234567890") ^ BInt("-9876543210987654321098765432109876543210")) == BInt("10429788288481127546160455888863017661496"));
+
+    BInt num1("-1234567890123456789012345678901234567890");
+    BInt num2("-9876543210987654321098765432109876543210");
+    EXPECT_EQ(num1 ^ num2, BInt("10429788288481127546160455888863017661496"));
+    num1 ^= num2;
+    EXPECT_EQ(num1, BInt("10429788288481127546160455888863017661496"));
 }
 
 TYPED_TEST(BigIntegerTest, BitwiseNegate) {
