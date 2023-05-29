@@ -127,7 +127,19 @@ TYPED_TEST(BigIntegerTest, AddTwoUnsignedBigIntegers) {
 
     bigIntOne = 0;
     bigIntTwo = 0;
-    EXPECT_EQ(bigIntOne.AddEq(bigIntTwo), 0);
+    EXPECT_EQ(bigIntOne += bigIntTwo, 0);
+
+    bigIntOne = 2;
+    bigIntTwo = 3;
+    EXPECT_EQ(bigIntOne += bigIntTwo, 5);
+
+    bigIntOne = -2;
+    bigIntTwo = 3;
+    EXPECT_EQ(bigIntOne += bigIntTwo, 1);
+
+    bigIntOne = 2;
+    bigIntTwo = -3;
+    EXPECT_EQ(bigIntOne += bigIntTwo, -1);
 }
 
 TYPED_TEST(BigIntegerTest, BiggerIntegerSubtractSmallerInteger) {
@@ -154,6 +166,22 @@ TYPED_TEST(BigIntegerTest, BiggerIntegerSubtractSmallerInteger) {
     bigIntTwo = BInt("99999999999999999999999999999999999999999999999999");
     EXPECT_EQ(bigIntOne.Sub(bigIntTwo).ConvertToString(),
               "1");
+
+    bigIntOne = 0;
+    bigIntTwo = 0;
+    EXPECT_EQ(bigIntOne -= bigIntTwo, 0);
+
+    // bigIntOne = 2;
+    // bigIntTwo = 3;
+    // EXPECT_EQ(bigIntOne -= bigIntTwo, -1);
+
+    bigIntOne = -2;
+    bigIntTwo = 3;
+    EXPECT_EQ(bigIntOne -= bigIntTwo, -5);
+
+    // bigIntOne = 2;
+    // bigIntTwo = -3;
+    // EXPECT_EQ(bigIntOne -= bigIntTwo, 5);
 }
 
 TYPED_TEST(BigIntegerTest, MultiplyTwoBigInteger) {
@@ -400,25 +428,25 @@ TYPED_TEST(BigIntegerTest, ModMul) {
     BInt modulus = 7;
     EXPECT_EQ(operand1.ModMul(operand2, modulus), 0);
 
-    // operand1 = 0;
-    // operand2 = 5;
-    // EXPECT_EQ(operand1.ModMul(operand2, modulus), 0);
+    operand1 = 0;
+    operand2 = 5;
+    EXPECT_EQ(operand1.ModMul(operand2, modulus), 0);
 
-    // // (m * n) < modulus, result should be m * n
-    // operand1 = 3;
-    // operand2 = 5;
-    // modulus = 16;
-    // EXPECT_EQ(operand1.ModMul(operand2, modulus), 15);
+    // (m * n) < modulus, result should be m * n
+    operand1 = 3;
+    operand2 = 5;
+    modulus = 16;
+    EXPECT_EQ(operand1.ModMul(operand2, modulus), 15);
 
-    // // (m * n) > modulus
-    // operand1 = 35;
-    // operand2 = 21;
-    // modulus = 16;
-    // EXPECT_EQ(operand1.ModMul(operand2, modulus), 15);
+    // (m * n) > modulus
+    operand1 = 35;
+    operand2 = 21;
+    modulus = 16;
+    EXPECT_EQ(operand1.ModMul(operand2, modulus), 15);
 
-    // // Big Integer Senario
-    // operand1 = BInt("123456789012345678901234567890");
-    // operand2 = BInt("987654321098765432109876543210");
-    // modulus = BInt("9999999999999999999912");
-    // EXPECT_EQ(operand1.ModMul(operand2, modulus), BInt("237334552122396220044"));
+    // Big Integer Senario
+    operand1 = BInt("123456789012345678901234567890");
+    operand2 = BInt("987654321098765432109876543210");
+    modulus = BInt("9999999999999999999912");
+    EXPECT_EQ(operand1.ModMul(operand2, modulus), BInt("237334552122396220044"));
 }

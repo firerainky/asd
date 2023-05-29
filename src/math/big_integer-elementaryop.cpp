@@ -100,21 +100,26 @@ namespace zhejiangfhe {
                 value.clear();
                 value.push_back(0);
             } else if (absoluteCompare > 0) {
-                AssignObj(SubWithSameSign(num));
+                // AssignObj(SubWithSameSign(num));
+                *this = SubWithSameSign(num);
             } else {
-                AssignObj(num.SubWithSameSign(*this, true));
+                // AssignObj(num.SubWithSameSign(*this, true));
+                *this = num.SubWithSameSign(*this, true);
             }
         } else if (sign == true && num.sign == false) {
             if (AbsoluteCompare(num) == 0) {
                 value.clear();
                 value.push_back(0);
             } else if (absoluteCompare > 0) {
-                AssignObj(SubWithSameSign(num, sign));
+                // AssignObj(SubWithSameSign(num, sign));
+                *this = SubWithSameSign(num, sign);
             } else {
-                AssignObj(num.SubWithSameSign(*this));
+                // AssignObj(num.SubWithSameSign(*this));
+                *this = num.SubWithSameSign(*this);
             }
         } else {
-            AssignObj(AddWithSameSign(num));
+            // AssignObj(AddWithSameSign(num));
+            *this = AddWithSameSign(num);
         }
         return *this;
     }
@@ -141,17 +146,21 @@ namespace zhejiangfhe {
     const BigInteger<NativeInt> &BigInteger<NativeInt>::SubEq(const BigInteger<NativeInt> &num) {
         int absoluteCompare = AbsoluteCompare(num);
         if (sign == false && num.sign == true) {
-            AssignObj(AddWithSameSign(num, sign));
+            // AssignObj(AddWithSameSign(num, sign));
+            *this = AddWithSameSign(num, sign);
         } else if (sign == true && num.sign == false) {
-            AssignObj(AddWithSameSign(num, sign));
+            // AssignObj(AddWithSameSign(num, sign));
+            *this = AddWithSameSign(num, sign);
         } else {
             if (AbsoluteCompare(num) == 0) {
                 value.clear();
                 value.push_back(0);
             } else if (absoluteCompare > 0) {
-                AssignObj(SubWithSameSign(num));
+                // AssignObj(SubWithSameSign(num));
+                *this = SubWithSameSign(num);
             } else {
-                AssignObj(num.SubWithSameSign(*this, true));
+                // AssignObj(num.SubWithSameSign(*this, true));
+                *this = num.SubWithSameSign(*this, true);
             }
         }
         return *this;

@@ -99,33 +99,33 @@ namespace zhejiangfhe {
         }
     }
 
-    template<typename NativeInt>
-    BigInteger<NativeInt> &BigInteger<NativeInt>::AssignObj(const BigInteger<NativeInt> &other) {
-        if (this != &other) {// 避免自我赋值
-        value.clear();
-            std::vector<NativeInt> resultVectors;
-            for (auto it = other.value.begin(); it != other.value.end(); ++it) {
-                resultVectors.push_back(*it);
-            }
-            while (!resultVectors.empty() && resultVectors.back() == 0) {
-                resultVectors.pop_back();
-            }
-            if (other.value.empty()) {
-                value.push_back(0);
-                sign=false;
-                return *this;
-            }
-            this->sign = other.sign;
-            for (auto it = resultVectors.begin(); it != resultVectors.end(); ++it) {
-                value.push_back(*it);
-            }
-            m_MSB = (resultVectors.size() - 1) * m_limbBitLength + m_GetMSBForLimb(resultVectors.back());
-            if (m_MSB == 0) {
-                sign = false;
-            }
-        }
-        return *this;
-    }
+    // template<typename NativeInt>
+    // BigInteger<NativeInt> &BigInteger<NativeInt>::AssignObj(const BigInteger<NativeInt> &other) {
+    //     if (this != &other) {// 避免自我赋值
+    //     value.clear();
+    //         std::vector<NativeInt> resultVectors;
+    //         for (auto it = other.value.begin(); it != other.value.end(); ++it) {
+    //             resultVectors.push_back(*it);
+    //         }
+    //         while (!resultVectors.empty() && resultVectors.back() == 0) {
+    //             resultVectors.pop_back();
+    //         }
+    //         if (other.value.empty()) {
+    //             value.push_back(0);
+    //             sign=false;
+    //             return *this;
+    //         }
+    //         this->sign = other.sign;
+    //         for (auto it = resultVectors.begin(); it != resultVectors.end(); ++it) {
+    //             value.push_back(*it);
+    //         }
+    //         m_MSB = (resultVectors.size() - 1) * m_limbBitLength + m_GetMSBForLimb(resultVectors.back());
+    //         if (m_MSB == 0) {
+    //             sign = false;
+    //         }
+    //     }
+    //     return *this;
+    // }
 
     template<typename NativeInt>
     int BigInteger<NativeInt>::Compare(const BigInteger<NativeInt> &another) const {

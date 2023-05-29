@@ -239,7 +239,7 @@ namespace zhejiangfhe {
 
     private:
         void AssignVal(const std::string &str);
-        BigInteger<NativeInt> &AssignObj(const BigInteger<NativeInt> &other);
+        // BigInteger<NativeInt> &AssignObj(const BigInteger<NativeInt> &other);
         static uint32_t ceilIntByUInt(const NativeInt Number);
         void RefreshMSB();
         uint32_t m_GetMSBForLimb(NativeInt x) {
