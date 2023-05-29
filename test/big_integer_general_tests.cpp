@@ -124,6 +124,10 @@ TYPED_TEST(BigIntegerTest, AddTwoUnsignedBigIntegers) {
     bigIntOne = BInt("12345678901234567890123456789012345678901234567890");
     bigIntTwo = BInt("123456789012345678901234567890");
     EXPECT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(), "12345678901234567890246913578024691357802469135780");
+
+    bigIntOne = 0;
+    bigIntTwo = 0;
+    EXPECT_EQ(bigIntOne.AddEq(bigIntTwo), 0);
 }
 
 TYPED_TEST(BigIntegerTest, BiggerIntegerSubtractSmallerInteger) {
@@ -384,4 +388,37 @@ TYPED_TEST(BigIntegerTest, OperatorMod) {
     EXPECT_EQ(operand, BInt("12345678901234567890123456789031234567890123456789012345678903"));
     operand %= modulus;
     EXPECT_EQ(operand, BInt("370370637037037063703703706403"));
+}
+
+TYPED_TEST(BigIntegerTest, ModMul) {
+    using BInt = zhejiangfhe::BigInteger<TypeParam>;
+
+    // (m * n) mod modulus
+    // m, 0 || n, 0, result should be 0
+    BInt operand1 = 3;
+    BInt operand2 = 0;
+    BInt modulus = 7;
+    EXPECT_EQ(operand1.ModMul(operand2, modulus), 0);
+
+    // operand1 = 0;
+    // operand2 = 5;
+    // EXPECT_EQ(operand1.ModMul(operand2, modulus), 0);
+
+    // // (m * n) < modulus, result should be m * n
+    // operand1 = 3;
+    // operand2 = 5;
+    // modulus = 16;
+    // EXPECT_EQ(operand1.ModMul(operand2, modulus), 15);
+
+    // // (m * n) > modulus
+    // operand1 = 35;
+    // operand2 = 21;
+    // modulus = 16;
+    // EXPECT_EQ(operand1.ModMul(operand2, modulus), 15);
+
+    // // Big Integer Senario
+    // operand1 = BInt("123456789012345678901234567890");
+    // operand2 = BInt("987654321098765432109876543210");
+    // modulus = BInt("9999999999999999999912");
+    // EXPECT_EQ(operand1.ModMul(operand2, modulus), BInt("237334552122396220044"));
 }

@@ -376,6 +376,45 @@ namespace zhejiangfhe {
         return *this = *this % modulus;
     }
 
+    template<typename NativeInt>
+    BigInteger<NativeInt> BigInteger<NativeInt>::ModMul(const BigInteger<NativeInt> &b, const BigInteger<NativeInt> &modulus) const {
+        BigInteger a(*this);
+        BigInteger ans = 0;
+        size_t nSize = a.value.size();
+        size_t bSize = b.value.size();
+        BigInteger tmpans;
+        ans.value.reserve(nSize + bSize);
+        tmpans.value.reserve(nSize + bSize);
+
+        for (size_t i = 0; i < bSize; ++i) {
+            tmpans.value.clear();// make sure there are no limbs to start.
+            Dlimb_t limbb(b.value[i]);
+            Dlimb_t temp = 0;
+            NativeInt ofl = 0;
+            uint32_t ix = 0;
+            while (ix < i) {
+                tmpans.value.push_back(0);// equivalent of << shift
+                ++ix;
+            }
+
+            for (auto itr: a.value) {
+                temp = ((Dlimb_t) itr * (Dlimb_t) limbb) + ofl;
+                tmpans.value.push_back((NativeInt) temp);
+                ofl = temp >> a.m_limbBitLength;
+            }
+            // check if there is any final overflow
+            if (ofl) {
+                tmpans.value.push_back(ofl);
+            }
+            // tmpans.m_state = INITIALIZED;
+            // tmpans.SetMSB();
+            tmpans.RefreshMSB();
+            ans += tmpans;
+            ans %= modulus;
+        }
+        return ans;
+    }
+
     template class zhejiangfhe::BigInteger<uint32_t>;
     template class zhejiangfhe::BigInteger<uint64_t>;
 }// namespace zhejiangfhe

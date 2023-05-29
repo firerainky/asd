@@ -132,6 +132,8 @@ namespace zhejiangfhe {
         BigInteger<NativeInt> operator%(const BigInteger<NativeInt> &modulus) const;
         const BigInteger<NativeInt> &operator%=(const BigInteger<NativeInt> &modulus);
 
+        BigInteger<NativeInt> ModMul(const BigInteger<NativeInt> &b, const BigInteger<NativeInt> &modulus) const;
+
         // Bit Operation
         BigInteger<NativeInt> And(const BigInteger<NativeInt>) const;
         const BigInteger<NativeInt> &AndEq(const BigInteger<NativeInt>);
