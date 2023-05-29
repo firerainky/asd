@@ -7,13 +7,13 @@
 namespace zhejiangfhe {
     // 创建继承自 Test 的 test fixture
     template<typename T>
-    class BigIntegerTest : public testing::Test {};
+    class BigIntegerModTest : public testing::Test {};
 
     // 将 test fixture 与类型列表绑定在一起，这样下面的测试就可以自动对类型列表中的每一种都执行一遍了
-    TYPED_TEST_SUITE(BigIntegerTest, LimbTypes);
+    TYPED_TEST_SUITE(BigIntegerModTest, LimbTypes);
 
-    TEST(BigIntegerTest, Mod) {
-        using BInt = zhejiangfhe::BigInteger<uint32_t>;
+    TYPED_TEST(BigIntegerModTest, Mod) {
+        using BInt = zhejiangfhe::BigInteger<TypeParam>;
 
         BInt operand = BInt("-2");
         Modulus modulus = Modulus(BInt("3"));
@@ -67,8 +67,8 @@ namespace zhejiangfhe {
 
     }
 
-    TEST(BigIntegerTest, ModAdd) {
-        using BInt = zhejiangfhe::BigInteger<uint32_t>;
+    TYPED_TEST(BigIntegerModTest, ModAdd) {
+        using BInt = zhejiangfhe::BigInteger<TypeParam>;
         BInt operand = BInt();
         Modulus modulus = Modulus(BInt("1"));
         EXPECT_EQ(ModIncrement(operand, modulus), BInt());
@@ -116,9 +116,9 @@ namespace zhejiangfhe {
     }
 
 
-    TEST(BigIntegerTest, ModSub) {
-        using BInt = zhejiangfhe::BigInteger<uint32_t>;
-        using Modulus = zhejiangfhe::Modulus<uint32_t>;
+    TYPED_TEST(BigIntegerModTest, ModSub) {
+        using BInt = zhejiangfhe::BigInteger<TypeParam>;
+        using Modulus = zhejiangfhe::Modulus<TypeParam>;
 
         // (operand1 - operand2), modulus
         BInt operand1 = BInt("3");
@@ -154,8 +154,8 @@ namespace zhejiangfhe {
     }
 
 
-    TEST(BigIntegerTest, ModMul) {
-        using BInt = zhejiangfhe::BigInteger<uint32_t>;
+    TYPED_TEST(BigIntegerModTest, ModMul) {
+        using BInt = zhejiangfhe::BigInteger<TypeParam>;
 
         // (m * n) mod modulus
         // m, 0 || n, 0, result should be 0
@@ -189,8 +189,8 @@ namespace zhejiangfhe {
 
 
 
-    TEST(BigIntegerModTest, ModExp) {
-        using BInt = zhejiangfhe::BigInteger<uint32_t>;
+    TYPED_TEST(BigIntegerModTest, ModExp) {
+        using BInt = zhejiangfhe::BigInteger<TypeParam>;
 
         BInt operand = BInt("2");
         BInt exponent = BInt();
