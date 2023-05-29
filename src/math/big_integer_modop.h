@@ -12,35 +12,8 @@ namespace zhejiangfhe {
 
     template<typename NativeInt>
     BigInteger<NativeInt> Mod(BigInteger<NativeInt> &operand, Modulus<NativeInt> &modulus) {
-        BigInteger<NativeInt> modulusValue = modulus.GetValue();
-        if (operand.GetMSB() < modulusValue.GetMSB() || operand.GetMSB() == modulusValue.GetMSB() && operand.AbsoluteCompare(modulusValue) < 0) {
-            if (operand.getSign()) {
-                return operand + modulusValue;
-            } else {
-                return BigInteger<NativeInt>(operand.GetValue(), operand.getSign());
-            }
-        }
-
-        if (operand.GetMSB() == modulusValue.GetMSB() && operand.AbsoluteCompare(modulusValue) == 0) {
-            return BigInteger<NativeInt>();
-        }
-
-        // use simple masking operation if modulus is 2
-        if (modulusValue.GetMSB() == 2 && modulusValue.GetValue()[0] == 2) {
-            if (operand.GetValue()[0] % 2 == 0) {
-                return BigInteger<NativeInt>();
-            } else {
-                return BigInteger<NativeInt>("1");
-            }
-        }
-        auto f = operand.DividedBy(modulusValue);
-        if (operand.getSign()) {
-            return f.second + modulusValue;
-        } else {
-            return f.second;
-        }
+        return operand % modulus.GetValue();
     }
-
 
     template<typename NativeInt>
     BigInteger<NativeInt> ModIncrement(BigInteger<NativeInt> &operand, Modulus<NativeInt> &modulus) {
@@ -60,7 +33,6 @@ namespace zhejiangfhe {
         a.AddEq(b);
         return Mod(a, modulus);
     }
-
 
     template<typename NativeInt>
     BigInteger<NativeInt> ModSub(BigInteger<NativeInt> &a, BigInteger<NativeInt> &b, Modulus<NativeInt> &modulus) {
@@ -83,5 +55,5 @@ namespace zhejiangfhe {
         BigInteger<NativeInt> mulRes = operand.Mul(another);
         return Mod(mulRes, modulus);
     }
-}
+}// namespace zhejiangfhe
 #endif//ZJ_FHE_LIB_BIG_INTEGER_MODOP_H
