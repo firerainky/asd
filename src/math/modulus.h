@@ -13,13 +13,20 @@ namespace zhejiangfhe {
     class Modulus {
 
     public:
+        Modulus() {}
+
         Modulus(BigInteger<NativeInt> value)
         {
             set_value(value);
         }
 
 
-        Modulus(uint64_t val)
+        Modulus(NativeInt val)
+        {
+            set_value(BigInteger<NativeInt>(val));
+        }
+
+        Modulus(std::string val)
         {
             set_value(BigInteger<NativeInt>(val));
         }
@@ -31,6 +38,11 @@ namespace zhejiangfhe {
         inline const BigInteger<NativeInt> GetValue() const {
             return value;
         };
+
+
+        const Modulus& operator=(const Modulus& val);
+
+        const Modulus& operator=(Modulus&& val);
 
     private:
         BigInteger<NativeInt> value;

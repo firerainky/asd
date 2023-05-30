@@ -2,8 +2,8 @@ set(TEST_MAIN unittests)
 set(TEST_SOURCES
         big_integer_general_tests.cpp
         big_integer_mod_test.cpp
-  main_tests.cpp
-)
+        main_tests.cpp
+        vector_test.cpp)
 set(TEST_INCLUDES ./)
 
 add_executable(${TEST_MAIN} ${TEST_SOURCES})

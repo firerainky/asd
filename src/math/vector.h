@@ -6,6 +6,7 @@
 #define ZJ_FHE_LIB_VECTOR_H
 
 #include "exception.h"
+#include "modulus.h"
 #include <cstdint>
 #include <iosfwd>
 #include <memory>
@@ -13,15 +14,23 @@
 #include <vector>
 
 namespace zhejiangfhe {
-    template <class IntegerType>
+    template <typename IntegerType>
     class Vector {
 
     public:
         Vector();
 
-        explicit Vector(uint32_t length);
+        Vector(uint32_t length);
+
+        Vector(uint32_t length, const Modulus<IntegerType>& modulus);
 
         Vector(uint32_t length, const IntegerType& modulus);
+
+        Vector(const uint32_t length, const std::string& modulus);
+
+//        Vector(uint32_t length, const IntegerType& modulus) : Vector(length, Modulus<IntegerType>(modulus)) {};
+//
+//        Vector(const uint32_t length, const std::string& modulus) : Vector(length, Modulus<IntegerType>(modulus)) {};
 
         Vector(const Vector& bigVector);
 
@@ -31,80 +40,83 @@ namespace zhejiangfhe {
 
         Vector(uint32_t length, const IntegerType& modulus, std::initializer_list<uint64_t> rhs);
 
+        explicit Vector(const std::vector<std::string>& s, const Modulus<IntegerType>& modulus);
+
+        explicit Vector(const std::vector<std::string>& s, const IntegerType& modulus);
+
+        explicit Vector(const std::vector<std::string>& s, const std::string& modulus);
+
+
+//        explicit Vector(const std::vector<std::string>& s, const IntegerType& modulus) : Vector(s, Modulus<IntegerType>(modulus)) {};
+//
+//        explicit Vector(const std::vector<std::string>& s, const std::string& modulus) : Vector(s, Modulus<IntegerType>(modulus)) {};
+
         virtual ~Vector();
 
 
-        const Vector& operator=(const Vector& rhs);
+        Vector& operator=(Vector& rhs);
 
         Vector& operator=(Vector&& rhs);
 
-        const Vector& operator=(std::initializer_list<std::string> rhs);
-
-        const Vector& operator=(std::initializer_list<uint64_t> rhs);
-
-        IntegerType& at(size_t i) {
+        BigInteger<IntegerType>& at(size_t i) {
             if (!this->IndexCheck(i)) {
                 ZJFHE_THROW(MathException, "Vector index out of range");
             }
             return this->data[i];
         }
 
-        const IntegerType& at(size_t i) const {
+        const BigInteger<IntegerType>& at(size_t i) const {
             if (!this->IndexCheck(i)) {
                 ZJFHE_THROW(MathException, "Vector index out of range");
             }
             return this->data[i];
         }
 
-        IntegerType& operator[](size_t idx) {
+        BigInteger<IntegerType>& operator[](size_t idx) {
             return (this->data[idx]);
         }
 
-        const IntegerType& operator[](size_t idx) const {
+        const BigInteger<IntegerType>& operator[](size_t idx) const {
             return (this->data[idx]);
         }
 
-        void SetModulus(const IntegerType& value);
+        void SetModulus(const Modulus<IntegerType>& value);
 
-        void SwitchModulus(const IntegerType& value);
+        void SwitchModulus(const Modulus<IntegerType>& value);
 
-        const IntegerType& GetModulus() const;
+        const Modulus<IntegerType>& GetModulus() const;
 
-        Vector Mod(const IntegerType& modulus) const;
+        Vector ModAdd(const BigInteger<IntegerType>& b) const;
 
-        const Vector& ModEq(const IntegerType& modulus);
+        const Vector& ModAddEq(const BigInteger<IntegerType>& b);
 
-        Vector ModAdd(const IntegerType& b) const;
+        Vector ModAddAtIndex(uint32_t i, const BigInteger<IntegerType>& b) const;
 
-        const Vector& ModAddEq(const IntegerType& b);
-
-        Vector ModAddAtIndex(uint32_t i, const IntegerType& b) const;
-
-        const Vector& ModAddAtIndexEq(uint32_t i, const IntegerType& b);
+        const Vector& ModAddAtIndexEq(uint32_t i, const BigInteger<IntegerType>& b);
 
         Vector ModAdd(const Vector& b) const;
 
         const Vector& ModAddEq(const Vector& b);
 
-        Vector ModSub(const IntegerType& b) const;
+        Vector ModSub(const BigInteger<IntegerType>& b) const;
 
-        const Vector& ModSubEq(const IntegerType& b);
+        const Vector& ModSubEq(const BigInteger<IntegerType>& b);
 
         Vector ModSub(const Vector& b) const;
 
         const Vector& ModSubEq(const Vector& b);
 
-        Vector ModMul(const IntegerType& b) const;
+        Vector ModMul(const BigInteger<IntegerType>& b) const;
 
-        const Vector& ModMulEq(const IntegerType& b);
+        const Vector& ModMulEq(const BigInteger<IntegerType>& b);
 
         Vector ModMul(const Vector& b) const;
 
         const Vector& ModMulEq(const Vector& b);
 
-        Vector ModExp(const IntegerType& b) const;
+        Vector ModExp(const BigInteger<IntegerType>& b) const;
 
-        const Vector& ModExpEq(const IntegerType& b);
+        const Vector& ModExpEq(const BigInteger<IntegerType>& b);
 
         Vector ModInverse() const;
 
@@ -114,28 +126,26 @@ namespace zhejiangfhe {
 
         const Vector MultiplyEq(const Vector& b);
 
-        Vector MultiplyAndRound(const IntegerType& p, const IntegerType& q) const;
+        Vector MultiplyAndRound(const BigInteger<IntegerType>& p, const BigInteger<IntegerType>& q) const;
 
-        const Vector& MultiplyAndRoundEq(const IntegerType& p, const IntegerType& q);
+        const Vector& MultiplyAndRoundEq(const BigInteger<IntegerType>& p, const BigInteger<IntegerType>& q);
 
-        Vector DivideAndRound(const IntegerType& q) const;
+        Vector DivideAndRound(const BigInteger<IntegerType>& q) const;
 
-        const Vector& DivideAndRoundEq(const IntegerType& q);
+        const Vector& DivideAndRoundEq(const BigInteger<IntegerType>& q);
 
         Vector GetDigitAtIndexForBase(uint32_t index, uint32_t base) const;
 
     private:
 
-        std::vector<IntegerType> data;
-        IntegerType modulus = 0;
+        std::vector<BigInteger<IntegerType>> data;
+        Modulus<IntegerType> modulus;
 
-        bool IndexCheck(size_t length) const {
-            if (length > this->data.size()) {
-                return false;
-            }
-            return true;
+        bool IndexCheck(size_t index) const {
+            return index < this->data.size();
         }
 
+        void Mod();
     };
 
 }// namespace zhejiangfhe
