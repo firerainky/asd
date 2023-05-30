@@ -71,6 +71,13 @@ TYPED_TEST(BigIntegerTest, CreatesNegativeBigIntegersWithStringRepresentation) {
     EXPECT_EQ(bigInt.ConvertToString(), "-123456789012345678901234567890123456789012345678901234567890");
 }
 
+TYPED_TEST(BigIntegerTest, CreateBigIntWithIntegralType) {
+    using BInt = zhejiangfhe::BigInteger<TypeParam>;
+
+    BInt num = -1;
+    EXPECT_EQ(num, BInt("-1"));
+}
+
 TYPED_TEST(BigIntegerTest, CompareTwoBigInteger) {
     using BInt = zhejiangfhe::BigInteger<TypeParam>;
 
@@ -171,17 +178,17 @@ TYPED_TEST(BigIntegerTest, BiggerIntegerSubtractSmallerInteger) {
     bigIntTwo = 0;
     EXPECT_EQ(bigIntOne -= bigIntTwo, 0);
 
-    // bigIntOne = 2;
-    // bigIntTwo = 3;
-    // EXPECT_EQ(bigIntOne -= bigIntTwo, -1);
+    bigIntOne = 2;
+    bigIntTwo = 3;
+    EXPECT_EQ(bigIntOne -= bigIntTwo, -1);
 
     bigIntOne = -2;
     bigIntTwo = 3;
     EXPECT_EQ(bigIntOne -= bigIntTwo, -5);
 
-    // bigIntOne = 2;
-    // bigIntTwo = -3;
-    // EXPECT_EQ(bigIntOne -= bigIntTwo, 5);
+    bigIntOne = 2;
+    bigIntTwo = -3;
+    EXPECT_EQ(bigIntOne -= bigIntTwo, 5);
 }
 
 TYPED_TEST(BigIntegerTest, MultiplyTwoBigInteger) {

@@ -10,10 +10,8 @@ namespace zhejiangfhe {
     const BigInteger<NativeInt> Modulus<NativeInt>::numerator = Modulus<NativeInt>::ValueInit::InitB();
 
     template<typename NativeInt>
-    void Modulus<NativeInt>::set_value(BigInteger<NativeInt> input)
-    {
-        if (input == 0) {
-
+    void Modulus<NativeInt>::set_value(BigInteger<NativeInt> input) {
+        if (input == 0UL) {
             value = 0;
             const_ratio = BigInteger<NativeInt>("0");
 

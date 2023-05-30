@@ -76,10 +76,13 @@ namespace zhejiangfhe {
 
     public:
         // CONSTRUCTORS
-
-        BigInteger(const std::string &strValue = "");
+        explicit BigInteger(const std::string &strValue = "");
+        explicit BigInteger(const char *str) : BigInteger(std::string(str)){};
 
         BigInteger(uint64_t val, bool sign = false);
+
+        // template<typename T>
+        // BigInteger(T) = delete;
 
         BigInteger(std::vector<NativeInt> vals, bool sign = false);
 
@@ -87,11 +90,26 @@ namespace zhejiangfhe {
 
         NativeInt ConvertToLimb() const;
 
-
         template<typename T, typename std::enable_if<!std::is_same<T, const BigInteger>::value, bool>::type = true>
         const BigInteger &operator=(const T &val) {
             return (*this = BigInteger(val));
         }
+
+        /**
+         * Constructors from smaller basic types
+         *
+         * @param val is the initial integer represented as a basic integer type.
+         */
+        template<typename T,
+                 typename std::enable_if<std::is_integral<T>::value && !std::is_same<T, char>::value && !std::is_same<T, uint64_t>::value,
+                                         bool>::type = true>
+        BigInteger(T val) {
+            if (val < 0) {
+                *this = BigInteger(static_cast<uint64_t>(-val), true);
+            } else {
+                *this = BigInteger(static_cast<uint64_t>(val));
+            }
+        }// NOLINT
 
         /**
          * @brief Compare the current BigInteger with another one

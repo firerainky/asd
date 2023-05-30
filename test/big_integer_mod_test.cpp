@@ -41,7 +41,7 @@ namespace zhejiangfhe {
 
         operand = BInt("2");
         modulus = Modulus(BInt("3"));
-        EXPECT_EQ(Mod(operand,modulus), BInt("2"));
+        EXPECT_EQ(Mod(operand, modulus), BInt("2"));
 
 
         operand = BInt("123456789012345678901234567890");
@@ -64,7 +64,6 @@ namespace zhejiangfhe {
         operand = BInt("12345678901234567890123456789031234567890123456789012345678903");
         modulus = Modulus(BInt("1234567890123456789012345678900"));
         EXPECT_EQ(Mod(operand, modulus), BInt("370370637037037063703703706403"));
-
     }
 
     TYPED_TEST(BigIntegerModTest, ModAdd) {
@@ -136,7 +135,7 @@ namespace zhejiangfhe {
         operand1 = BInt("1");
         operand2 = BInt("3");
         modulus = Modulus(BInt("3"));
-        EXPECT_EQ(ModSub(operand1, operand2, modulus), BInt(1));
+        EXPECT_EQ(ModSub(operand1, operand2, modulus).ConvertToString(), BInt(1).ConvertToString());
 
 
         // operand1 - operand2 = 0
@@ -188,7 +187,6 @@ namespace zhejiangfhe {
     }
 
 
-
     TYPED_TEST(BigIntegerModTest, ModExp) {
         using BInt = zhejiangfhe::BigInteger<TypeParam>;
 
@@ -234,4 +232,4 @@ namespace zhejiangfhe {
         modulus = Modulus(BInt("131313131313"));
         EXPECT_EQ(ModExp(operand, exponent, modulus), BInt(39418477653));
     }
-}
+}// namespace zhejiangfhe

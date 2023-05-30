@@ -44,8 +44,11 @@ namespace zhejiangfhe {
         } else if (difference < negativeModulus || difference > modulusValue) {
             return Mod(difference, modulus);
         } else {
-            BigInteger<NativeInt> borrowTag(-static_cast<std::int64_t>(difference.GetSign()));
-            return difference + modulusValue.And(borrowTag);
+            if (difference.GetSign()) {// negative
+                return modulusValue + difference;
+            } else {
+                return difference;
+            }
         }
     }
 
