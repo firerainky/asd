@@ -9,6 +9,7 @@
 #include "integer_interface.h"
 #include <cstdint>
 #include <iosfwd>
+#include <iostream>
 #include <memory>
 #include <string>
 #include <vector>
@@ -297,8 +298,11 @@ namespace zhejiangfhe {
         static void MultiplyWithKaratsuba(NativeInt operand1, NativeInt operand2, NativeInt *resultTwo);
     };
 
+    template<typename NativeInt>
+    std::ostream &operator<<(std::ostream &os, const BigInteger<NativeInt> &a) {
+        return os << a.ConvertToString() << ", MSB: " << a.GetMSB() << ", limb_size: " << sizeof(NativeInt) * 8;
+    }
 
 }// namespace zhejiangfhe
-
 
 #endif//ZJ_FHE_LIB_BigInteger_H

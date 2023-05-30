@@ -43,7 +43,6 @@ namespace zhejiangfhe {
             return NativeInteger("0");
         }
 
-
         const std::string ConvertToString() {
             return "NativeInteger test";
         }
