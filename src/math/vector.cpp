@@ -3,14 +3,14 @@
 //
 
 #include "vector.h"
-#include "modulus.h"
 #include "big_integer.h"
 #include "big_integer_modop.h"
+#include "modulus.h"
 
 namespace zhejiangfhe {
 
 
-    template <typename IntegerType>
+    template<typename IntegerType>
     Vector<IntegerType>::Vector(const uint32_t length) {
         this->data.resize(length);
         for (uint32_t i = 0; i < length; i++) {
@@ -19,8 +19,8 @@ namespace zhejiangfhe {
         this->modulus = Modulus<IntegerType>("");
     }
 
-    template <typename IntegerType>
-    Vector<IntegerType>::Vector(const uint32_t length, const Modulus<IntegerType>& modulus) {
+    template<typename IntegerType>
+    Vector<IntegerType>::Vector(const uint32_t length, const Modulus<IntegerType> &modulus) {
         this->data.resize(length);
         for (uint32_t i = 0; i < length; i++) {
             this->data[i] = 0;
@@ -29,8 +29,8 @@ namespace zhejiangfhe {
         this->Mod();
     }
 
-    template <typename IntegerType>
-    Vector<IntegerType>::Vector(const uint32_t length, const IntegerType& modulus) {
+    template<typename IntegerType>
+    Vector<IntegerType>::Vector(const uint32_t length, const IntegerType &modulus) {
         Modulus<IntegerType> newModulus = Modulus(modulus);
         this->data.resize(length);
         for (uint32_t i = 0; i < length; i++) {
@@ -40,15 +40,14 @@ namespace zhejiangfhe {
         this->Mod();
     }
 
-    template <typename IntegerType>
-    Vector<IntegerType>::Vector(const uint32_t length, const std::string& modulus) {
+    template<typename IntegerType>
+    Vector<IntegerType>::Vector(const uint32_t length, const std::string &modulus) {
         Modulus<IntegerType> newModulus(modulus);
         Vector(length, newModulus);
     }
 
-
-    template <typename IntegerType>
-    Vector<IntegerType>::Vector(const Vector& inVector) {
+    template<typename IntegerType>
+    Vector<IntegerType>::Vector(const Vector &inVector) {
         size_t length = inVector.data.size();
         this->data.resize(length);
         for (size_t i = 0; i < length; i++) {
@@ -57,19 +56,18 @@ namespace zhejiangfhe {
         this->modulus = inVector.modulus;
     }
 
-    template <typename IntegerType>
-    Vector<IntegerType>::Vector(Vector&& inVector) {
+    template<typename IntegerType>
+    Vector<IntegerType>::Vector(Vector &&inVector) {
         this->data = std::move(inVector.data);
         this->modulus = std::move(inVector.modulus);
     }
 
-
-    template <typename IntegerType>
-    Vector<IntegerType>::Vector(const uint32_t length, const IntegerType& modulus,
-                                     std::initializer_list<std::string> rhs) {
+    template<typename IntegerType>
+    Vector<IntegerType>::Vector(const uint32_t length, const IntegerType &modulus,
+                                std::initializer_list<std::string> rhs) {
         this->data.resize(length);
         this->modulus = modulus;
-        uint32_t len       = rhs.size();
+        uint32_t len = rhs.size();
         for (uint32_t i = 0; i < length; i++) {
             if (i < len) {
                 BigInteger<IntegerType> val = BigInteger<IntegerType>(*(rhs.begin() + i));
@@ -80,11 +78,11 @@ namespace zhejiangfhe {
         }
     }
 
-    template <typename IntegerType>
-    Vector<IntegerType>::Vector(const uint32_t length, const IntegerType& modulus, std::initializer_list<uint64_t> rhs) {
+    template<typename IntegerType>
+    Vector<IntegerType>::Vector(const uint32_t length, const IntegerType &modulus, std::initializer_list<uint64_t> rhs) {
         this->data.resize(length);
         this->modulus = modulus;
-        uint32_t len       = rhs.size();
+        uint32_t len = rhs.size();
         for (uint32_t i = 0; i < length; i++) {
             if (i < len) {
                 BigInteger<IntegerType> val = BigInteger<IntegerType>(*(rhs.begin() + i));
@@ -95,43 +93,57 @@ namespace zhejiangfhe {
         }
     }
 
-    template <typename IntegerType>
-    Vector<IntegerType>::Vector(const std::vector<std::string>& s, const Modulus<IntegerType>& modulus) {
+    template<typename IntegerType>
+    Vector<IntegerType>::Vector(const std::vector<std::string> &s, const Modulus<IntegerType> &modulus) {
         this->data.resize(s.size());
-        this->modulus       = modulus;
+        this->modulus = modulus;
         for (uint32_t i = 0; i < s.size(); i++) {
-            BigInteger<IntegerType> val = (BigInteger<IntegerType>)s[i];
+            BigInteger<IntegerType> val = (BigInteger<IntegerType>) s[i];
             this->data[i] = util::Mod(val, this->modulus);
         }
     }
 
-    template <typename IntegerType>
-    Vector<IntegerType>::Vector(const std::vector<std::string>& s, const IntegerType& modulus) {
+    template<typename IntegerType>
+    Vector<IntegerType>::Vector(const std::vector<std::string> &s, const IntegerType &modulus) {
         this->data.resize(s.size());
-        this->modulus       = modulus;
+        this->modulus = modulus;
         for (uint32_t i = 0; i < s.size(); i++) {
-            BigInteger<IntegerType> val = (BigInteger<IntegerType>)s[i];
+            BigInteger<IntegerType> val = (BigInteger<IntegerType>) s[i];
             this->data[i] = util::Mod(val, this->modulus);
         }
     }
 
-    template <typename IntegerType>
-    Vector<IntegerType>::Vector(const std::vector<std::string>& s, const std::string& modulus) {
+    template<typename IntegerType>
+    Vector<IntegerType>::Vector(const std::vector<std::string> &s, const std::string &modulus) {
         this->data.resize(s.size());
-        this->modulus       = modulus;
+        this->modulus = modulus;
         for (uint32_t i = 0; i < s.size(); i++) {
-            BigInteger<IntegerType> val = (BigInteger<IntegerType>)s[i];
+            BigInteger<IntegerType> val = (BigInteger<IntegerType>) s[i];
             this->data[i] = util::Mod(val, this->modulus);
         }
     }
 
-    template <typename IntegerType>
+    template<typename IntegerType>
     Vector<IntegerType>::~Vector() {
         this->data.clear();
     }
-    
-    template <class IntegerType>
-    Vector<IntegerType>& Vector<IntegerType>::operator=(Vector<IntegerType>& rhs) {
+
+    template<typename IntegerType>
+    bool Vector<IntegerType>::operator==(const Vector &rhs) const {
+        if (data.size() != rhs.data.size() || modulus.GetValue() != rhs.modulus.GetValue()) return false;
+        for (uint32_t i = 0; i < data.size(); ++i) {
+            if (data[i] != rhs.data[i]) return false;
+        }
+        return true;
+    }
+
+    template<typename IntegerType>
+    bool Vector<IntegerType>::operator!=(const Vector &rhs) const {
+        return !(*this == rhs);
+    }
+
+    template<class IntegerType>
+    Vector<IntegerType> &Vector<IntegerType>::operator=(Vector<IntegerType> &rhs) {
         if (this != &rhs) {
             if (this->data.size() == rhs.data.size()) {
                 for (uint32_t i = 0; i < this->data.size(); i++) {
@@ -148,25 +160,24 @@ namespace zhejiangfhe {
         return *this;
     }
 
-    template <class IntegerType>
-    Vector<IntegerType>& Vector<IntegerType>::operator=(Vector&& rhs) {
+    template<class IntegerType>
+    Vector<IntegerType> &Vector<IntegerType>::operator=(Vector &&rhs) {
         if (this != &rhs) {
-            this->data.swap(rhs.data);  // swap the two vector contents,
+            this->data.swap(rhs.data);// swap the two vector contents,
             if (rhs.data.size() > 0) {
                 rhs.data.clear();
             }
-            this->modulus       = rhs.modulus;
+            this->modulus = rhs.modulus;
         }
         return *this;
     }
 
-    template <typename IntegerType>
+    template<typename IntegerType>
     void Vector<IntegerType>::Mod() {
         for (uint32_t i = 0; i < this->data.size(); i++) {
             this->data[i] = util::Mod(this->data[i], this->modulus);
         }
     }
-
 
 
     template class zhejiangfhe::Vector<uint32_t>;

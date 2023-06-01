@@ -2,7 +2,7 @@
 // Created by 赵启明 on 2023/5/31.
 //
 
-#include "big_integer.h"
+// #include "big_integer.h"
 #include "big_integer_modop.h"
 #include "big_integer_test.h"
 #include "modulus.h"
@@ -34,11 +34,11 @@ namespace zhejiangfhe {
 
         Vector v1(v);
 
-        v = Vector(5, 3, {1,3,5,7});
+        v = Vector(5, 3, {1, 3, 5, 7});
 
-        v = Vector(5, 3, {"1","3","5","7"});
+        v = Vector(5, 3, {"1", "3", "5", "7"});
 
-        std::vector<std::string> vec = {"1","3","5","7"};
+        std::vector<std::string> vec = {"1", "3", "5", "7"};
         v = Vector(vec, modulus);
 
         v = Vector(vec, 3);
@@ -49,8 +49,29 @@ namespace zhejiangfhe {
         Vector k = v;
         v[0] = 2;
         EXPECT_EQ(k[0], 1);
-
-
     }
 
-}
+    TYPED_TEST(VectorTest, KDJFKJ) {
+        using BInt = zhejiangfhe::BigInteger<TypeParam>;
+        using Vector = zhejiangfhe::Vector<TypeParam>;
+
+        Vector v1(5);
+        Vector v2(5);
+
+        EXPECT_TRUE(v1 == v2);
+        EXPECT_EQ(v1, v2);
+
+        v2 = Vector(4);
+        EXPECT_TRUE(v1 != v2);
+
+        v1 = Vector(5, 3, {1, 3, 5, 7});
+        v2 = Vector(5, 3, {1, 3, 5, 7});
+        EXPECT_EQ(v1, v2);
+
+        v2 = Vector(5, 4, {1, 3, 5, 7});
+        EXPECT_TRUE(v1 != v2);
+
+        v2 = Vector(4, 3, {1, 3, 5, 7});
+        EXPECT_TRUE(v1 != v2);
+    }
+}// namespace zhejiangfhe
