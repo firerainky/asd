@@ -26,6 +26,18 @@ namespace zhejiangfhe {
             return ret < modulus.GetValue() ? ret : ret - modulus.GetValue();
         }
 
+
+        uint64_t ModBarrett64(uint64_t &operand, const Modulus<uint64_t> &modulus) {
+            uint64_t modulusValue = modulus.GetValue().getValueOfIndex(0);
+            uint64_t ration1 = modulus.GetConstRatio().getValueOfIndex(1);
+            __int128 estimated = static_cast<__int128>(operand) * static_cast<__int128>(ration1);
+            estimated >>= 64;
+
+            estimated *= modulusValue;
+            uint64_t ret = operand - estimated;
+            return ret < modulusValue ? ret : ret - modulusValue;
+        }
+
         template<typename NativeInt>
         BigInteger<NativeInt> ModAdd(BigInteger<NativeInt> &a, BigInteger<NativeInt> &b, Modulus<NativeInt> &modulus) {
 

@@ -57,6 +57,21 @@ static void BM_Mod_Direct(benchmark::State &state, Args &&...args) {
 BENCHMARK_CAPTURE(BM_Mod_Direct, big_integer_test, "18446744073709551614", "14097");
 BENCHMARK_CAPTURE(BM_Mod_Direct, small_integer_test, "5", "3");
 
+
+template<class... Args>
+static void BM_Mod_Direct64(benchmark::State &state, Args &&...args) {
+    auto args_tuple = std::make_tuple(std::move(args)...);
+    uint64_t a = std::get<0>(args_tuple);
+    uint64_t modulus = std::get<1>(args_tuple);
+
+    for (auto _: state) {
+        uint64_t ans = a % modulus;
+    }
+}
+BENCHMARK_CAPTURE(BM_Mod_Direct64, big_integer_test, 18446744073709551614ULL, 14097);
+BENCHMARK_CAPTURE(BM_Mod_Direct64, small_integer_test, 5, 3);
+
+
 template<class... Args>
 static void BM_Mod_Barret(benchmark::State &state, Args &&...args) {
     using BInt = zhejiangfhe::BigInteger<uint64_t>;
@@ -72,5 +87,22 @@ static void BM_Mod_Barret(benchmark::State &state, Args &&...args) {
 }
 BENCHMARK_CAPTURE(BM_Mod_Barret, big_integer_test, "18446744073709551614", "14097");
 BENCHMARK_CAPTURE(BM_Mod_Barret, small_integer_test, "5", "3");
+
+
+template<class... Args>
+static void BM_Mod_Barret64(benchmark::State &state, Args &&...args) {
+    using BInt = zhejiangfhe::BigInteger<uint64_t>;
+    using Modulus = zhejiangfhe::Modulus<uint64_t>;
+
+    auto args_tuple = std::make_tuple(std::move(args)...);
+    uint64_t a = std::get<0>(args_tuple);
+    Modulus modulus(BInt(std::get<1>(args_tuple)));
+
+    for (auto _: state) {
+        BInt ans = zhejiangfhe::util::ModBarrett64(a, modulus);
+    }
+}
+BENCHMARK_CAPTURE(BM_Mod_Barret64, big_integer_test, 18446744073709551614ULL, "14097");
+BENCHMARK_CAPTURE(BM_Mod_Barret64, small_integer_test, 5, "3");
 
 BENCHMARK_MAIN();

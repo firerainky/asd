@@ -211,6 +211,11 @@ namespace zhejiangfhe {
         BInt exponent = BInt();
         Modulus modulus = Modulus(BInt("3"));
         EXPECT_EQ(util::ModExp(operand, exponent, modulus), BInt(1));
+        
+        operand = BInt("5");
+        exponent = BInt("1");
+        modulus = Modulus(BInt("3"));
+        EXPECT_EQ(util::ModExp(operand, exponent, modulus), BInt(2));
 
         operand = BInt("2");
         exponent = BInt("1");
