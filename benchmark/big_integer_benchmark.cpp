@@ -67,7 +67,7 @@ static void BM_Mod_Barret(benchmark::State &state, Args &&...args) {
     Modulus modulus(BInt(std::get<1>(args_tuple)));
 
     for (auto _: state) {
-        BInt ans = zhejiangfhe::Mod(a, modulus);
+        BInt ans = zhejiangfhe::util::Mod(a, modulus);
     }
 }
 BENCHMARK_CAPTURE(BM_Mod_Barret, big_integer_test, "12345678901234567890123456789031234567890123456789012345678903", "1234567890123456789012345678900");
