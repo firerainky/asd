@@ -18,6 +18,15 @@ namespace zhejiangfhe {
         }
 
         template<typename NativeInt>
+        BigInteger<NativeInt> ModBarrett(BigInteger<NativeInt> &operand, const Modulus<NativeInt> &modulus) {
+            BigInteger<NativeInt> estimated = operand * (modulus.GetConstRatio());
+            estimated >>= 128;
+            estimated *= modulus.GetValue();
+            BigInteger<NativeInt> ret = operand - estimated;
+            return ret < modulus.GetValue() ? ret : ret - modulus.GetValue();
+        }
+
+        template<typename NativeInt>
         BigInteger<NativeInt> ModAdd(BigInteger<NativeInt> &a, BigInteger<NativeInt> &b, Modulus<NativeInt> &modulus) {
 
             if (a >= modulus.GetValue()) {
@@ -127,6 +136,6 @@ namespace zhejiangfhe {
             }
             return product;
         }
-    }
+    }// namespace util
 }// namespace zhejiangfhe
 #endif//ZJ_FHE_LIB_BIG_INTEGER_MODOP_H

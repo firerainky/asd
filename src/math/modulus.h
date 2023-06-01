@@ -15,23 +15,20 @@ namespace zhejiangfhe {
     public:
         Modulus() {}
 
-        Modulus(BigInteger<NativeInt> value)
-        {
+        Modulus(BigInteger<NativeInt> value) {
             set_value(value);
         }
 
 
-        Modulus(NativeInt val)
-        {
+        Modulus(NativeInt val) {
             set_value(BigInteger<NativeInt>(val));
         }
 
-        Modulus(std::string val)
-        {
+        Modulus(std::string val) {
             set_value(BigInteger<NativeInt>(val));
         }
 
-        inline const BigInteger<NativeInt> GetConstRatio(){
+        inline const BigInteger<NativeInt> GetConstRatio() const {
             return const_ratio;
         };
 
@@ -40,13 +37,13 @@ namespace zhejiangfhe {
         };
 
 
-        const Modulus& operator=(const Modulus& val);
+        const Modulus &operator=(const Modulus &val);
 
-        const Modulus& operator=(Modulus&& val);
+        const Modulus &operator=(Modulus &&val);
 
     private:
         BigInteger<NativeInt> value;
-        bool is_prime = false; //todo add numth_util.h
+        bool is_prime = false;//todo add numth_util.h
         BigInteger<NativeInt> const_ratio;
 
         static const BigInteger<NativeInt> numerator;
@@ -61,7 +58,6 @@ namespace zhejiangfhe {
                 return numerator.LeftShift(128);
             }
         };
-
     };
 
 }// namespace zhejiangfhe

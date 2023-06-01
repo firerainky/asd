@@ -66,6 +66,21 @@ namespace zhejiangfhe {
         EXPECT_EQ(util::Mod(operand, modulus), BInt("370370637037037063703703706403"));
     }
 
+    TYPED_TEST(BigIntegerModTest, ModBarrett) {
+        using BInt = zhejiangfhe::BigInteger<TypeParam>;
+
+        BInt operand = 3;
+        Modulus modulus = Modulus(BInt(2));
+        EXPECT_EQ(util::ModBarrett(operand, modulus), 1);
+
+        operand = 0;
+        EXPECT_EQ(util::ModBarrett(operand, modulus), 0);
+
+        operand = BInt("12345678901234567890123456789031234567890123456789012345678903");
+        modulus = Modulus(BInt(14097));
+        EXPECT_EQ(util::Mod(operand, modulus), BInt(13353));
+    }
+
     TYPED_TEST(BigIntegerModTest, ModAdd) {
         using BInt = zhejiangfhe::BigInteger<TypeParam>;
         using Modulus = zhejiangfhe::Modulus<TypeParam>;
