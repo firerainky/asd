@@ -117,8 +117,11 @@ namespace zhejiangfhe {
                 return 1;
             }
 
-            if (exponent == 1 || operand == 1) {
+            if (operand == 1) {
                 return operand;
+            }
+            if (exponent == 1) {
+                return Mod(operand, modulus);
             }
             while (true) {
                 if (exp.getValueOfIndex(0) % 2 == 1) {
