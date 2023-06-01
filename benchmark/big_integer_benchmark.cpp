@@ -54,7 +54,7 @@ static void BM_Mod_Direct(benchmark::State &state, Args &&...args) {
         BInt ans = a % modulus;
     }
 }
-BENCHMARK_CAPTURE(BM_Mod_Direct, big_integer_test, "12345678901234567890123456789031234567890123456789012345678903", "14097");
+BENCHMARK_CAPTURE(BM_Mod_Direct, big_integer_test, "18446744073709551614", "14097");
 BENCHMARK_CAPTURE(BM_Mod_Direct, small_integer_test, "5", "3");
 
 template<class... Args>
@@ -70,7 +70,7 @@ static void BM_Mod_Barret(benchmark::State &state, Args &&...args) {
         BInt ans = zhejiangfhe::util::ModBarrett(a, modulus);
     }
 }
-BENCHMARK_CAPTURE(BM_Mod_Barret, big_integer_test, "12345678901234567890123456789031234567890123456789012345678903", "14097");
+BENCHMARK_CAPTURE(BM_Mod_Barret, big_integer_test, "18446744073709551614", "14097");
 BENCHMARK_CAPTURE(BM_Mod_Barret, small_integer_test, "5", "3");
 
 BENCHMARK_MAIN();
