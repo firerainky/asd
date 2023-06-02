@@ -116,7 +116,7 @@ namespace zhejiangfhe {
 
         EXPECT_EQ(v2, v3);
         v1.ModAddEq(operand);
-        EXPECT_EQ(v1, v2);
+        EXPECT_EQ(v1, v3);
 
 
         v1 = Vector(5, 11, {"5", "4", "6", "7", "10"});
@@ -141,7 +141,7 @@ namespace zhejiangfhe {
         EXPECT_EQ(v2, v3);
 
         v1.ModSubEq(operand);
-        EXPECT_EQ(v1, v2);
+        EXPECT_EQ(v1, v3);
 
 
         v1 = Vector(5, 11, {"5", "4", "6", "7", "10"});
@@ -180,5 +180,19 @@ namespace zhejiangfhe {
         EXPECT_EQ(v1, v5);
     }
 
+
+    TYPED_TEST(VectorTest, ModExp) {
+        using BInt = zhejiangfhe::BigInteger<TypeParam>;
+        using Vector = zhejiangfhe::Vector<TypeParam>;
+
+        Vector v1 = Vector(5, 11, {"5", "4", "6", "7", "10"});
+        BInt operand = BInt(2);
+        Vector v2 = v1.ModExp(operand);
+        Vector v3 = Vector(5, 11, {"3", "5", "3", "5", "1"});
+        EXPECT_EQ(v2, v3);
+
+        v1.ModExpEq(operand);
+        EXPECT_EQ(v1, v3);
+    }
 
 }// namespace zhejiangfhe

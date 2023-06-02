@@ -359,6 +359,20 @@ namespace zhejiangfhe {
         }
     }
 
+    template <class IntegerType>
+    Vector<IntegerType> Vector<IntegerType>::ModExp(const BigInteger<IntegerType> &b) const {
+        Vector<IntegerType> ans(*this);
+        for (uint32_t i = 0; i < this->data.size(); i++) {
+            ans.data[i] = util::ModExp(ans.data[i], b, this->modulus);
+        }
+        return ans;
+    }
+
+    template <class IntegerType>
+    const Vector<IntegerType> &Vector<IntegerType>::ModExpEq(const BigInteger<IntegerType> &b) {
+        return *this = ModExp(b);
+    }
+
 
     template class zhejiangfhe::Vector<uint32_t>;
     template class zhejiangfhe::Vector<uint64_t>;
