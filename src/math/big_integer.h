@@ -246,6 +246,14 @@ namespace zhejiangfhe {
             return sign;
         }
 
+        /**
+         * Gets the bit at the specified index.
+         *
+         * @param index is the index of the bit to get.
+         * @return resulting bit.
+         */
+        uint8_t GetBitAtIndex(uint32_t index) const;
+
     protected:
         std::vector<NativeInt> value;
         bool sign = false;
@@ -296,6 +304,15 @@ namespace zhejiangfhe {
          * 这里 n = NativeInt 长度 / 2，下面的计算时由于进位的原因，做了多次平移。
          */
         static void MultiplyWithKaratsuba(NativeInt operand1, NativeInt operand2, NativeInt *resultTwo);
+
+        /**
+         * function to return the ceiling of the input number divided by
+         * the number of bits in the limb data type.  DBC this is to
+         * determine how many limbs are needed for an input bitsize.
+         * @param number is the number to be divided.
+         * @return the ceiling of Number/(bits in the limb data type)
+         */
+        static uint32_t MSB2NLimbs(const uint32_t number);
     };
 
     template<typename NativeInt>

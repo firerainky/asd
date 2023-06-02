@@ -457,3 +457,26 @@ TYPED_TEST(BigIntegerTest, ModMul) {
     modulus = BInt("9999999999999999999912");
     EXPECT_EQ(operand1.ModMul(operand2, modulus), BInt("237334552122396220044"));
 }
+
+TYPED_TEST(BigIntegerTest, GetBitAtIndex) {
+    using BInt = zhejiangfhe::BigInteger<TypeParam>;
+
+    BInt a = 1;
+
+    EXPECT_EQ(a.GetBitAtIndex(1), 1);
+    EXPECT_EQ(a.GetBitAtIndex(2), 0);
+
+    a = 7;
+    EXPECT_EQ(a.GetBitAtIndex(3), 1);
+    EXPECT_EQ(a.GetBitAtIndex(5), 0);
+
+    a = BInt("1234567890123456789012345678901234567890");
+    EXPECT_EQ(a.GetBitAtIndex(63), 0);
+    EXPECT_EQ(a.GetBitAtIndex(64), 1);
+    EXPECT_EQ(a.GetBitAtIndex(65), 0);
+    EXPECT_EQ(a.GetBitAtIndex(66), 0);
+    EXPECT_EQ(a.GetBitAtIndex(67), 0);
+    EXPECT_EQ(a.GetBitAtIndex(68), 1);
+    EXPECT_EQ(a.GetBitAtIndex(69), 1);
+    EXPECT_EQ(a.GetBitAtIndex(70), 1);
+}

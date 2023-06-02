@@ -45,7 +45,6 @@ namespace zhejiangfhe {
         RefreshMSB();
     }
 
-
     template<typename NativeInt>
     void BigInteger<NativeInt>::AssignVal(const std::string &str) {
 
@@ -99,33 +98,29 @@ namespace zhejiangfhe {
         }
     }
 
-    // template<typename NativeInt>
-    // BigInteger<NativeInt> &BigInteger<NativeInt>::AssignObj(const BigInteger<NativeInt> &other) {
-    //     if (this != &other) {// 避免自我赋值
-    //     value.clear();
-    //         std::vector<NativeInt> resultVectors;
-    //         for (auto it = other.value.begin(); it != other.value.end(); ++it) {
-    //             resultVectors.push_back(*it);
-    //         }
-    //         while (!resultVectors.empty() && resultVectors.back() == 0) {
-    //             resultVectors.pop_back();
-    //         }
-    //         if (other.value.empty()) {
-    //             value.push_back(0);
-    //             sign=false;
-    //             return *this;
-    //         }
-    //         this->sign = other.sign;
-    //         for (auto it = resultVectors.begin(); it != resultVectors.end(); ++it) {
-    //             value.push_back(*it);
-    //         }
-    //         m_MSB = (resultVectors.size() - 1) * m_limbBitLength + m_GetMSBForLimb(resultVectors.back());
-    //         if (m_MSB == 0) {
-    //             sign = false;
-    //         }
-    //     }
-    //     return *this;
-    // }
+    template<typename NativeInt>
+    uint8_t BigInteger<NativeInt>::GetBitAtIndex(uint32_t index) const {
+        if (index > m_MSB) return 0;
+        uint32_t i = MSB2NLimbs(index) - 1;
+        // uint32_t i = index / m_limbBitLength;
+        NativeInt x = value[i];
+        uint32_t remain = index % m_limbBitLength == 0 ? m_limbBitLength : index % m_limbBitLength;
+        NativeInt bMask = 1;
+        bMask <<= (remain - 1);
+        return x & bMask ? 1 : 0;
+    }
+
+    template<typename NativeInt>
+    uint32_t BigInteger<NativeInt>::MSB2NLimbs(const uint32_t number) {
+        static uint32_t mask = m_limbBitLength - 1;
+
+        if (!number) return 1;
+        if ((number & mask) != 0) {
+            return (number >> m_log2LimbBitLength) + 1;
+        } else {
+            return number >> m_log2LimbBitLength;
+        }
+    }
 
     template<typename NativeInt>
     int BigInteger<NativeInt>::Compare(const BigInteger<NativeInt> &another) const {
