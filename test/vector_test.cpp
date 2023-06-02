@@ -190,6 +190,20 @@ namespace zhejiangfhe {
         EXPECT_EQ(v1, v3);
     }
 
+
+    TYPED_TEST(VectorTest, ModInverse) {
+        using BInt = zhejiangfhe::BigInteger<TypeParam>;
+        using Vector = zhejiangfhe::Vector<TypeParam>;
+
+        Vector v1 = Vector(5, 11, {"5", "4", "6", "7", "10"});
+        Vector v2 = v1.ModInverse();
+        Vector v3 = Vector(5, 11, {"9", "3", "2", "8", "10"});
+        EXPECT_EQ(v2, v3);
+
+        v1.ModInverseEq();
+        EXPECT_EQ(v1, v3);
+    }
+
     TYPED_TEST(VectorTest, GetDigitAtIndexForBase) {
         using Vector = zhejiangfhe::Vector<TypeParam>;
         using BInt = zhejiangfhe::BigInteger<TypeParam>;

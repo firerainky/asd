@@ -328,6 +328,20 @@ namespace zhejiangfhe {
         return *this = ModExp(b);
     }
 
+    template<class IntegerType>
+    Vector<IntegerType> Vector<IntegerType>::ModInverse() const {
+        Vector<IntegerType> ans(*this);
+        for (uint32_t i = 0; i < this->data.size(); i++) {
+            ans.data[i] = util::ModInverse(ans.data[i], this->modulus);
+        }
+        return ans;
+    }
+
+    template<class IntegerType>
+    const Vector<IntegerType> &Vector<IntegerType>::ModInverseEq() {
+        return *this = ModInverse();
+    }
+
     template<typename IntegerType>
     Vector<IntegerType> Vector<IntegerType>::GetDigitAtIndexForBase(uint32_t index, uint32_t base) const {
         Vector ans(*this);
