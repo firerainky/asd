@@ -3,6 +3,7 @@
 //
 
 #include "big_integer.h"
+#include <cmath>
 #include <limits>
 
 namespace zhejiangfhe {
@@ -120,6 +121,19 @@ namespace zhejiangfhe {
         } else {
             return number >> m_log2LimbBitLength;
         }
+    }
+
+    template<typename NativeInt>
+    uint32_t BigInteger<NativeInt>::GetDigitAtIndexForBase(uint32_t index, uint32_t base) const {
+        uint32_t digitLength = ceil(log2(base));
+        uint32_t digit = 0;
+        uint32_t newIndex = 1 + (index - 1) * digitLength;
+        for (uint32_t i = 1; i < base; i = i * 2) {
+            digit += GetBitAtIndex(newIndex) * i;
+            newIndex++;
+        }
+
+        return digit;
     }
 
     template<typename NativeInt>

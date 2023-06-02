@@ -75,8 +75,6 @@ namespace zhejiangfhe {
         EXPECT_TRUE(v1 != v2);
     }
 
-
-
     TYPED_TEST(VectorTest, SwitchModulus) {
         using BInt = zhejiangfhe::BigInteger<TypeParam>;
         using Vector = zhejiangfhe::Vector<TypeParam>;
@@ -89,7 +87,6 @@ namespace zhejiangfhe {
         Vector v2 = Vector(5, 5, {"1", "0", "4", "1"});
 
         EXPECT_EQ(v1, v2);
-
 
 
         v1 = Vector(5, 7, {"1", "3", "5", "7"});
@@ -154,8 +151,6 @@ namespace zhejiangfhe {
         EXPECT_EQ(v1, v5);
     }
 
-
-
     TYPED_TEST(VectorTest, ModMul) {
         using BInt = zhejiangfhe::BigInteger<TypeParam>;
         using Vector = zhejiangfhe::Vector<TypeParam>;
@@ -195,4 +190,14 @@ namespace zhejiangfhe {
         EXPECT_EQ(v1, v3);
     }
 
+    TYPED_TEST(VectorTest, GetDigitAtIndexForBase) {
+        using Vector = zhejiangfhe::Vector<TypeParam>;
+        using BInt = zhejiangfhe::BigInteger<TypeParam>;
+
+        Vector v(3, 100, {83, 1, 45});
+        EXPECT_EQ(v.GetDigitAtIndexForBase(1, 4), Vector(3, 100, {3, 1, 1}));
+        EXPECT_EQ(v.GetDigitAtIndexForBase(2, 4), Vector(3, 100, {0, 0, 3}));
+        EXPECT_EQ(v.GetDigitAtIndexForBase(3, 4), Vector(3, 100, {1, 0, 2}));
+        EXPECT_EQ(v.GetDigitAtIndexForBase(4, 4), Vector(3, 100, {1, 0, 0}));
+    }
 }// namespace zhejiangfhe

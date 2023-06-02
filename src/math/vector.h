@@ -130,7 +130,23 @@ namespace zhejiangfhe {
 
         const Vector &DivideAndRoundEq(const BigInteger<IntegerType> &q);
 
-        Vector GetDigitAtIndexForBase(uint32_t index, uint32_t base) const;
+        /**
+         * Digit vector at a specific index for all entries for a given number base.
+         * Example: for vector (83, 1, 45), index 3 and base 4 we have:
+         *
+         *                           index:1,2,3,4
+         * |83|                           |3,0,1,1|                 |1|
+         * |1 | --base 4 decomposition--> |1,0,0,0| --at index 3--> |0|
+         * |45|                           |1,3,2,0|                 |2|
+         *
+         * The return vector is (1,0,2)
+         *
+         * @param index is the index to return the digit from in all entries.
+         * @param base is the base to use for the operation.
+         * @return is the digit at a specific index for all entries for a given number
+         * base
+         */
+        Vector<IntegerType> GetDigitAtIndexForBase(uint32_t index, uint32_t base) const;
 
     private:
         std::vector<BigInteger<IntegerType>> data;

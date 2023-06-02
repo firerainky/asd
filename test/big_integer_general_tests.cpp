@@ -480,3 +480,14 @@ TYPED_TEST(BigIntegerTest, GetBitAtIndex) {
     EXPECT_EQ(a.GetBitAtIndex(69), 1);
     EXPECT_EQ(a.GetBitAtIndex(70), 1);
 }
+
+TYPED_TEST(BigIntegerTest, GetDigitAtIndexForBase) {
+    using BInt = zhejiangfhe::BigInteger<TypeParam>;
+
+    BInt a = 83;
+
+    EXPECT_EQ(a.GetDigitAtIndexForBase(1, 4), 3);
+    EXPECT_EQ(a.GetDigitAtIndexForBase(2, 4), 0);
+    EXPECT_EQ(a.GetDigitAtIndexForBase(3, 4), 1);
+    EXPECT_EQ(a.GetDigitAtIndexForBase(4, 4), 1);
+}

@@ -254,6 +254,22 @@ namespace zhejiangfhe {
          */
         uint8_t GetBitAtIndex(uint32_t index) const;
 
+        /**
+         * Get the number of digits using a specific base.
+         * Warning: only power-of-2 bases are currently supported.
+         * Example: for number 83, index 3 and base 4 we have:
+         *
+         *                         index:1,2,3,4
+         * 83 --base 4 decomposition--> (3,0,1,1) --at index 3--> 1
+         *
+         * The return number is 1.
+         *
+         * @param index is the location to return value from in the specific base.
+         * @param base is the base with which to determine length in.
+         * @return the length of the representation in a specific base.
+         */
+        uint32_t GetDigitAtIndexForBase(uint32_t index, uint32_t base) const;
+
     protected:
         std::vector<NativeInt> value;
         bool sign = false;
