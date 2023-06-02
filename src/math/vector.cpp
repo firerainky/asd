@@ -31,24 +31,6 @@ namespace zhejiangfhe {
     }
 
     template<typename IntegerType>
-    Vector<IntegerType>::Vector(const uint32_t length, const IntegerType &modulus) {
-        Modulus<IntegerType> newModulus = Modulus(modulus);
-        this->data.resize(length);
-        for (uint32_t i = 0; i < length; i++) {
-            this->data[i] = 0;
-        }
-        this->modulus = newModulus;
-        this->Mod();
-        this->state = INITIALIZED;
-    }
-
-    template<typename IntegerType>
-    Vector<IntegerType>::Vector(const uint32_t length, const std::string &modulus) {
-        Modulus<IntegerType> newModulus(modulus);
-        Vector(length, newModulus);
-    }
-
-    template<typename IntegerType>
     Vector<IntegerType>::Vector(const Vector &inVector) {
         size_t length = inVector.data.size();
         this->data.resize(length);
@@ -101,28 +83,6 @@ namespace zhejiangfhe {
 
     template<typename IntegerType>
     Vector<IntegerType>::Vector(const std::vector<std::string> &s, const Modulus<IntegerType> &modulus) {
-        this->data.resize(s.size());
-        this->modulus = modulus;
-        for (uint32_t i = 0; i < s.size(); i++) {
-            BigInteger<IntegerType> val = (BigInteger<IntegerType>) s[i];
-            this->data[i] = util::Mod(val, this->modulus);
-        }
-        this->state = INITIALIZED;
-    }
-
-    template<typename IntegerType>
-    Vector<IntegerType>::Vector(const std::vector<std::string> &s, const IntegerType &modulus) {
-        this->data.resize(s.size());
-        this->modulus = modulus;
-        for (uint32_t i = 0; i < s.size(); i++) {
-            BigInteger<IntegerType> val = (BigInteger<IntegerType>) s[i];
-            this->data[i] = util::Mod(val, this->modulus);
-        }
-        this->state = INITIALIZED;
-    }
-
-    template<typename IntegerType>
-    Vector<IntegerType>::Vector(const std::vector<std::string> &s, const std::string &modulus) {
         this->data.resize(s.size());
         this->modulus = modulus;
         for (uint32_t i = 0; i < s.size(); i++) {
