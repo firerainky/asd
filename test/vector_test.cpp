@@ -51,7 +51,7 @@ namespace zhejiangfhe {
         EXPECT_EQ(k[0], 1);
     }
 
-    TYPED_TEST(VectorTest, KDJFKJ) {
+    TYPED_TEST(VectorTest, EqualTo) {
         using BInt = zhejiangfhe::BigInteger<TypeParam>;
         using Vector = zhejiangfhe::Vector<TypeParam>;
 

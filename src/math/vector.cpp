@@ -99,6 +99,7 @@ namespace zhejiangfhe {
 
     template<typename IntegerType>
     bool Vector<IntegerType>::operator==(const Vector &rhs) const {
+        if (this == &rhs) return true;
         if (data.size() != rhs.data.size() || modulus.GetValue() != rhs.modulus.GetValue()) return false;
         for (uint32_t i = 0; i < data.size(); ++i) {
             if (data[i] != rhs.data[i]) return false;
