@@ -17,6 +17,7 @@ namespace zhejiangfhe {
             this->data[i] = 0;
         }
         this->modulus = Modulus<IntegerType>("");
+        this->state = GARBAGE;
     }
 
     template<typename IntegerType>
@@ -26,7 +27,7 @@ namespace zhejiangfhe {
             this->data[i] = 0;
         }
         this->modulus = modulus;
-        this->Mod();
+        this->state = INITIALIZED;
     }
 
     template<typename IntegerType>
@@ -38,6 +39,7 @@ namespace zhejiangfhe {
         }
         this->modulus = newModulus;
         this->Mod();
+        this->state = INITIALIZED;
     }
 
     template<typename IntegerType>
@@ -54,12 +56,14 @@ namespace zhejiangfhe {
             this->data[i] = inVector.data[i];
         }
         this->modulus = inVector.modulus;
+        this->state = INITIALIZED;
     }
 
     template<typename IntegerType>
     Vector<IntegerType>::Vector(Vector &&inVector) {
         this->data = std::move(inVector.data);
         this->modulus = std::move(inVector.modulus);
+        this->state = INITIALIZED;
     }
 
     template<typename IntegerType>
@@ -76,6 +80,7 @@ namespace zhejiangfhe {
                 this->data[i] = 0;
             }
         }
+        this->state = INITIALIZED;
     }
 
     template<typename IntegerType>
@@ -91,6 +96,7 @@ namespace zhejiangfhe {
                 this->data[i] = BigInteger<IntegerType>(0);
             }
         }
+        this->state = INITIALIZED;
     }
 
     template<typename IntegerType>
@@ -101,6 +107,7 @@ namespace zhejiangfhe {
             BigInteger<IntegerType> val = (BigInteger<IntegerType>) s[i];
             this->data[i] = util::Mod(val, this->modulus);
         }
+        this->state = INITIALIZED;
     }
 
     template<typename IntegerType>
@@ -111,6 +118,7 @@ namespace zhejiangfhe {
             BigInteger<IntegerType> val = (BigInteger<IntegerType>) s[i];
             this->data[i] = util::Mod(val, this->modulus);
         }
+        this->state = INITIALIZED;
     }
 
     template<typename IntegerType>
@@ -121,6 +129,7 @@ namespace zhejiangfhe {
             BigInteger<IntegerType> val = (BigInteger<IntegerType>) s[i];
             this->data[i] = util::Mod(val, this->modulus);
         }
+        this->state = INITIALIZED;
     }
 
     template<typename IntegerType>
@@ -156,6 +165,7 @@ namespace zhejiangfhe {
                 }
             }
             this->modulus = rhs.modulus;
+            this->state = INITIALIZED;
         }
         return *this;
     }
@@ -167,12 +177,56 @@ namespace zhejiangfhe {
             if (rhs.data.size() > 0) {
                 rhs.data.clear();
             }
-            this->modulus = rhs.modulus;
+            this->modulus       = rhs.modulus;
+            this->state = INITIALIZED;
         }
         return *this;
     }
 
+
     template<typename IntegerType>
+    void Vector<IntegerType>::SetModulus(const Modulus<IntegerType>& value) {
+        if (this->state == INITIALIZED) {
+            ZJFHE_THROW(zhejiangfhe::ConfigException, "modulus already set");
+        }
+        this->modulus = value;
+        this->Mod();
+        this->state = INITIALIZED;
+    }
+
+
+    template <class IntegerType>
+    void Vector<IntegerType>::SwitchModulus(const Modulus<IntegerType>& val) {
+        BigInteger<IntegerType> newModulus = val.GetValue();
+        BigInteger<IntegerType> oldModulus(this->modulus.GetValue());
+        BigInteger<IntegerType> n;
+        BigInteger<IntegerType> oldModulusByTwo(oldModulus >> 1);
+        BigInteger<IntegerType> diff((oldModulus > newModulus) ? (oldModulus - newModulus) : (newModulus - oldModulus));
+        for (uint32_t i = 0; i < this->data.size(); i++) {
+            n = this->at(i);
+            if (oldModulus < newModulus) {
+                if (n > oldModulusByTwo) {
+                    this->data[i] = util::ModAdd(n, diff, val);
+                }
+                else {
+                    this->data[i] = util::Mod(n, val);
+                }
+            }
+            else {
+                if (n > oldModulusByTwo) {
+                    this->at(i) = util::ModSub(n, diff, val);
+                }
+                else {
+                    this->at(i) = util::Mod(n, val);
+                }
+            }
+        }
+        this->state = GARBAGE;
+        this->SetModulus(val);
+    }
+
+
+    template <typename IntegerType>
     void Vector<IntegerType>::Mod() {
         for (uint32_t i = 0; i < this->data.size(); i++) {
             this->data[i] = util::Mod(this->data[i], this->modulus);

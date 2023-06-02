@@ -74,4 +74,31 @@ namespace zhejiangfhe {
         v2 = Vector(4, 3, {1, 3, 5, 7});
         EXPECT_TRUE(v1 != v2);
     }
+
+
+
+    TYPED_TEST(VectorTest, SwitchModulus) {
+        using BInt = zhejiangfhe::BigInteger<TypeParam>;
+        using Vector = zhejiangfhe::Vector<TypeParam>;
+
+        Vector v1 = Vector(5, 3, {"1", "3", "5", "7"});
+
+        Modulus modulus = Modulus(BInt("5"));
+        v1.SwitchModulus(modulus);
+
+        Vector v2 = Vector(5, 5, {"1", "0", "4", "1"});
+
+        EXPECT_EQ(v1, v2);
+
+
+
+        v1 = Vector(5, 7, {"1", "3", "5", "7"});
+
+        modulus = Modulus(BInt("5"));
+        v1.SwitchModulus(modulus);
+
+        v2 = Vector(5, 5, {"1", "3", "3", "0"});
+
+        EXPECT_EQ(v1, v2);
+    }
 }// namespace zhejiangfhe

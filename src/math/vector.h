@@ -14,6 +14,9 @@
 #include <vector>
 
 namespace zhejiangfhe {
+
+    enum State { INITIALIZED, GARBAGE };
+
     template<typename IntegerType>
     class Vector {
 
@@ -141,6 +144,7 @@ namespace zhejiangfhe {
     private:
         std::vector<BigInteger<IntegerType>> data;
         Modulus<IntegerType> modulus;
+        State state;
 
         bool IndexCheck(size_t index) const {
             return index < this->data.size();
