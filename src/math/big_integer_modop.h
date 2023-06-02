@@ -13,12 +13,12 @@ namespace zhejiangfhe {
     namespace util {
 
         template<typename NativeInt>
-        BigInteger<NativeInt> Mod(BigInteger<NativeInt> &operand, const Modulus<NativeInt> &modulus) {
+        BigInteger<NativeInt> Mod(const BigInteger<NativeInt> &operand, const Modulus<NativeInt> &modulus) {
             return operand % modulus.GetValue();
         }
 
         template<typename NativeInt>
-        BigInteger<NativeInt> ModBarrett(BigInteger<NativeInt> &operand, const Modulus<NativeInt> &modulus) {
+        BigInteger<NativeInt> ModBarrett(const BigInteger<NativeInt> &operand, const Modulus<NativeInt> &modulus) {
             BigInteger<NativeInt> estimated = operand * (modulus.GetConstRatio());
             estimated >>= 128;
             estimated *= modulus.GetValue();
@@ -38,8 +38,9 @@ namespace zhejiangfhe {
         }
 
         template<typename NativeInt>
-        BigInteger<NativeInt> ModAdd(BigInteger<NativeInt> &a, BigInteger<NativeInt> &b, const Modulus<NativeInt> &modulus) {
-
+        BigInteger<NativeInt> ModAdd(const BigInteger<NativeInt> &operand1, const BigInteger<NativeInt> &operand2, const Modulus<NativeInt> &modulus) {
+            BigInteger<NativeInt> a(operand1);
+            BigInteger<NativeInt> b(operand2);
             if (a >= modulus.GetValue()) {
                 a = Mod(a, modulus);
             }
@@ -51,14 +52,14 @@ namespace zhejiangfhe {
         }
 
         template<typename NativeInt>
-        BigInteger<NativeInt> ModIncrement(BigInteger<NativeInt> &operand, const Modulus<NativeInt> &modulus) {
+        BigInteger<NativeInt> ModIncrement(const BigInteger<NativeInt> &operand, const Modulus<NativeInt> &modulus) {
             BigInteger<NativeInt> a("1");
             return ModAdd(operand, a, modulus);
         }
 
 
         template<typename NativeInt>
-        BigInteger<NativeInt> ModSub(BigInteger<NativeInt> &a, BigInteger<NativeInt> &b, const Modulus<NativeInt> &modulus) {
+        BigInteger<NativeInt> ModSub(const BigInteger<NativeInt> &a, const BigInteger<NativeInt> &b, const Modulus<NativeInt> &modulus) {
             BigInteger<NativeInt> difference = a.Sub(b);
             BigInteger<NativeInt> modulusValue = modulus.GetValue();
             BigInteger<NativeInt> negativeModulus(modulusValue.GetValue(), true);
@@ -76,7 +77,7 @@ namespace zhejiangfhe {
         }
 
         template<typename NativeInt>
-        BigInteger<NativeInt> ModMul(BigInteger<NativeInt> &operand, BigInteger<NativeInt> &another, const Modulus<NativeInt> &modulus) {
+        BigInteger<NativeInt> ModMul(const BigInteger<NativeInt> &operand, const BigInteger<NativeInt> &another, const Modulus<NativeInt> &modulus) {
             BigInteger<NativeInt> mulRes = operand.Mul(another);
             return Mod(mulRes, modulus);
         }
@@ -118,7 +119,7 @@ namespace zhejiangfhe {
         // }
 
         template<typename NativeInt>
-        BigInteger<NativeInt> ModExp(BigInteger<NativeInt> &operand, BigInteger<NativeInt> &exponent, const Modulus<NativeInt> &modulus) {
+        BigInteger<NativeInt> ModExp(const BigInteger<NativeInt> &operand, const BigInteger<NativeInt> &exponent, const Modulus<NativeInt> &modulus) {
             BigInteger<NativeInt> modulusValue = modulus.GetValue();
             BigInteger<NativeInt> mid = Mod(operand, modulus);
             BigInteger<NativeInt> product(1);

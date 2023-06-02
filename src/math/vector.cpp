@@ -225,6 +225,24 @@ namespace zhejiangfhe {
         this->SetModulus(val);
     }
 
+    template <class IntegerType>
+    const Modulus<IntegerType>& Vector<IntegerType>::GetModulus() const {
+        return this->modulus;
+    }
+
+    template <class IntegerType>
+    Vector<IntegerType> Vector<IntegerType>::ModAdd(const BigInteger<IntegerType> &b) const {
+        Vector<IntegerType> ans(*this);
+        for (uint32_t i = 0; i < this->data.size(); i++) {
+            ans.data[i] = util::ModAdd(ans.data[i], b, ans.modulus);
+        }
+        return ans;
+    }
+
+    template <class IntegerType>
+    const Vector<IntegerType>& Vector<IntegerType>::ModAddEq(const BigInteger<IntegerType> &b) {
+        return *this = ModAdd(b);
+    }
 
     template <typename IntegerType>
     void Vector<IntegerType>::Mod() {
