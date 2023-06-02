@@ -115,9 +115,70 @@ namespace zhejiangfhe {
         Vector v3 = Vector(5, 3, {"0", "2", "1", "0", "2"});
 
         EXPECT_EQ(v2, v3);
-
-
         v1.ModAddEq(operand);
         EXPECT_EQ(v1, v2);
+
+
+        v1 = Vector(5, 11, {"5", "4", "6", "7", "10"});
+        Vector v4 = Vector(5, 11, {"2", "3", "1", "6", "2"});
+        v2 = v1.ModAdd(v4);
+        Vector v5 = Vector(5, 11, {"7", "7", "7", "2", "1"});
+        EXPECT_EQ(v2, v5);
+
+        v1.ModAddEq(v4);
+        EXPECT_EQ(v1, v5);
     }
+
+
+    TYPED_TEST(VectorTest, ModSub) {
+        using BInt = zhejiangfhe::BigInteger<TypeParam>;
+        using Vector = zhejiangfhe::Vector<TypeParam>;
+
+        Vector v1 = Vector(5, 11, {"5", "4", "6", "7", "10"});
+        BInt operand = BInt(5);
+        Vector v2 = v1.ModSub(operand);
+        Vector v3 = Vector(5, 11, {"0", "10", "1", "2", "5"});
+        EXPECT_EQ(v2, v3);
+
+        v1.ModSubEq(operand);
+        EXPECT_EQ(v1, v2);
+
+
+        v1 = Vector(5, 11, {"5", "4", "6", "7", "10"});
+        Vector v4 = Vector(5, 11, {"2", "3", "1", "6", "2"});
+        v2 = v1.ModSub(v4);
+        Vector v5 = Vector(5, 11, {"3", "1", "5", "1", "8"});
+        EXPECT_EQ(v2, v5);
+
+        v1.ModSubEq(v4);
+        EXPECT_EQ(v1, v5);
+    }
+
+
+
+    TYPED_TEST(VectorTest, ModMul) {
+        using BInt = zhejiangfhe::BigInteger<TypeParam>;
+        using Vector = zhejiangfhe::Vector<TypeParam>;
+
+        Vector v1 = Vector(5, 11, {"5", "4", "6", "7", "10"});
+        BInt operand = BInt(5);
+        Vector v2 = v1.ModMul(operand);
+        Vector v3 = Vector(5, 11, {"3", "9", "8", "2", "6"});
+        EXPECT_EQ(v2, v3);
+
+        v1.ModMulEq(operand);
+        EXPECT_EQ(v1, v2);
+
+
+        v1 = Vector(5, 11, {"5", "4", "6", "7", "10"});
+        Vector v4 = Vector(5, 11, {"2", "3", "1", "6", "2"});
+        v2 = v1.ModMul(v4);
+        Vector v5 = Vector(5, 11, {"10", "1", "6", "9", "9"});
+        EXPECT_EQ(v2, v5);
+
+        v1.ModMulEq(v4);
+        EXPECT_EQ(v1, v5);
+    }
+
+
 }// namespace zhejiangfhe

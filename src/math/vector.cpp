@@ -244,6 +244,114 @@ namespace zhejiangfhe {
         return *this = ModAdd(b);
     }
 
+    template <class IntegerType>
+    Vector<IntegerType> Vector<IntegerType>::ModAddAtIndex(uint32_t i, const BigInteger<IntegerType> &b) const {
+        if (!this->IndexCheck(i)) {
+            ZJFHE_THROW(MathException, "Vector index out of range");
+        }
+        Vector<IntegerType> ans(*this);
+        ans.data[i] = util::ModAdd(ans.data[i], b, ans.modulus);
+        return ans;
+    }
+
+    template <class IntegerType>
+    const Vector<IntegerType> &Vector<IntegerType>::ModAddAtIndexEq(uint32_t i, const BigInteger<IntegerType> &b) {
+        return *this = ModAddAtIndex(i, b);
+    }
+
+    template <class IntegerType>
+    Vector<IntegerType> Vector<IntegerType>::ModAdd(const Vector<IntegerType> &b) const {
+        if (this->modulus.GetValue() != b.modulus.GetValue()) {
+            ZJFHE_THROW(MathException, "Vector adding vectors of different modulus");
+        }
+        else if (this->data.size() != b.data.size()) {
+            ZJFHE_THROW(MathException, "Vector adding vectors of different lengths");
+        }
+
+        Vector<IntegerType> ans(*this);
+        for (uint32_t i = 0; i < this->data.size(); i++) {
+            ans.data[i] = util::ModAdd(ans.data[i], b.data[i], ans.modulus);
+        }
+        return ans;
+    }
+
+    template <class IntegerType>
+    const Vector<IntegerType> & Vector<IntegerType>::ModAddEq(const Vector<IntegerType> &b) {
+        return *this = ModAdd(b);
+    }
+
+
+    template <class IntegerType>
+    Vector<IntegerType> Vector<IntegerType>::ModSub(const BigInteger<IntegerType> &b) const {
+        Vector<IntegerType> ans(*this);
+        for (uint32_t i = 0; i < this->data.size(); i++) {
+            ans.data[i] = util::ModSub(ans.data[i], b, ans.modulus);
+        }
+        return ans;
+    }
+
+    template <class IntegerType>
+    const Vector<IntegerType>& Vector<IntegerType>::ModSubEq(const BigInteger<IntegerType> &b) {
+        return *this = ModSub(b);
+    }
+
+    template <class IntegerType>
+    Vector<IntegerType> Vector<IntegerType>::ModSub(const Vector<IntegerType> &b) const {
+        if (this->modulus.GetValue() != b.modulus.GetValue()) {
+            ZJFHE_THROW(MathException, "Vector subtract vectors of different modulus");
+        }
+        else if (this->data.size() != b.data.size()) {
+            ZJFHE_THROW(MathException, "Vector subtract vectors of different lengths");
+        }
+
+        Vector<IntegerType> ans(*this);
+        for (uint32_t i = 0; i < this->data.size(); i++) {
+            ans.data[i] = util::ModSub(ans.data[i], b.data[i], ans.modulus);
+        }
+        return ans;
+    }
+
+    template <class IntegerType>
+    const Vector<IntegerType> & Vector<IntegerType>::ModSubEq(const Vector<IntegerType> &b) {
+        return *this = ModSub(b);
+    }
+
+
+    template <class IntegerType>
+    Vector<IntegerType> Vector<IntegerType>::ModMul(const BigInteger<IntegerType> &b) const {
+        Vector<IntegerType> ans(*this);
+        for (uint32_t i = 0; i < this->data.size(); i++) {
+            ans.data[i] = util::ModMul(ans.data[i], b, ans.modulus);
+        }
+        return ans;
+    }
+
+    template <class IntegerType>
+    const Vector<IntegerType>& Vector<IntegerType>::ModMulEq(const BigInteger<IntegerType> &b) {
+        return *this = ModMul(b);
+    }
+
+    template <class IntegerType>
+    Vector<IntegerType> Vector<IntegerType>::ModMul(const Vector<IntegerType> &b) const {
+        if (this->modulus.GetValue() != b.modulus.GetValue()) {
+            ZJFHE_THROW(MathException, "Vector multiply vectors of different modulus");
+        }
+        else if (this->data.size() != b.data.size()) {
+            ZJFHE_THROW(MathException, "Vector multiply vectors of different lengths");
+        }
+
+        Vector<IntegerType> ans(*this);
+        for (uint32_t i = 0; i < this->data.size(); i++) {
+            ans.data[i] = util::ModMul(ans.data[i], b.data[i], ans.modulus);
+        }
+        return ans;
+    }
+
+    template <class IntegerType>
+    const Vector<IntegerType> & Vector<IntegerType>::ModMulEq(const Vector<IntegerType> &b) {
+        return *this = ModMul(b);
+    }
+
     template <typename IntegerType>
     void Vector<IntegerType>::Mod() {
         for (uint32_t i = 0; i < this->data.size(); i++) {
