@@ -127,6 +127,10 @@ namespace zhejiangfhe {
 
         BigInteger<NativeInt> Sub(const BigInteger<NativeInt> &num) const;
         const BigInteger<NativeInt> &SubEq(const BigInteger<NativeInt> &num);
+        BigInteger<NativeInt> operator-() {
+            this->sign=!this->sign;
+            return *this;
+        }
 
         std::size_t length() const {
             return value.size();

@@ -151,6 +151,61 @@ namespace zhejiangfhe {
             }
             return product;
         }
-    }// namespace util
+template<typename NativeInt>
+BigInteger<NativeInt> ExtendedEuclideanAlgorithm(const BigInteger<NativeInt>& a, const BigInteger<NativeInt>& b, BigInteger<NativeInt>& x, BigInteger<NativeInt>& y) {
+    if (a == 0) {
+        x = 0;
+        y = 1;
+        return b;
+    }
+
+    BigInteger<NativeInt> x1, y1;
+    BigInteger<NativeInt> gcd = ExtendedEuclideanAlgorithm(b % a, a, x1, y1);
+
+    x = y1 - b.DividedBy(a).first * x1;
+    y = x1;
+
+    // Handle negative coefficients
+    if (a < 0) {
+        x = -x;
+    }
+    if (b < 0) {
+        y = -y;
+    }
+
+    return gcd;
+}
+
+
+template<typename NativeInt>
+BigInteger<NativeInt> ModInverse(const BigInteger<NativeInt>& operand, const Modulus<NativeInt>& modulus) {
+    // Step 1: Compute gcd(a, b) and coefficients x, y such that ax + by = gcd(a, b)
+    BigInteger<NativeInt> a = operand;
+    BigInteger<NativeInt> b = modulus.GetValue();
+    BigInteger<NativeInt> x, y;
+    BigInteger<NativeInt> gcd = ExtendedEuclideanAlgorithm(a, b, x, y);
+
+    // Step 2: If gcd(a, b) is not 1, then a has no inverse mod b
+    if (gcd != 1) {
+                 ZJFHE_THROW(zhejiangfhe::MathException,
+                          "Modular inverse does not exist" 
+                          );
+    }
+
+    // Step 3: Compute a^-1 mod b using coefficient x
+    BigInteger<NativeInt> inverse = x % b;  // inverse = x mod b
+    if (inverse < 0) {
+        inverse += (b < 0 ? -b : b);  // inverse = inverse + |b| if inverse < 0
+    }
+    if (modulus.GetValue() < 0) {
+        inverse = -inverse;  // if modulus is negative, inverse should be negative
+    }
+    if (operand < 0) {
+        inverse = -inverse;  // if operand is negative, inverse should be negative
+    }
+    return inverse;
+}
+
+    }
 }// namespace zhejiangfhe
 #endif//ZJ_FHE_LIB_BIG_INTEGER_MODOP_H

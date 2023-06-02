@@ -254,4 +254,23 @@ namespace zhejiangfhe {
         modulus = Modulus(BInt("131313131313"));
         EXPECT_EQ(util::ModExp(operand, exponent, modulus), BInt(39418477653));
     }
+    TYPED_TEST(BigIntegerModTest, ModInverse) {
+        using BInt = zhejiangfhe::BigInteger<TypeParam>;
+
+        BInt operand = BInt("3");
+        Modulus modulus = Modulus(BInt("7"));
+        EXPECT_EQ(util::ModInverse(operand, modulus), BInt("5"));
+
+        BInt operand2 = BInt("4");
+        Modulus modulus2 = Modulus(BInt("6"));
+        EXPECT_THROW(util::ModInverse(operand2, modulus2), zhejiangfhe::MathException);
+
+        BInt operand3 = BInt("-2");
+        Modulus modulus3 = Modulus(BInt("5"));
+        EXPECT_EQ(util::ModInverse(operand3, modulus3), BInt("-3"));
+
+        // BInt operand4 = BInt("3");
+        // Modulus modulus4 = Modulus(BInt("-7"));
+        // EXPECT_EQ(util::ModInverse(operand4, modulus4), BInt("5"));
+    }
 }// namespace zhejiangfhe
