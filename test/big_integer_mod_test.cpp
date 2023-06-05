@@ -211,7 +211,7 @@ namespace zhejiangfhe {
         BInt exponent = BInt();
         Modulus modulus = Modulus(BInt("3"));
         EXPECT_EQ(util::ModExp(operand, exponent, modulus), BInt(1));
-        
+
         operand = BInt("5");
         exponent = BInt("1");
         modulus = Modulus(BInt("3"));
@@ -273,4 +273,49 @@ namespace zhejiangfhe {
         // Modulus modulus4 = Modulus(BInt("-7"));
         // EXPECT_EQ(util::ModInverse(operand4, modulus4), BInt("5"));
     }
+    TYPED_TEST(BigIntegerModTest, ModNegate) {
+    using BInt = zhejiangfhe::BigInteger<TypeParam>;
+
+    // Test valid input
+    BInt operand1 = BInt("3");
+    Modulus modulus1 = Modulus(BInt("7"));
+    EXPECT_EQ(util::ModNegate(operand1, modulus1), BInt("4"));
+
+    BInt operand2 = BInt("5");
+    Modulus modulus2 = Modulus(BInt("11"));
+    EXPECT_EQ(util::ModNegate(operand2, modulus2), BInt("6"));
+
+    BInt operand3 = BInt("13");
+    Modulus modulus3 = Modulus(BInt("19"));
+    EXPECT_EQ(util::ModNegate(operand3, modulus3), BInt("6"));
+
+    BInt operand4 = BInt("17");
+    Modulus modulus4 = Modulus(BInt("23"));
+    EXPECT_EQ(util::ModNegate(operand4, modulus4), BInt("6"));
+
+    // Test negative input
+    BInt operand5 = BInt("-2");
+    Modulus modulus5 = Modulus(BInt("5"));
+    EXPECT_EQ(util::ModNegate(operand5, modulus5), BInt("3"));
+
+    BInt operand6 = BInt("-3");
+    Modulus modulus6 = Modulus(BInt("7"));
+    EXPECT_EQ(util::ModNegate(operand6, modulus6), BInt("4"));
+
+    // Test large input
+    BInt operand7 = BInt("1000000000000000000");
+    Modulus modulus7 = Modulus(BInt("1000000000000000001"));
+    EXPECT_EQ(util::ModNegate(operand7, modulus7), BInt("1"));
+
+    // Test zero input
+    BInt operand8 = BInt("0");
+    Modulus modulus8 = Modulus(BInt("5"));
+    EXPECT_EQ(util::ModNegate(operand8, modulus8), BInt("0"));
+
+
+    // Test negative modulus
+    // BInt operand10 = BInt("3");
+    // Modulus modulus10 = Modulus(BInt("-7"));
+    // EXPECT_EQ(util::ModNegate(operand10, modulus10),BInt("-4"));
+}
 }// namespace zhejiangfhe

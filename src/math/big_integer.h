@@ -121,6 +121,13 @@ namespace zhejiangfhe {
         int Compare(const BigInteger<NativeInt> &another) const;
 
         int AbsoluteCompare(const BigInteger<NativeInt> &another) const;
+        BigInteger<NativeInt> Abs() const {
+            if (value.empty()) {
+                return BigInteger<NativeInt>(0);
+            } else {
+                return BigInteger<NativeInt>(value, false);
+            }
+        }
 
         BigInteger<NativeInt> Add(const BigInteger<NativeInt> &num) const;
         const BigInteger<NativeInt> &AddEq(const BigInteger<NativeInt> &num);
@@ -128,8 +135,7 @@ namespace zhejiangfhe {
         BigInteger<NativeInt> Sub(const BigInteger<NativeInt> &num) const;
         const BigInteger<NativeInt> &SubEq(const BigInteger<NativeInt> &num);
         BigInteger<NativeInt> operator-() {
-            this->sign=!this->sign;
-            return *this;
+            return BigInteger(this->value, !this->sign);
         }
 
         std::size_t length() const {
