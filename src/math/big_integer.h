@@ -7,6 +7,7 @@
 
 #include "exception.h"
 #include "integer_interface.h"
+#include "numth_util.h"
 #include <cstdint>
 #include <iosfwd>
 #include <iostream>
@@ -217,20 +218,6 @@ namespace zhejiangfhe {
         const BigInteger<NativeInt> &operator>>=(uint16_t shift) {
             return *this = this->RightShift(shift);
         }
-
-        inline int nlz(NativeInt x) const {
-            if (typeid(x) == typeid(uint64_t)) {
-                return nlz64(x);
-            } else if (typeid(x) == typeid(uint32_t)) {
-                return nlz32(x);
-            } else {
-                ZJFHE_THROW(zhejiangfhe::TypeException, "not support native int");
-            }
-        }
-
-        int nlz64(NativeInt x) const;
-
-        int nlz32(NativeInt x) const;
 
         inline BigInteger Exp(uint32_t p) {
             if (p == 0) {

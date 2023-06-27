@@ -280,13 +280,6 @@ TYPED_TEST(BigIntegerTest, RightShiftBigInteger) {
 }
 
 
-TEST(BigIntegerTest, LeadingZero) {
-    using BInt = zhejiangfhe::BigInteger<limbtype>;
-
-    EXPECT_EQ(BInt(1).nlz(1), 8 * sizeof(limbtype) - 1);
-    EXPECT_EQ(BInt(1).nlz(2), 8 * sizeof(limbtype) - 2);
-}
-
 TYPED_TEST(BigIntegerTest, ExpBigInteger) {
     using BInt = zhejiangfhe::BigInteger<TypeParam>;
 

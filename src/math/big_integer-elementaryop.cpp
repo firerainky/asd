@@ -3,6 +3,7 @@
 //
 
 #include "big_integer.h"
+#include "numth_util.h"
 
 namespace zhejiangfhe {
 
@@ -285,7 +286,7 @@ namespace zhejiangfhe {
             return true;
         }
 
-        s = nlz(v[n - 1]);
+        s = util::nlz(v[n - 1]);
 
         std::vector<NativeInt> vn(n);
         for (i = n - 1; i > 0; i--) {
