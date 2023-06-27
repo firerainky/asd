@@ -11,8 +11,6 @@
 namespace zhejiangfhe {
     namespace util {
 
-
-
 //        template <typename IntType>
 //        void PrimeFactorize(IntType n, std::set<IntType>& primeFactors) {
 //
@@ -177,7 +175,7 @@ namespace zhejiangfhe {
 //
 //
 //
-//        uint64_t GetTotient(const uint64_t n) {
+//        uint64_t GetTotient(uint64_t n) {
 //            std::set<uint64_t> factors;
 //            uint64_t enn(n);
 //            PrimeFactorize(enn, factors);

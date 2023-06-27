@@ -14,15 +14,50 @@
 #include <iosfwd>
 
 namespace zhejiangfhe {
-    template<typename NativeInt>
-    class poly {
+    template<typename VecType>
+    class Poly {
 
     public:
-        poly();
+        using Integer = typename VecType::Integer;
+        typedef IntLatticeParam<Integer> Params;
+
+        Poly();
+
+        Poly(const Poly& element, Params param);
+
+        const Poly& operator=(const Poly& rhs);
+
+        const Poly& operator=(Poly&& rhs);
+
+        const Poly& operator=(std::initializer_list<uint64_t> rhs);
+
+        const Poly& operator=(std::vector<int64_t> rhs);
+
+        const Poly& operator=(std::vector<int32_t> rhs);
+
+        const Poly& operator=(std::initializer_list<std::string> rhs);
+
+        const Poly& operator=(uint64_t val);
+
+        void SetValuesToZero();
+
+        void SetValuesToMax();
+
+        const Params GetParams() const {
+            return params;
+        }
+
+        Integer& at(uint32_t i);
+        const Integer& at(uint32_t i) const;
+
+
+        Integer& operator[](uint32_t i);
+        const Integer& operator[](uint32_t i) const;
+
 
     protected:
-        IntLatticeParam<NativeInt> param;
-        Vector<NativeInt> value;
+        Params params;
+        VecType value;
     };
 }
 

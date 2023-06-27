@@ -22,6 +22,9 @@ namespace zhejiangfhe {
     class Vector {
 
     public:
+
+        typedef BigInteger<IntegerType> Integer;
+
         Vector();
 
         Vector(uint32_t length);
