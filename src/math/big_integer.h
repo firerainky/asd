@@ -14,6 +14,8 @@
 #include <string>
 #include <vector>
 
+typedef uint32_t limbtype;
+
 namespace zhejiangfhe {
 
     template<typename NativeInt>
@@ -66,11 +68,12 @@ namespace zhejiangfhe {
         static const uint32_t value = 1 + Log2<N / 2>::value;
     };
 
-
     template<>
     struct Log2<2> {
         static const uint32_t value = 1;
     };
+
+    typedef BigInteger<limbtype> BInt;
 
     template<typename NativeInt>
     class BigInteger : public IntegerInterface<BigInteger<NativeInt>> {

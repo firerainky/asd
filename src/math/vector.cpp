@@ -351,6 +351,5 @@ namespace zhejiangfhe {
         return ans;
     }
 
-    template class zhejiangfhe::Vector<uint32_t>;
-    template class zhejiangfhe::Vector<uint64_t>;
+    template class zhejiangfhe::Vector<limbtype>;
 }// namespace zhejiangfhe

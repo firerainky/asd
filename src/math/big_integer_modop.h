@@ -57,7 +57,6 @@ namespace zhejiangfhe {
             return ModAdd(operand, a, modulus);
         }
 
-
         template<typename NativeInt>
         BigInteger<NativeInt> ModSub(const BigInteger<NativeInt> &a, const BigInteger<NativeInt> &b, const Modulus<NativeInt> &modulus) {
             BigInteger<NativeInt> difference = a.Sub(b);

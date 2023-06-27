@@ -164,7 +164,6 @@ namespace zhejiangfhe {
     }
 
 
-    template class zhejiangfhe::BigInteger<uint32_t>;
-    template class zhejiangfhe::BigInteger<uint64_t>;
+    template class zhejiangfhe::BigInteger<limbtype>;
 
 }// namespace zhejiangfhe

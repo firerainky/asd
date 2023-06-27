@@ -15,7 +15,8 @@
 
 namespace zhejiangfhe {
 
-    enum State { INITIALIZED, GARBAGE };
+    enum State { INITIALIZED,
+                 GARBAGE };
 
     template<typename IntegerType>
     class Vector {
@@ -27,9 +28,9 @@ namespace zhejiangfhe {
 
         Vector(uint32_t length, const Modulus<IntegerType> &modulus);
 
-        Vector(uint32_t length, const IntegerType& modulus) : Vector(length, Modulus<IntegerType>(modulus)) {};
+        Vector(uint32_t length, const IntegerType &modulus) : Vector(length, Modulus<IntegerType>(modulus)){};
 
-        Vector(const uint32_t length, const std::string& modulus) : Vector(length, Modulus<IntegerType>(modulus)) {};
+        Vector(const uint32_t length, const std::string &modulus) : Vector(length, Modulus<IntegerType>(modulus)){};
 
         Vector(const Vector &bigVector);
 
@@ -41,9 +42,9 @@ namespace zhejiangfhe {
 
         explicit Vector(const std::vector<std::string> &s, const Modulus<IntegerType> &modulus);
 
-        explicit Vector(const std::vector<std::string>& s, const IntegerType& modulus) : Vector(s, Modulus<IntegerType>(modulus)) {};
+        explicit Vector(const std::vector<std::string> &s, const IntegerType &modulus) : Vector(s, Modulus<IntegerType>(modulus)){};
 
-        explicit Vector(const std::vector<std::string>& s, const std::string& modulus) : Vector(s, Modulus<IntegerType>(modulus)) {};
+        explicit Vector(const std::vector<std::string> &s, const std::string &modulus) : Vector(s, Modulus<IntegerType>(modulus)){};
 
         virtual ~Vector();
 

@@ -348,6 +348,5 @@ namespace zhejiangfhe {
     template<typename NativeInt>
     const uint32_t BigInteger<NativeInt>::m_log2LimbBitLength = Log2<m_limbBitLength>::value;
 
-    template class zhejiangfhe::BigInteger<uint32_t>;
-    template class zhejiangfhe::BigInteger<uint64_t>;
+    template class zhejiangfhe::BigInteger<limbtype>;
 }// namespace zhejiangfhe

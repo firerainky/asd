@@ -1,5 +1,6 @@
 #pragma once
 
+#include "big_integer.h"
 #include <gtest/gtest.h>
 
 /**
@@ -8,4 +9,4 @@
  */
 
 // 需要测试的 limb_type 类型列表，目前仅需要 uint32 和 uint64
-using LimbTypes = ::testing::Types<uint32_t, uint64_t>;
+using LimbTypes = ::testing::Types<limbtype>;

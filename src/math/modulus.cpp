@@ -23,7 +23,7 @@ namespace zhejiangfhe {
 
 
     template<typename NativeInt>
-    const Modulus<NativeInt>& Modulus<NativeInt>::operator=(const Modulus<NativeInt>& val) {
+    const Modulus<NativeInt> &Modulus<NativeInt>::operator=(const Modulus<NativeInt> &val) {
         if (this != &val) {
             this->set_value(val.value);
         }
@@ -32,13 +32,12 @@ namespace zhejiangfhe {
 
 
     template<typename NativeInt>
-    const Modulus<NativeInt>& Modulus<NativeInt>::operator=(Modulus<NativeInt>&& val) {
+    const Modulus<NativeInt> &Modulus<NativeInt>::operator=(Modulus<NativeInt> &&val) {
         if (this != &val) {
             this->set_value(val.value);
         }
         return *this;
     }
 
-    template class zhejiangfhe::Modulus<uint32_t>;
-    template class zhejiangfhe::Modulus<uint64_t>;
+    template class zhejiangfhe::Modulus<limbtype>;
 }// namespace zhejiangfhe

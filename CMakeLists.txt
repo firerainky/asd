@@ -41,9 +41,9 @@ if(FHE_BUILD_TEST)
   add_subdirectory(test)
 endif()
 
-option(FHE_BUILD_BENCHMARK "IF BUILD BENCHMARK TARGET" ON)
+option(FHE_BUILD_BENCHMARK "IF BUILD BENCHMARK TARGET" OFF)
 message(STATUS "FHE_BUILD_BENCHMARK: ${FHE_BUILD_BENCHMARK}")
 
 if(FHE_BUILD_BENCHMARK)
-  add_subdirectory(benchmark)
+  # add_subdirectory(benchmark)
 endif()

@@ -60,6 +60,8 @@ namespace zhejiangfhe {
         };
     };
 
+    typedef Modulus<limbtype> BMod;
+
 }// namespace zhejiangfhe
 
 #endif//ZJ_FHE_LIB_MODULUS_H

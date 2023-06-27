@@ -221,7 +221,7 @@ TYPED_TEST(BigIntegerTest, MultiplyTwoBigInteger) {
 }
 
 TYPED_TEST(BigIntegerTest, MultiplyEqTwoBigInteger) {
-    using BInt = zhejiangfhe::BigInteger<uint32_t>;
+    using BInt = zhejiangfhe::BigInteger<TypeParam>;
 
     EXPECT_EQ(BInt().MulEq(BInt("5")).ConvertToString(), "0");
 
@@ -281,14 +281,10 @@ TYPED_TEST(BigIntegerTest, RightShiftBigInteger) {
 
 
 TEST(BigIntegerTest, LeadingZero) {
-    using BInt = zhejiangfhe::BigInteger<uint32_t>;
-    EXPECT_EQ(BInt(1).nlz(1), 31);
-    EXPECT_EQ(BInt(1).nlz(2), 30);
+    using BInt = zhejiangfhe::BigInteger<limbtype>;
 
-
-    using BInt64 = zhejiangfhe::BigInteger<uint64_t>;
-    EXPECT_EQ(BInt64(1).nlz(1), 63);
-    EXPECT_EQ(BInt64(1).nlz(2), 62);
+    EXPECT_EQ(BInt(1).nlz(1), 8 * sizeof(limbtype) - 1);
+    EXPECT_EQ(BInt(1).nlz(2), 8 * sizeof(limbtype) - 2);
 }
 
 TYPED_TEST(BigIntegerTest, ExpBigInteger) {
