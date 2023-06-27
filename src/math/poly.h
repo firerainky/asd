@@ -14,6 +14,8 @@
 #include <iosfwd>
 
 namespace zhejiangfhe {
+    enum Format { EVALUATION = 0, COEFFICIENT = 1 };
+
     template<typename VecType>
     class Poly {
 
@@ -47,6 +49,10 @@ namespace zhejiangfhe {
             return params;
         }
 
+        const Format GetFormat() const {
+            return format;
+        }
+
         Integer& at(uint32_t i);
         const Integer& at(uint32_t i) const;
 
@@ -58,6 +64,7 @@ namespace zhejiangfhe {
     protected:
         Params params;
         VecType value;
+        Format format;
     };
 }
 
