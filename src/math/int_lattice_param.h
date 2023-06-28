@@ -88,14 +88,42 @@ namespace zhejiangfhe {
 
 
     protected:
+        /**
+         * 分圆多项式的阶？
+         */
         uint32_t cyclotomicOrder;
+
+        /**
+         * 环的尺寸
+         */
         uint32_t ringDimension;
 
-        bool isPowerOfTwo;// True iff the Ring Dimension is a power of 2.
+        /**
+         * ringDimension 是否为2的幂
+         */
+        bool isPowerOfTwo;
+
+        /**
+         * 模数
+         */
         IntegerType ciphertextModulus;
+
+
+        /**
+         * 单位根
+         */
         IntegerType rootOfUnity;
-        IntegerType bigCiphertextModulus;// Used for only some applications.
-        IntegerType bigRootOfUnity;      // Used for only some applications.
+
+        /**
+         * the big ciphertext modulus used for bit packing operations
+         */
+        IntegerType bigCiphertextModulus;
+
+
+        /**
+         * the big root of unity used for bit packing operations
+         */
+        IntegerType bigRootOfUnity;
     };
 }
 #endif//ZJ_FHE_LIB_INT_LATTICE_PARAM_H

@@ -25,6 +25,9 @@ namespace zhejiangfhe {
 
         Poly();
 
+        Poly(const Params params, Format format = Format::EVALUATION,
+                 bool initializeElementToZero = false);
+
         Poly(const Poly& element, Params param);
 
         const Poly& operator=(const Poly& rhs);
@@ -35,15 +38,22 @@ namespace zhejiangfhe {
 
         const Poly& operator=(std::vector<int64_t> rhs);
 
-        const Poly& operator=(std::vector<int32_t> rhs);
-
         const Poly& operator=(std::initializer_list<std::string> rhs);
+
+        const Poly& operator=(std::vector<int32_t> rhs);
 
         const Poly& operator=(uint64_t val);
 
-        void SetValuesToZero();
+        void SetValue(const VecType& value, Format format);
+
+        void SetValueToZero();
 
         void SetValuesToMax();
+
+        bool IsEmpty() const;
+
+
+        uint32_t GetLength() const;
 
         const Params GetParams() const {
             return params;
