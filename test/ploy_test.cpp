@@ -15,9 +15,32 @@ namespace zhejiangfhe {
 
     TYPED_TEST(PolyTest, Construct) {
         using Poly = zhejiangfhe::Poly<TypeParam>;
+        using Params  = typename Poly::Params;
+        using BigInteger = typename Poly::Integer;
+
+        BigInteger ringDimension(8);
+        BigInteger modulus("1099511627873");
+        BigInteger rootOfUnity("108163207722");
+        std::shared_ptr<Params> params = std::make_shared<Params>(16, ringDimension, modulus, rootOfUnity);
+        Poly poly;
+        std::vector<int32_t> valueVec;
+        valueVec.push_back(1);
+        valueVec.push_back(2);
+        valueVec.push_back(3);
+        valueVec.push_back(4);
 
 
-        Poly p();
+        std::vector<int64_t> int64ValueVec;
+        int64ValueVec.push_back(1);
+        int64ValueVec.push_back(2);
+        int64ValueVec.push_back(3);
+        int64ValueVec.push_back(4);
+        poly = int64ValueVec;
+
+        poly = {"1", "3", "5", "7"};
+
+        poly = 4;
+        Poly poly1(params, COEFFICIENT, true);
 
 
     }

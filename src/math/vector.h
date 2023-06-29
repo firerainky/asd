@@ -49,6 +49,8 @@ namespace zhejiangfhe {
 
         explicit Vector(const std::vector<std::string> &s, const std::string &modulus) : Vector(s, Modulus<IntegerType>(modulus)){};
 
+        const Vector& operator=(std::initializer_list<std::string> rhs);
+
         virtual ~Vector();
 
         bool operator==(const Vector &rhs) const;
@@ -78,6 +80,10 @@ namespace zhejiangfhe {
 
         const BigInteger<IntegerType> &operator[](size_t idx) const {
             return (this->data[idx]);
+        }
+
+        size_t GetLength() const {
+            return data.size();
         }
 
         void SetModulus(const Modulus<IntegerType> &value);

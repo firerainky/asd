@@ -144,6 +144,25 @@ namespace zhejiangfhe {
         return *this;
     }
 
+    template <class IntegerType>
+    const Vector<IntegerType>& Vector<IntegerType>::operator=(std::initializer_list<std::string> rhs) {
+        size_t len = rhs.size();
+        if (this->data.size() < len) {
+            this->data.resize(len);
+        }
+        for (uint32_t i = 0; i < this->data.size(); i++) {  // this loops over each entry
+            if (i < len) {
+                this->data[i] = *(rhs.begin() + i);
+            }
+            else {
+                this->data[i] = 0;
+            }
+        }
+        if (this->state == INITIALIZED) {
+            this->Mod();
+        }
+        return *this;
+    }
 
     template<typename IntegerType>
     void Vector<IntegerType>::SetModulus(const Modulus<IntegerType> &value) {

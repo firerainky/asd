@@ -21,11 +21,11 @@ namespace zhejiangfhe {
     template <typename VecType>
     Poly<VecType>::Poly(const Poly& element, std::shared_ptr<Poly::Params> params)
         : format(element.format), params(params) {
-        if (element.values == nullptr) {
+        if (element.value == nullptr) {
             value = nullptr;
         }
         else {
-            value = VecType(*element.value);
+            value = std::make_unique<VecType>(*element.value);
         }
     }
 
@@ -39,9 +39,16 @@ namespace zhejiangfhe {
 
     template <typename VecType>
     uint32_t Poly<VecType>::GetLength() const {
-        if (value  == 0)
+        if (value == 0)
             ZJFHE_THROW(NotAvailableError, "No values in Poly");
         return value->GetLength();
+    }
+
+    template <typename VecType>
+    const VecType& Poly<VecType>::GetValue() const {
+        if (value == 0)
+            ZJFHE_THROW(NotAvailableError, "No values in PolyImpl");
+        return *value;
     }
 
     template <typename VecType>
@@ -49,7 +56,7 @@ namespace zhejiangfhe {
         static Integer ZERO(0);
         uint32_t len = rhs.size();
         if (!IsEmpty()) {
-            uint32_t vectorLength = this->values->GetLength();
+            uint32_t vectorLength = GetLength();
 
             for (uint32_t j = 0; j < vectorLength; ++j) {  // loops within a tower
                 if (j < len) {
@@ -72,7 +79,7 @@ namespace zhejiangfhe {
         static Integer ZERO(0);
         uint32_t len = rhs.size();
         if (!IsEmpty()) {
-            uint32_t vectorLength = this->values->GetLength();
+            uint32_t vectorLength = GetLength();
 
             for (uint32_t j = 0; j < vectorLength; ++j) {  // loops within a tower
                 if (j < len) {
@@ -111,7 +118,7 @@ namespace zhejiangfhe {
                     temp.operator[](j) = ZERO;
                 }
             }
-            this->SetValues(std::move(temp), format);
+            this->SetValue(std::move(temp), format);
         }
         format = Format::COEFFICIENT;
         return *this;
@@ -122,7 +129,7 @@ namespace zhejiangfhe {
         static Integer ZERO(0);
         uint32_t len = rhs.size();
         if (!IsEmpty()) {
-            uint32_t vectorLength = this->values->GetLength();
+            uint32_t vectorLength = GetLength();
 
             for (uint32_t j = 0; j < vectorLength; ++j) {  // loops within a tower
                 if (j < len) {
@@ -182,9 +189,9 @@ namespace zhejiangfhe {
     const Poly<VecType>& Poly<VecType>::operator=(uint64_t val) {
         format = Format::EVALUATION;
         if (value == nullptr) {
-            value = VecType(params->GetRingDimension(), params->GetModulus());
+            value = std::make_unique<VecType>(params->GetRingDimension(), params->GetModulus());
         }
-        for (size_t i = 0; i < value->GetLength(); ++i) {
+        for (size_t i = 0; i < GetLength(); ++i) {
             this->operator[](i) = Integer(val);
         }
         return *this;
@@ -196,24 +203,24 @@ namespace zhejiangfhe {
         if (params->GetRootOfUnity() == Integer(0)) {
             ZJFHE_THROW(TypeException, "Polynomial has a 0 root of unity");
         }
-        if (params->GetRingDimension() != value.GetLength() || params->GetModulus() != value.GetModulus()) {
+        if (params->GetRingDimension() != value.GetLength() || params->GetModulus() != value.GetModulus().GetValue()) {
             ZJFHE_THROW(TypeException, "Parameter mismatch on SetValues for Polynomial");
         }
-        this->value = value;
+        this->value = std::make_unique<VecType>(value);
         this->format = format;
     }
 
 
     template <typename VecType>
     void Poly<VecType>::SetValueToZero() {
-        value = VecType(params->GetRingDimension(), params->GetModulus());
+        value = std::make_unique<VecType>(params->GetRingDimension(), params->GetModulus());
     }
 
     template <typename VecType>
     void Poly<VecType>::SetValuesToMax() {
         Integer max = params->GetModulus() - Integer(1);
         uint32_t size  = params->GetRingDimension();
-        value    = VecType(params->GetRingDimension(), params->GetModulus());
+        value    = std::make_unique<VecType>(params->GetRingDimension(), params->GetModulus());
         for (uint32_t i = 0; i < size; i++) {
             value->operator[](i) = Integer(max);
         }
@@ -243,4 +250,7 @@ namespace zhejiangfhe {
     const typename Poly<VecType>::Integer& Poly<VecType>::operator[](uint32_t i) const {
         return (*value)[i];
     }
+
+
+    template class zhejiangfhe::Poly<Vector<limbtype>>;
 }

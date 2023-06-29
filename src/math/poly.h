@@ -34,11 +34,10 @@ namespace zhejiangfhe {
 
         const Poly& operator=(Poly&& rhs);
 
-        const Poly& operator=(std::initializer_list<uint64_t> rhs);
+        const Poly& operator=(std::initializer_list<std::string> rhs);
 
         const Poly& operator=(std::vector<int64_t> rhs);
 
-        const Poly& operator=(std::initializer_list<std::string> rhs);
 
         const Poly& operator=(std::vector<int32_t> rhs);
 
@@ -52,10 +51,11 @@ namespace zhejiangfhe {
 
         bool IsEmpty() const;
 
+        const VecType& GetValue() const;
 
         uint32_t GetLength() const;
 
-        const Params GetParams() const {
+        const std::shared_ptr<Params> GetParams() const {
             return params;
         }
 
@@ -72,7 +72,7 @@ namespace zhejiangfhe {
 
 
     protected:
-        VecType value;
+        std::unique_ptr<VecType> value;
         Format format;
 
         std::shared_ptr<Params> params;
