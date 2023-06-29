@@ -10,9 +10,8 @@ namespace zhejiangfhe {
 
 
     template <typename VecType>
-    Poly<VecType>::Poly(const Poly::Params params, Format format, bool initializeElementToZero)
-        : value(nullptr), format(format) {
-        params = params;
+    Poly<VecType>::Poly(const std::shared_ptr<Poly::Params> params, Format format, bool initializeElementToZero)
+        : value(nullptr), format(format), params(params) {
         if (initializeElementToZero) {
             this->SetValueToZero();
         }
@@ -20,9 +19,8 @@ namespace zhejiangfhe {
 
 
     template <typename VecType>
-    Poly<VecType>::Poly(const Poly& element, Poly::Params)
-        : format(element.format), params(element.params) {
-
+    Poly<VecType>::Poly(const Poly& element, std::shared_ptr<Poly::Params> params)
+        : format(element.format), params(params) {
         if (element.values == nullptr) {
             value = nullptr;
         }

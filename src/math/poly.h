@@ -25,10 +25,10 @@ namespace zhejiangfhe {
 
         Poly();
 
-        Poly(const Params params, Format format = Format::EVALUATION,
+        Poly(const std::shared_ptr<Params> params, Format format = Format::EVALUATION,
                  bool initializeElementToZero = false);
 
-        Poly(const Poly& element, Params param);
+        Poly(const Poly& element, std::shared_ptr<Params> param);
 
         const Poly& operator=(const Poly& rhs);
 
@@ -72,11 +72,10 @@ namespace zhejiangfhe {
 
 
     protected:
-        Params params;
         VecType value;
         Format format;
 
-        std::shared_ptr<Params> m_params;
+        std::shared_ptr<Params> params;
     };
 }
 
