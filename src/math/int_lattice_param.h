@@ -18,6 +18,7 @@ namespace zhejiangfhe {
         IntLatticeParam(uint32_t order, const IntegerType &ctModulus, const IntegerType &rUnity = IntegerType(0),
                         const IntegerType &bigCtModulus = IntegerType(0), const IntegerType &bigRUnity = IntegerType(0)) {
             cyclotomicOrder = order;
+            ringDimension = order / 2; // todo ???
 //            ringDimension = util::GetTotient(order);
             isPowerOfTwo = ringDimension == cyclotomicOrder / 2;
             ciphertextModulus = ctModulus;

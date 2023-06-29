@@ -22,12 +22,13 @@ namespace zhejiangfhe {
         BigInteger modulus("1099511627873");
         BigInteger rootOfUnity("108163207722");
         std::shared_ptr<Params> params = std::make_shared<Params>(16, ringDimension, modulus, rootOfUnity);
-        Poly poly;
+        Poly poly(params, COEFFICIENT, true);
         std::vector<int32_t> valueVec;
         valueVec.push_back(1);
         valueVec.push_back(2);
         valueVec.push_back(3);
         valueVec.push_back(4);
+        poly = valueVec;
 
 
         std::vector<int64_t> int64ValueVec;
@@ -40,7 +41,6 @@ namespace zhejiangfhe {
         poly = {"1", "3", "5", "7"};
 
         poly = 4;
-        Poly poly1(params, COEFFICIENT, true);
 
 
     }
