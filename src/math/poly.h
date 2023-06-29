@@ -21,7 +21,7 @@ namespace zhejiangfhe {
 
     public:
         using Integer = typename VecType::Integer;
-        typedef IntLatticeParam<Integer> Params;
+        using Params  = IntLatticeParam<Integer>;
 
         Poly();
 
@@ -75,6 +75,8 @@ namespace zhejiangfhe {
         Params params;
         VecType value;
         Format format;
+
+        std::shared_ptr<Params> m_params;
     };
 }
 

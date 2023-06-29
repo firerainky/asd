@@ -21,13 +21,13 @@ namespace zhejiangfhe {
 
     template <typename VecType>
     Poly<VecType>::Poly(const Poly& element, Poly::Params)
-        : format(element.m_format), params(element.m_params) {
+        : format(element.format), params(element.params) {
 
-        if (element.m_values == nullptr) {
+        if (element.values == nullptr) {
             value = nullptr;
         }
         else {
-            value = VecType(*element.m_values);
+            value = VecType(*element.value);
         }
     }
 
@@ -51,7 +51,7 @@ namespace zhejiangfhe {
         static Integer ZERO(0);
         uint32_t len = rhs.size();
         if (!IsEmpty()) {
-            uint32_t vectorLength = this->m_values->GetLength();
+            uint32_t vectorLength = this->values->GetLength();
 
             for (uint32_t j = 0; j < vectorLength; ++j) {  // loops within a tower
                 if (j < len) {
@@ -74,7 +74,7 @@ namespace zhejiangfhe {
         static Integer ZERO(0);
         uint32_t len = rhs.size();
         if (!IsEmpty()) {
-            uint32_t vectorLength = this->m_values->GetLength();
+            uint32_t vectorLength = this->values->GetLength();
 
             for (uint32_t j = 0; j < vectorLength; ++j) {  // loops within a tower
                 if (j < len) {
@@ -124,7 +124,7 @@ namespace zhejiangfhe {
         static Integer ZERO(0);
         uint32_t len = rhs.size();
         if (!IsEmpty()) {
-            uint32_t vectorLength = this->m_values->GetLength();
+            uint32_t vectorLength = this->values->GetLength();
 
             for (uint32_t j = 0; j < vectorLength; ++j) {  // loops within a tower
                 if (j < len) {
