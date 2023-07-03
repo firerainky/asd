@@ -236,6 +236,12 @@ namespace zhejiangfhe {
 
 
     template<typename NativeInt>
+    const BigInteger<NativeInt> &BigInteger<NativeInt>::DividedByEq(const BigInteger<NativeInt> &b) {
+        std::pair<BigInteger<NativeInt>, BigInteger<NativeInt>> resultPair = this->DividedBy(b);
+        return *this = resultPair.first;
+    }
+
+    template<typename NativeInt>
     std::pair<BigInteger<NativeInt>, BigInteger<NativeInt>> BigInteger<NativeInt>::DividedBy(const BigInteger<NativeInt> &denominator) const {
 
         bool finalSign = sign xor denominator.sign;
