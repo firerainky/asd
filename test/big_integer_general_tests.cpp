@@ -250,8 +250,11 @@ TYPED_TEST(BigIntegerTest, DivideTwoBigInteger) {
     EXPECT_EQ(BInt("99999999999999999999999999999").DividedBy(BInt("33333333333333333333333333333")).first.ConvertToString(), "3");
     std::pair<BInt, BInt> ans = BInt("999999999999999999999999999998000000000000000000000000000001").DividedBy(BInt("999999999999999999999999999999"));
     EXPECT_EQ(ans.first.ConvertToString(), "999999999999999999999999999999");
-}
 
+    num = BInt("12234");
+    num.DividedByEq(2);
+    EXPECT_EQ(num, BInt(6117));
+}
 
 TYPED_TEST(BigIntegerTest, LeftShiftBigInteger) {
     using BInt = zhejiangfhe::BigInteger<TypeParam>;

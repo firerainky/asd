@@ -289,6 +289,7 @@ namespace zhejiangfhe {
                 remainder[0] = k;
             }
             remainderIn.NormalizeLimbs();
+            quotientIn.NormalizeLimbs();
             return true;
         }
 
@@ -354,6 +355,7 @@ namespace zhejiangfhe {
         }
         remainder[n - 1] = un[n - 1] >> s;
         remainderIn.NormalizeLimbs();
+        quotientIn.NormalizeLimbs();
         return true;
     }
 

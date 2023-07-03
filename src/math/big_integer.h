@@ -156,7 +156,6 @@ namespace zhejiangfhe {
         const BigInteger<NativeInt> &MulEq(const BigInteger<NativeInt> &b);
 
         std::pair<BigInteger<NativeInt>, BigInteger<NativeInt>> DividedBy(const BigInteger<NativeInt> &b) const;
-
         const BigInteger<NativeInt> &DividedByEq(const BigInteger<NativeInt> &b);
 
         // Mod
