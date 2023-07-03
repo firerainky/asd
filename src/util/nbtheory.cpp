@@ -11,35 +11,6 @@
 
 namespace zhejiangfhe {
 
-    template<typename IntType>
-    bool IsPrime(const IntType &p, const uint32_t iterCount) {
-        if (p < IntType(2) || p == IntType(2) || p == IntType(3) || p == IntType(5))
-            return true;
-        if (p % 2 == IntType(0))
-            return false;
-
-        // return true;
-
-        IntType d = p - IntType(1);
-        uint32_t s = 0;
-        while (d % 2 == IntType(0)) {
-            d = d.DividedByEq(IntType(2));
-            s++;
-        }
-        bool composite = true;
-        for (uint32_t i = 0; i < iterCount; ++i) {
-            IntType a = RNG(p - IntType(3)) + IntType(2);
-            composite = (WitnessFunction(a, d, s, p));
-            if (composite)
-                break;
-        }
-        return (!composite);
-    }
-
-    template bool IsPrime(const BInt &p, const uint32_t iterCount);
-
-    /* Private Helpers */
-
     /**
      * @description: Generate a random big integer between 0 and uper bound.
      * @param upperBound The upper bound of the generated random integer.
@@ -64,7 +35,8 @@ namespace zhejiangfhe {
         return IntType(randomNumber);
     }
 
-    /* TODO: Understands the Miller rabin primality test algorithm, then normalize parameter comments
+    /* 
+    TODO: Understands the Miller rabin primality test algorithm, then normalize parameter comments
       A witness function used for the Miller-Rabin Primality test.
       Inputs: a is a randomly generated witness between 2 and p-1,
       p is the number to be tested for primality,
@@ -89,4 +61,46 @@ namespace zhejiangfhe {
         }
         return (mod != IntType(1));
     }
+
+    template<typename IntType>
+    bool IsPrime(const IntType &p, const uint32_t iterCount) {
+        if (p < IntType(2) || p == IntType(2) || p == IntType(3) || p == IntType(5))
+            return true;
+        if (p % 2 == IntType(0))
+            return false;
+
+        IntType d = p - IntType(1);
+        uint32_t s = 0;
+        while (d % 2 == IntType(0)) {
+            d = d.DividedByEq(IntType(2));
+            s++;
+        }
+        bool composite = true;
+        for (uint32_t i = 0; i < iterCount; ++i) {
+            IntType a = RNG(p - IntType(3)) + IntType(2);
+            composite = (WitnessFunction(a, d, s, p));
+            if (composite)
+                break;
+        }
+        return (!composite);
+    }
+
+    // TODO: Consider integer overflow?
+    template<typename IntType>
+    IntType FirstPrime(uint64_t nBits, uint64_t m) {
+        IntType r = util::ModExp(IntType(2), IntType(nBits - 1), BMod(IntType(m)));
+        IntType qNew = (IntType(1) << nBits);
+        IntType qNew2 = (r > IntType(0)) ? (qNew + (IntType(m) - r) + IntType(1)) : (qNew + IntType(1));// if r == 0
+        qNew = qNew2;
+
+        while (!IsPrime(qNew)) {
+            qNew2 = qNew + IntType(m);
+            qNew = qNew2;
+        }
+
+        return qNew;
+    }
+
+    template bool IsPrime(const BInt &p, const uint32_t iterCount);
+    template BInt FirstPrime(uint64_t nBits, uint64_t m);
 }// namespace zhejiangfhe

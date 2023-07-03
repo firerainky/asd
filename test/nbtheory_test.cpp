@@ -28,4 +28,23 @@ namespace zhejiangfhe {
         a = 952229140959;
         EXPECT_FALSE(IsPrime(a)) << "Expected big integer a(" << a << ") is a composite.";
     }
+
+    TEST(NbTheoryTest, FirstPrime) {
+        uint64_t m, nBits;
+        {
+            m = 2048;
+            nBits = 30;
+            BInt expectedResult("1073750017");
+            BInt computedResult = FirstPrime<BInt>(nBits, m);
+            EXPECT_EQ(computedResult, expectedResult) << "Compute first prime with small integer failed";
+        }
+
+        {
+            m = 4096;
+            nBits = 49;
+            BInt expectedResult("562949953548289");
+            BInt computedResult = FirstPrime<BInt>(nBits, m);
+            EXPECT_EQ(computedResult, expectedResult) << "Compute first prime with big integer failed";
+        }
+    }
 }// namespace zhejiangfhe
