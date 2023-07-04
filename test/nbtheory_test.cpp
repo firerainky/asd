@@ -62,4 +62,17 @@ namespace zhejiangfhe {
             EXPECT_EQ(expectedResult, computedResult) << "Compute GCD for big integers failed.";
         }
     }
+
+    TEST(NbTheoryTest, PrimeFactorize) {
+        BInt composite = 53093040;
+        std::set<BInt> expectedFactors({2, 3, 5, 7, 11, 13, 17});
+        std::set<BInt> computedFactors;
+        PrimeFactorize(composite, computedFactors);
+
+        ASSERT_EQ(computedFactors.size(), expectedFactors.size()) << "Factorize an composite failed.";
+
+        for (auto it = computedFactors.begin(); it != computedFactors.end(); ++it) {
+            EXPECT_TRUE(expectedFactors.find(*it) != expectedFactors.end()) << "Factorize an composite error.";
+        }
+    }
 }// namespace zhejiangfhe

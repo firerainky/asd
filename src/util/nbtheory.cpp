@@ -116,6 +116,24 @@ namespace zhejiangfhe {
     }
 
     template<typename IntType>
+    void PrimeFactorize(IntType n, std::set<IntType> &primeFactors) {
+
+        if (n == IntType(0) || n == IntType(1))
+            return;
+
+        if (IsPrime(n)) {
+            primeFactors.insert(n);
+            return;
+        }
+
+        IntType divisor(PollardRho(n));
+        PrimeFactorize(divisor, primeFactors);
+
+        n /= divisor;
+        PrimeFactorize(n, primeFactors);
+    }
+
+    template<typename IntType>
     const IntType PollardRho(const IntType &n) {
         IntType divisor(1);
 
@@ -142,4 +160,5 @@ namespace zhejiangfhe {
     template BInt FirstPrime(uint64_t nBits, uint64_t m);
     template const BInt PollardRho(const BInt &n);
     template BInt GCD(const BInt &a, const BInt &b);
+    template void PrimeFactorize(BInt n, std::set<BInt> &primeFactors);
 }// namespace zhejiangfhe

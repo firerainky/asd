@@ -5,6 +5,7 @@
  */
 
 #include <iostream>
+#include <set>
 
 namespace zhejiangfhe {
 
@@ -27,6 +28,15 @@ namespace zhejiangfhe {
      */
     template<typename IntType>
     IntType GCD(const IntType &a, const IntType &b);
+
+    /**
+     * Recursively factorizes to find the distinct primefactors of a number.
+     * 
+     * @param n The value to factorize.
+     * @param primeFactors Set of factors found.
+     */
+    template<typename IntType>
+    void PrimeFactorize(IntType n, std::set<IntType> &primeFactors);
 
     /**
      * Finds the first prime that is congruence to 1 modulo m.
