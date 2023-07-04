@@ -101,6 +101,45 @@ namespace zhejiangfhe {
         return qNew;
     }
 
+    template<typename IntType>
+    IntType GCD(const IntType &a, const IntType &b) {
+        IntType m_a = a;
+        IntType m_b = b;
+        IntType m_t;
+
+        while (m_b != IntType(0)) {
+            m_t = m_b;
+            m_b = m_a % m_b;
+            m_a = m_t;
+        }
+        return m_a;
+    }
+
+    template<typename IntType>
+    const IntType PollardRho(const IntType &n) {
+        IntType divisor(1);
+
+        IntType c = RNG(n);
+        IntType x = RNG(n);
+        IntType xx(x);
+
+        // check divisibility by 2
+        if (n % 2 == IntType(0))
+            return IntType(2);
+
+        do {
+            x = (x * x + c) % n;
+            xx = (xx * xx + c) % n;
+            xx = (xx * xx + c) % n;
+
+            divisor = GCD((x > xx) ? x - xx : xx - x, n);
+        } while (divisor == IntType(1));
+
+        return divisor;
+    }
+
     template bool IsPrime(const BInt &p, const uint32_t iterCount);
     template BInt FirstPrime(uint64_t nBits, uint64_t m);
+    template const BInt PollardRho(const BInt &n);
+    template BInt GCD(const BInt &a, const BInt &b);
 }// namespace zhejiangfhe

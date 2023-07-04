@@ -47,4 +47,19 @@ namespace zhejiangfhe {
             EXPECT_EQ(computedResult, expectedResult) << "Compute first prime with big integer failed";
         }
     }
+
+    TEST(NbTheoryTest, GCD) {
+        {
+            BInt a = 10403, b = 103;
+            BInt computedResult = 103;
+            BInt expectedResult = GCD(a, b);
+            EXPECT_EQ(computedResult, expectedResult) << "Compute GCD for small integers failed.";
+        }
+        {
+            BInt a("883035439563027"), b("3042269397984931");
+            BInt computedResult = GCD(a, b);
+            BInt expectedResult = 1;
+            EXPECT_EQ(expectedResult, computedResult) << "Compute GCD for big integers failed.";
+        }
+    }
 }// namespace zhejiangfhe
