@@ -211,6 +211,24 @@ namespace zhejiangfhe {
         return result;
     }
 
+    // TODO: Replace with an native integer version in nbtheory2?
+    template<typename IntType>
+    IntType GetTotient(const IntType &n) {
+        std::set<IntType> factors;
+        IntType enn(n);
+        PrimeFactorize(enn, factors);
+
+        IntType primeProd(1);
+        IntType numerator(1);
+
+        for (auto &r: factors) {
+            numerator = numerator * (r - 1);
+            primeProd = primeProd * r;
+        }
+
+        return (enn / primeProd) * numerator;
+    }
+
     template<typename IntType>
     IntType RootOfUnity(uint32_t m, const IntType &modulo) {
         ZJ_DEBUG_FLAG(false);
@@ -269,4 +287,5 @@ namespace zhejiangfhe {
     template void PrimeFactorize(BInt n, std::set<BInt> &primeFactors);
     template BInt RootOfUnity(uint32_t m, const BInt &modulo);
     template std::vector<BInt> GetTotientList(const BInt &n);
+    template BInt GetTotient(const BInt &n);
 }// namespace zhejiangfhe

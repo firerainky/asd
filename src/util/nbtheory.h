@@ -60,6 +60,15 @@ namespace zhejiangfhe {
     std::vector<IntType> GetTotientList(const IntType &n);
 
     /**
+     * Returns the totient value: phi of a number n.
+     * 
+     * @param n The input number.
+     * @return Phi of n which is the number of integers m coprime to n such that 1 <= m <= n.
+     */
+    template<typename IntType>
+    IntType GetTotient(const IntType &n);
+
+    /**
      * Finds roots of unity for given input.  Assumes the the input is a power of two.
      * 
      * @param m Number which is cyclotomic
