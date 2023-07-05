@@ -79,18 +79,40 @@ namespace zhejiangfhe {
     }
 
     TEST(NbTheoryTest, RootOfUnity) {
-        ZJ_DEBUG_FLAG(false);
-        uint32_t m = 4096;
-        uint32_t nBits = 33;
+        {
+            ZJ_DEBUG_FLAG(false);
+            uint32_t m = 4096;
+            uint32_t nBits = 33;
 
-        BInt primeModulus = FirstPrime<BInt>(nBits, m);
-        BInt primitiveRootOfUnity = RootOfUnity(m, primeModulus);
+            BInt primeModulus = FirstPrime<BInt>(nBits, m);
+            BInt primitiveRootOfUnity = RootOfUnity(m, primeModulus);
 
-        BInt powerm = util::ModExp(primitiveRootOfUnity, BInt(m), BMod(primeModulus));
-        ZJ_DEBUG("First Prime: " << primeModulus << ", Root of Unity: " << primitiveRootOfUnity);
-        EXPECT_EQ(powerm, 1);
+            BInt powerm = util::ModExp(primitiveRootOfUnity, BInt(m), BMod(primeModulus));
+            ZJ_DEBUG("First Prime: " << primeModulus << ", Root of Unity: " << primitiveRootOfUnity);
+            EXPECT_EQ(powerm, 1);
 
-        BInt powermBy2 = util::ModExp(primitiveRootOfUnity, BInt(2048), BMod(primeModulus));
-        EXPECT_NE(powermBy2, 1);
+            BInt powermBy2 = util::ModExp(primitiveRootOfUnity, BInt(m / 2), BMod(primeModulus));
+            EXPECT_NE(powermBy2, 1);
+
+            BInt powermBy4 = util::ModExp(primitiveRootOfUnity, BInt(m / 4), BMod(primeModulus));
+            EXPECT_NE(powermBy4, 1);
+        }
+        {
+            ZJ_DEBUG_FLAG(false);
+            uint32_t m = 32768 * 2;
+            uint32_t nBits = 59;
+            BInt primeModulus = FirstPrime<BInt>(nBits, m);
+            BInt primitiveRootOfUnity = RootOfUnity(m, primeModulus);
+
+            BInt powerm = util::ModExp(primitiveRootOfUnity, BInt(m), BMod(primeModulus));
+            ZJ_DEBUG("First Prime: " << primeModulus << ", Root of Unity: " << primitiveRootOfUnity);
+            EXPECT_EQ(powerm, 1);
+
+            BInt powermBy2 = util::ModExp(primitiveRootOfUnity, BInt(m / 2), BMod(primeModulus));
+            EXPECT_NE(powermBy2, 1);
+
+            BInt powermBy4 = util::ModExp(primitiveRootOfUnity, BInt(m / 4), BMod(primeModulus));
+            EXPECT_NE(powermBy4, 1);
+        }
     }
 }// namespace zhejiangfhe

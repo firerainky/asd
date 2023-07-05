@@ -200,6 +200,18 @@ namespace zhejiangfhe {
     }
 
     template<typename IntType>
+    std::vector<IntType> GetTotientList(const IntType &n) {
+        std::vector<IntType> result;
+        IntType one(1);
+        for (IntType i = IntType(1); i < n; i = i + IntType(1)) {
+            if (GCD(i, n) == one) {
+                result.push_back(i);
+            }
+        }
+        return result;
+    }
+
+    template<typename IntType>
     IntType RootOfUnity(uint32_t m, const IntType &modulo) {
         ZJ_DEBUG_FLAG(false);
 
@@ -235,18 +247,18 @@ namespace zhejiangfhe {
         IntType x = result % modulo;
         IntType minRU(x);
         IntType curPowIdx(1);
-        // std::vector<IntType> coprimes = GetTotientList<IntType>(m);
-        // for (usint i = 0; i < coprimes.size(); i++) {
-        //     auto nextPowIdx = coprimes[i];
-        //     IntType diffPow(nextPowIdx - curPowIdx);
-        //     for (IntType j(0); j < diffPow; j += IntType(1)) {
-        //         x.ModMulEq(result, modulo, mu);
-        //     }
-        //     if (x < minRU && x != IntType(1)) {
-        //         minRU = x;
-        //     }
-        //     curPowIdx = nextPowIdx;
-        // }
+        std::vector<IntType> coprimes = GetTotientList<IntType>(m);
+        for (uint32_t i = 0; i < coprimes.size(); i++) {
+            auto nextPowIdx = coprimes[i];
+            IntType diffPow(nextPowIdx - curPowIdx);
+            for (IntType j(0); j < diffPow; j += IntType(1)) {
+                x = (x * result) % modulo;
+            }
+            if (x < minRU && x != IntType(1)) {
+                minRU = x;
+            }
+            curPowIdx = nextPowIdx;
+        }
         return minRU;
     }
 
@@ -256,4 +268,5 @@ namespace zhejiangfhe {
     template BInt GCD(const BInt &a, const BInt &b);
     template void PrimeFactorize(BInt n, std::set<BInt> &primeFactors);
     template BInt RootOfUnity(uint32_t m, const BInt &modulo);
+    template std::vector<BInt> GetTotientList(const BInt &n);
 }// namespace zhejiangfhe

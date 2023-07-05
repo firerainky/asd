@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <set>
+#include <vector>
 
 namespace zhejiangfhe {
 
@@ -48,6 +49,15 @@ namespace zhejiangfhe {
      */
     template<typename IntType>
     IntType FirstPrime(uint64_t nBits, uint64_t m);
+
+    /**
+     * Get the residue classes in Z*_n
+     * 
+     * @param n The input number.
+     * @return Vector of residue classes x under Z_n such that gcd(x, n) == 1.
+     */
+    template<typename IntType>
+    std::vector<IntType> GetTotientList(const IntType &n);
 
     /**
      * Finds roots of unity for given input.  Assumes the the input is a power of two.
