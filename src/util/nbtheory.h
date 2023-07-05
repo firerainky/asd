@@ -4,6 +4,8 @@
  * Copyright (c) 2023 Zhejiang Lab. All rights reserved.
  */
 
+#pragma once
+
 #include <iostream>
 #include <set>
 #include <vector>
@@ -65,8 +67,7 @@ namespace zhejiangfhe {
      * @param n The input number.
      * @return Phi of n which is the number of integers m coprime to n such that 1 <= m <= n.
      */
-    template<typename IntType>
-    IntType GetTotient(const IntType &n);
+    uint64_t GetTotient(const uint64_t n);
 
     /**
      * Finds roots of unity for given input.  Assumes the the input is a power of two.

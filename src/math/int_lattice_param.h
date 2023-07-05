@@ -4,8 +4,9 @@
 
 #ifndef ZJ_FHE_LIB_INT_LATTICE_PARAM_H
 #define ZJ_FHE_LIB_INT_LATTICE_PARAM_H
-#include "exception.h"
 #include "big_integer.h"
+#include "exception.h"
+#include "nbtheory.h"
 #include "numth_util.h"
 #include <cstdint>
 #include <iosfwd>
@@ -18,8 +19,7 @@ namespace zhejiangfhe {
         IntLatticeParam(uint32_t order, const IntegerType &ctModulus, const IntegerType &rUnity = IntegerType(0),
                         const IntegerType &bigCtModulus = IntegerType(0), const IntegerType &bigRUnity = IntegerType(0)) {
             cyclotomicOrder = order;
-            ringDimension = order / 2; // todo ???
-//            ringDimension = util::GetTotient(order);
+            ringDimension = GetTotient(order);
             isPowerOfTwo = ringDimension == cyclotomicOrder / 2;
             ciphertextModulus = ctModulus;
             rootOfUnity = rUnity;
@@ -27,35 +27,35 @@ namespace zhejiangfhe {
             bigRootOfUnity = bigRUnity;
         }
 
-        IntLatticeParam(const IntLatticeParam& rhs) {
-            cyclotomicOrder      = rhs.cyclotomicOrder;
-            ringDimension        = rhs.ringDimension;
-            isPowerOfTwo         = rhs.isPowerOfTwo;
-            ciphertextModulus    = rhs.ciphertextModulus;
-            rootOfUnity          = rhs.rootOfUnity;
+        IntLatticeParam(const IntLatticeParam &rhs) {
+            cyclotomicOrder = rhs.cyclotomicOrder;
+            ringDimension = rhs.ringDimension;
+            isPowerOfTwo = rhs.isPowerOfTwo;
+            ciphertextModulus = rhs.ciphertextModulus;
+            rootOfUnity = rhs.rootOfUnity;
             bigCiphertextModulus = rhs.bigCiphertextModulus;
-            bigRootOfUnity       = rhs.bigRootOfUnity;
+            bigRootOfUnity = rhs.bigRootOfUnity;
         }
 
-        IntLatticeParam(const IntLatticeParam&& rhs) {
-            cyclotomicOrder      = rhs.cyclotomicOrder;
-            ringDimension        = rhs.ringDimension;
-            isPowerOfTwo         = rhs.isPowerOfTwo;
-            ciphertextModulus    = std::move(rhs.ciphertextModulus);
-            rootOfUnity          = std::move(rhs.rootOfUnity);
+        IntLatticeParam(const IntLatticeParam &&rhs) {
+            cyclotomicOrder = rhs.cyclotomicOrder;
+            ringDimension = rhs.ringDimension;
+            isPowerOfTwo = rhs.isPowerOfTwo;
+            ciphertextModulus = std::move(rhs.ciphertextModulus);
+            rootOfUnity = std::move(rhs.rootOfUnity);
             bigCiphertextModulus = std::move(rhs.bigCiphertextModulus);
-            bigRootOfUnity       = std::move(rhs.bigRootOfUnity);
+            bigRootOfUnity = std::move(rhs.bigRootOfUnity);
         }
 
 
-        const IntLatticeParam& operator=(const IntLatticeParam& rhs) {
-            cyclotomicOrder      = rhs.cyclotomicOrder;
-            ringDimension        = rhs.ringDimension;
-            isPowerOfTwo         = rhs.isPowerOfTwo;
-            ciphertextModulus    = rhs.ciphertextModulus;
-            rootOfUnity          = rhs.rootOfUnity;
+        const IntLatticeParam &operator=(const IntLatticeParam &rhs) {
+            cyclotomicOrder = rhs.cyclotomicOrder;
+            ringDimension = rhs.ringDimension;
+            isPowerOfTwo = rhs.isPowerOfTwo;
+            ciphertextModulus = rhs.ciphertextModulus;
+            rootOfUnity = rhs.rootOfUnity;
             bigCiphertextModulus = rhs.bigCiphertextModulus;
-            bigRootOfUnity       = rhs.bigRootOfUnity;
+            bigRootOfUnity = rhs.bigRootOfUnity;
             return *this;
         }
 
@@ -71,19 +71,19 @@ namespace zhejiangfhe {
             return isPowerOfTwo;
         }
 
-        const IntegerType& GetModulus() const {
+        const IntegerType &GetModulus() const {
             return ciphertextModulus;
         }
 
-        const IntegerType& GetBigModulus() const {
+        const IntegerType &GetBigModulus() const {
             return bigCiphertextModulus;
         }
 
-        const IntegerType& GetRootOfUnity() const {
+        const IntegerType &GetRootOfUnity() const {
             return rootOfUnity;
         }
 
-        const IntegerType& GetBigRootOfUnity() const {
+        const IntegerType &GetBigRootOfUnity() const {
             return bigRootOfUnity;
         }
 
@@ -126,5 +126,5 @@ namespace zhejiangfhe {
          */
         IntegerType bigRootOfUnity;
     };
-}
+}// namespace zhejiangfhe
 #endif//ZJ_FHE_LIB_INT_LATTICE_PARAM_H
