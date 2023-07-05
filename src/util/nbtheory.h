@@ -31,8 +31,9 @@ namespace zhejiangfhe {
 
     /**
      * Recursively factorizes to find the distinct primefactors of a number.
+     * Side effect: the value of number is destroyed.
      * 
-     * @param n The value to factorize.
+     * @param n The value to factorize. [note the value of n is destroyed]
      * @param primeFactors Set of factors found.
      */
     template<typename IntType>
@@ -48,13 +49,13 @@ namespace zhejiangfhe {
     template<typename IntType>
     IntType FirstPrime(uint64_t nBits, uint64_t m);
 
-    template<typename IntType>
     /**
      * Finds roots of unity for given input.  Assumes the the input is a power of two.
      * 
      * @param m Number which is cyclotomic
-     * @param modulo 
-     * @return 
+     * @param modulo Modulo which is used to find generator.
+     * @return A root of unity;
      */
+    template<typename IntType>
     IntType RootOfUnity(uint32_t m, const IntType &modulo);
 }// namespace zhejiangfhe

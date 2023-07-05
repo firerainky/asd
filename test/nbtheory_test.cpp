@@ -5,6 +5,8 @@
  */
 
 #include "big_integer.h"
+#include "big_integer_modop.h"
+#include "debug.h"
 #include "nbtheory.h"
 #include <gtest/gtest.h>
 
@@ -30,7 +32,7 @@ namespace zhejiangfhe {
     }
 
     TEST(NbTheoryTest, FirstPrime) {
-        uint64_t m, nBits;
+        uint32_t m, nBits;
         {
             m = 2048;
             nBits = 30;
@@ -74,5 +76,21 @@ namespace zhejiangfhe {
         for (auto it = computedFactors.begin(); it != computedFactors.end(); ++it) {
             EXPECT_TRUE(expectedFactors.find(*it) != expectedFactors.end()) << "Factorize an composite error.";
         }
+    }
+
+    TEST(NbTheoryTest, RootOfUnity) {
+        ZJ_DEBUG_FLAG(false);
+        uint32_t m = 4096;
+        uint32_t nBits = 33;
+
+        BInt primeModulus = FirstPrime<BInt>(nBits, m);
+        BInt primitiveRootOfUnity = RootOfUnity(m, primeModulus);
+
+        BInt powerm = util::ModExp(primitiveRootOfUnity, BInt(m), BMod(primeModulus));
+        ZJ_DEBUG("First Prime: " << primeModulus << ", Root of Unity: " << primitiveRootOfUnity);
+        EXPECT_EQ(powerm, 1);
+
+        BInt powermBy2 = util::ModExp(primitiveRootOfUnity, BInt(2048), BMod(primeModulus));
+        EXPECT_NE(powermBy2, 1);
     }
 }// namespace zhejiangfhe

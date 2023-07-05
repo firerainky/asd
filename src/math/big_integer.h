@@ -15,7 +15,7 @@
 #include <string>
 #include <vector>
 
-typedef uint32_t limbtype;
+typedef uint64_t limbtype;
 
 namespace zhejiangfhe {
 

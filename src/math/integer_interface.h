@@ -12,7 +12,6 @@ namespace zhejiangfhe {
     template<typename T>
     class IntegerInterface {
     public:
-
         /**
          *
          * @param b
@@ -64,7 +63,7 @@ namespace zhejiangfhe {
 
 
         inline friend T operator/(const T &a, const T &b) {
-            return a.DividedBy(b);
+            return a.DividedBy(b).first;
         }
         inline friend const T &operator/=(T &a, const T &b) {
             return a.DividedByEq(b);
@@ -72,23 +71,23 @@ namespace zhejiangfhe {
 
 
         //// relational operators, using Compare
-        friend bool operator==(const T& a, const T& b) {
+        friend bool operator==(const T &a, const T &b) {
             return a.Compare(b) == 0;
         }
-        friend bool operator!=(const T& a, const T& b) {
+        friend bool operator!=(const T &a, const T &b) {
             return a.Compare(b) != 0;
         }
 
-        friend bool operator>(const T& a, const T& b) {
+        friend bool operator>(const T &a, const T &b) {
             return a.Compare(b) > 0;
         }
-        friend bool operator>=(const T& a, const T& b) {
+        friend bool operator>=(const T &a, const T &b) {
             return a.Compare(b) >= 0;
         }
-        friend bool operator<(const T& a, const T& b) {
+        friend bool operator<(const T &a, const T &b) {
             return a.Compare(b) < 0;
         }
-        friend bool operator<=(const T& a, const T& b) {
+        friend bool operator<=(const T &a, const T &b) {
             return a.Compare(b) <= 0;
         }
 

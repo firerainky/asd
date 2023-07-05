@@ -225,7 +225,6 @@ namespace zhejiangfhe {
             printValue.push_back(decimalArr[i] + '0');
         }
 
-        // std::cout << printValue << "\n";
         return std::string(negative ? "-" : "").append(printValue);
     }
 

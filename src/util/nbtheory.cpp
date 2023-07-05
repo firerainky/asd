@@ -7,6 +7,7 @@
 #include "nbtheory.h"
 #include "big_integer.h"
 #include "big_integer_modop.h"
+#include "debug.h"
 #include <random>
 
 namespace zhejiangfhe {
@@ -60,6 +61,48 @@ namespace zhejiangfhe {
             }
         }
         return (mod != IntType(1));
+    }
+
+    /**
+     * A helper function to RootOfUnity function. This finds a generator for a given
+     * prime q. Input: BigInteger q which is a prime. Output: A generator of prime q
+     */
+    template<typename IntType>
+    static IntType FindGenerator(const IntType &q) {
+        ZJ_DEBUG_FLAG(false);
+
+        std::set<IntType> primeFactors;
+
+        IntType qm1 = q - IntType(1);
+        IntType qm2 = q - IntType(2);
+        PrimeFactorize<IntType>(qm1, primeFactors);
+
+        ZJ_DEBUG("Find Generator(" << q << ")，calling prime factorization.");
+        ZJ_DEBUG("Prime factors of " << qm1);
+        for (auto &v: primeFactors) {
+            ZJ_DEBUG(v << " ");
+        }
+
+        bool generatorFound = false;
+        IntType gen;
+        while (!generatorFound) {
+            uint32_t count = 0;
+            gen = RNG(qm2) + IntType(1);
+
+            ZJ_DEBUG("Generator " << gen);
+
+            for (auto it = primeFactors.begin(); it != primeFactors.end(); ++it) {
+                IntType t = qm1 / (*it);
+                ZJ_DEBUG(qm1 << " / " << *it << " " << util::ModExp(gen, t, BMod(q)));
+                if (util::ModExp(gen, t, BMod(q)) == IntType(1))
+                    break;
+                else
+                    count++;
+            }
+            if (count == primeFactors.size())
+                generatorFound = true;
+        }
+        return gen;
     }
 
     template<typename IntType>
@@ -156,9 +199,61 @@ namespace zhejiangfhe {
         return divisor;
     }
 
+    template<typename IntType>
+    IntType RootOfUnity(uint32_t m, const IntType &modulo) {
+        ZJ_DEBUG_FLAG(false);
+
+        IntType M(m);
+        if ((modulo - IntType(1)) % m != IntType(0)) {
+            // TODO: Throw an exception?
+            return BInt();
+        }
+        IntType result;
+        IntType gen = FindGenerator(modulo);
+        IntType mid = (modulo - IntType(1)).DividedByEq(M);
+        ZJ_DEBUG("mid = " << mid);
+        result = util::ModExp(gen, mid, BMod(modulo));
+        if (result == IntType(1)) {
+            result = RootOfUnity(m, modulo);
+        }
+        ZJ_DEBUG("result = " << result);
+
+        /**
+          * At this point, result contains a primitive root of unity. However,
+          * we want to return the minimum root of unity, to avoid different
+          * crypto contexts having different roots of unity for the same
+          * cyclotomic order and moduli. Therefore, we are going to cycle over
+          * all primitive roots of unity and select the smallest one (minRU).
+          *
+          * To cycle over all primitive roots of unity, we raise the root of
+          * unity in result to all the powers that are co-prime to the
+          * cyclotomic order. In power-of-two cyclotomics, this will be the
+          * set of all odd powers, but here we use a more general routine
+          * to support arbitrary cyclotomics.
+          *
+          */
+        IntType x = result % modulo;
+        IntType minRU(x);
+        IntType curPowIdx(1);
+        // std::vector<IntType> coprimes = GetTotientList<IntType>(m);
+        // for (usint i = 0; i < coprimes.size(); i++) {
+        //     auto nextPowIdx = coprimes[i];
+        //     IntType diffPow(nextPowIdx - curPowIdx);
+        //     for (IntType j(0); j < diffPow; j += IntType(1)) {
+        //         x.ModMulEq(result, modulo, mu);
+        //     }
+        //     if (x < minRU && x != IntType(1)) {
+        //         minRU = x;
+        //     }
+        //     curPowIdx = nextPowIdx;
+        // }
+        return minRU;
+    }
+
     template bool IsPrime(const BInt &p, const uint32_t iterCount);
     template BInt FirstPrime(uint64_t nBits, uint64_t m);
     template const BInt PollardRho(const BInt &n);
     template BInt GCD(const BInt &a, const BInt &b);
     template void PrimeFactorize(BInt n, std::set<BInt> &primeFactors);
+    template BInt RootOfUnity(uint32_t m, const BInt &modulo);
 }// namespace zhejiangfhe
