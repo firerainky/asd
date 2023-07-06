@@ -16,6 +16,7 @@ namespace zhejiangfhe {
     class IntLatticeParam {
 
     public:
+        using Integer = IntegerType;
         IntLatticeParam(uint32_t order, const IntegerType &ctModulus, const IntegerType &rUnity = IntegerType(0),
                         const IntegerType &bigCtModulus = IntegerType(0), const IntegerType &bigRUnity = IntegerType(0)) {
             cyclotomicOrder = order;
@@ -47,7 +48,6 @@ namespace zhejiangfhe {
             bigRootOfUnity = std::move(rhs.bigRootOfUnity);
         }
 
-
         const IntLatticeParam &operator=(const IntLatticeParam &rhs) {
             cyclotomicOrder = rhs.cyclotomicOrder;
             ringDimension = rhs.ringDimension;
@@ -57,6 +57,10 @@ namespace zhejiangfhe {
             bigCiphertextModulus = rhs.bigCiphertextModulus;
             bigRootOfUnity = rhs.bigRootOfUnity;
             return *this;
+        }
+
+        bool operator==(const IntLatticeParam &rhs) const {
+            return cyclotomicOrder == rhs.cyclotomicOrder && ringDimension == rhs.ringDimension && ciphertextModulus == rhs.ciphertextModulus && rootOfUnity == rhs.rootOfUnity && bigCiphertextModulus == rhs.bigCiphertextModulus && bigRootOfUnity == rhs.bigRootOfUnity;
         }
 
         uint32_t GetCyclotomicOrder() const {

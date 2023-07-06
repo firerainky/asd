@@ -22,7 +22,6 @@ namespace zhejiangfhe {
     class Vector {
 
     public:
-
         typedef BigInteger<IntegerType> Integer;
 
         Vector();
@@ -49,7 +48,8 @@ namespace zhejiangfhe {
 
         explicit Vector(const std::vector<std::string> &s, const std::string &modulus) : Vector(s, Modulus<IntegerType>(modulus)){};
 
-        const Vector& operator=(std::initializer_list<std::string> rhs);
+        const Vector &operator=(std::initializer_list<std::string> rhs);
+        const Vector &operator=(std::initializer_list<uint64_t> rhs);
 
         virtual ~Vector();
 
