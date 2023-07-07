@@ -56,9 +56,12 @@ namespace zhejiangfhe {
 
         bool operator==(const Poly &rhs) const {
             if (GetFormat() != rhs.GetFormat()) { return false; }
-            // if (params->GetRootOfUnity() != rhs.params->GetRootOfUnity()) {
-            //     return false;
-            // }
+            if (params->GetRootOfUnity() != rhs.params->GetRootOfUnity()) {
+                return false;
+            }
+            if (GetValue() != rhs.GetValue()) {
+                return false;
+            }
             return true;
         }
 
@@ -85,10 +88,22 @@ namespace zhejiangfhe {
         Integer &at(uint32_t i);
         const Integer &at(uint32_t i) const;
 
-
         Integer &operator[](uint32_t i);
         const Integer &operator[](uint32_t i) const;
 
+        /**
+         * @description: Performs an addition operation on polynomials.
+         * @param rhs The polynomial to add with.
+         * @return The result polynomial.
+         */
+        Poly Add(const Poly &rhs) const;
+
+        /**
+         * @description: Performs an addition operation in place.
+         * @param rhs The polynomial to add with.
+         * @return 
+         */
+        Poly AddEq(const Poly &rhs);
 
     protected:
         std::unique_ptr<VecType> value;

@@ -221,7 +221,6 @@ namespace zhejiangfhe {
         return *this;
     }
 
-
     template<typename VecType>
     const Poly<VecType> &Poly<VecType>::operator=(uint64_t val) {
         format = Format::EVALUATION;
@@ -234,6 +233,18 @@ namespace zhejiangfhe {
         return *this;
     }
 
+    template<typename VecType>
+    Poly<VecType> Poly<VecType>::Add(const Poly<VecType> &rhs) const {
+        Poly tmp = *this;
+        tmp.value->ModAddEq(*rhs.value);
+        return tmp;
+    }
+
+    template<typename VecType>
+    Poly<VecType> Poly<VecType>::AddEq(const Poly<VecType> &rhs) {
+        value->ModAddEq(*rhs.value);
+        return *this;
+    }
 
     template<typename VecType>
     void Poly<VecType>::SetValue(const VecType &value, Format format) {
