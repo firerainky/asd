@@ -84,4 +84,52 @@ namespace zhejiangfhe {
         poly1.SubEq(poly2);
         EXPECT_EQ(poly1, expectedPoly) << "Subtraction operation in place on polynomials failed.";
     }
+
+    TEST(PolyTest, MultiplyScalar) {
+        using BPoly = Poly<Vector<limbtype>>;
+        using Params = typename BPoly::Params;
+        uint32_t m = 8;
+        uint32_t bits = 20;
+
+        std::shared_ptr<Params> params = ElemParamFactory::GenElemParams<Params>(m, bits);
+
+        BPoly poly(params);
+        poly = {1, 2, 3, 4};
+
+        BPoly computedPoly = poly.MultiplyScalar(2);
+        BPoly expectedPoly(params);
+        expectedPoly = {2, 4, 6, 8};
+        EXPECT_EQ(computedPoly, expectedPoly) << "MultiplyScalar operation on polynomials failed.";
+
+        poly.MultiplyScalarEq(2);
+        EXPECT_EQ(poly, expectedPoly) << "MultiplyScalar operation in place on polynomials failed.";
+
+
+    }
+
+
+    TEST(PolyTest, MultiplyForEvaluation) {
+        using BPoly = Poly<Vector<limbtype>>;
+        using Params = typename BPoly::Params;
+        uint32_t m = 8;
+        uint32_t bits = 20;
+
+        std::shared_ptr<Params> params = ElemParamFactory::GenElemParams<Params>(m, bits);
+
+        BPoly poly1(params);
+        poly1 = {4, 4, 4, 4};
+
+        BPoly poly2(params);
+        poly2 = {1, 2, 3, 4};
+
+        BPoly expectedPoly(params);
+        expectedPoly = {4, 8, 12, 16};
+
+        BPoly computedPoly(params);
+        computedPoly = poly1.MultiplyForEvaluation(poly2);
+        EXPECT_EQ(computedPoly, expectedPoly) << "MultiplyForEvaluation operation on polynomials failed.";
+
+        poly1.MultiplyForEvaluationEq(poly2);
+        EXPECT_EQ(poly1, expectedPoly) << "MultiplyForEvaluation operation in place on polynomials failed.";
+    }
 }// namespace zhejiangfhe

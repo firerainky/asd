@@ -312,6 +312,48 @@ namespace zhejiangfhe {
         return (*value)[i];
     }
 
+    template<typename VecType>
+    Poly<VecType> Poly<VecType>::MultiplyScalar(const Integer &value) const {
+        Poly tmp = *this;
+        tmp.value->ModMulEq(value);
+        return tmp;
+    }
+
+
+    template<typename VecType>
+    Poly<VecType> Poly<VecType>::MultiplyScalarEq(const Integer &val) const {
+        this->value->ModMulEq(val);
+        return *this;
+    }
+
+    template<typename VecType>
+    Poly<VecType> Poly<VecType>::MultiplyForEvaluation(const Poly<VecType> &element) const {
+        if (format != Format::EVALUATION || element.format != Format::EVALUATION)
+            ZJFHE_THROW(NotImplementedException,
+                          "MultiplyForEvaluation for Poly is supported only in Format::EVALUATION format.\n");
+
+        if (*this->params != *element.params)
+            ZJFHE_THROW(TypeException, "operator* called on Poly's with different params.");
+
+        Poly tmp = *this;
+        tmp.value->ModMulEq(*element.value);
+        return tmp;
+    }
+
+    template<typename VecType>
+    Poly<VecType> Poly<VecType>::MultiplyForEvaluationEq(const Poly<VecType> &element) {
+        if (format != Format::EVALUATION || element.format != Format::EVALUATION)
+            ZJFHE_THROW(NotImplementedException,
+                        "MultiplyForEvaluationEq for Poly is supported only in Format::EVALUATION format.\n");
+
+        if (*this->params != *element.params)
+            ZJFHE_THROW(TypeException, "operator* called on Poly's with different params.");
+
+        value->ModMulEq(*element.value);
+        return *this;
+    }
+
+
 
     template class zhejiangfhe::Poly<Vector<limbtype>>;
 }// namespace zhejiangfhe

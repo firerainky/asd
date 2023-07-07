@@ -60,7 +60,13 @@ namespace zhejiangfhe {
         }
 
         bool operator==(const IntLatticeParam &rhs) const {
-            return cyclotomicOrder == rhs.cyclotomicOrder && ringDimension == rhs.ringDimension && ciphertextModulus == rhs.ciphertextModulus && rootOfUnity == rhs.rootOfUnity && bigCiphertextModulus == rhs.bigCiphertextModulus && bigRootOfUnity == rhs.bigRootOfUnity;
+            return cyclotomicOrder == rhs.cyclotomicOrder && ringDimension == rhs.ringDimension && ciphertextModulus == rhs.ciphertextModulus
+                   && rootOfUnity == rhs.rootOfUnity && bigCiphertextModulus == rhs.bigCiphertextModulus && bigRootOfUnity == rhs.bigRootOfUnity;
+        }
+
+        bool operator!=(const IntLatticeParam &rhs) const {
+            return !(cyclotomicOrder == rhs.cyclotomicOrder && ringDimension == rhs.ringDimension && ciphertextModulus == rhs.ciphertextModulus
+                     && rootOfUnity == rhs.rootOfUnity && bigCiphertextModulus == rhs.bigCiphertextModulus && bigRootOfUnity == rhs.bigRootOfUnity);
         }
 
         uint32_t GetCyclotomicOrder() const {

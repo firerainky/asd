@@ -119,6 +119,35 @@ namespace zhejiangfhe {
          */
         Poly SubEq(const Poly &rhs);
 
+        /**
+         * @brief 多项式乘标量
+         * @param &value is the scalar to multiply with.
+         * @return is the result of the multiplication.
+         */
+        Poly MultiplyScalar(const Integer &value) const;
+
+        /**
+         * @brief 原地进行多项式乘标量
+         * @param &value is the scalar to multiply with.
+         * @return is the result of the multiplication.
+         */
+        Poly MultiplyScalarEq(const Integer &value) const;
+
+
+        /**
+         * @brief 点值模式下，进行多项式点值乘法
+         * @param &element is the element to multiply with.
+         * @return is the result of the multiplication.
+         */
+        Poly MultiplyForEvaluation(const Poly &element) const;
+
+        /**
+         * @description: 点值模式下，原地进行多项式点值乘法
+         * @param rhs The polynomial to multiply with.
+         * @return
+         */
+        Poly MultiplyForEvaluationEq(const Poly &element);
+
     protected:
         std::unique_ptr<VecType> value;
         Format format;
