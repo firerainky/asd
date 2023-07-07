@@ -103,8 +103,6 @@ namespace zhejiangfhe {
 
         poly.MultiplyScalarEq(2);
         EXPECT_EQ(poly, expectedPoly) << "MultiplyScalar operation in place on polynomials failed.";
-
-
     }
 
 
@@ -131,5 +129,29 @@ namespace zhejiangfhe {
 
         poly1.MultiplyForEvaluationEq(poly2);
         EXPECT_EQ(poly1, expectedPoly) << "MultiplyForEvaluation operation in place on polynomials failed.";
+    }
+
+    TEST(PolyTest, SetFormat) {
+        using BPoly = Poly<Vector<limbtype>>;
+        using Params = typename BPoly::Params;
+
+        uint32_t m = 8;
+        uint32_t bits = 5;
+        std::shared_ptr<Params> params = ElemParamFactory::GenElemParams<Params>(m, bits);
+
+        BPoly coeffPoly(params, Format::COEFFICIENT);
+        coeffPoly = {3, 0, 0, 0};
+
+        BPoly evalPoly(params, Format::EVALUATION);
+        evalPoly = {3, 3, 3, 3};
+
+        EXPECT_NE(coeffPoly, evalPoly);
+
+        BPoly tempPoly(coeffPoly);
+        tempPoly.SetFormat(Format::EVALUATION);
+        EXPECT_EQ(tempPoly, evalPoly) << "Convert values representation from coefficient format to evaluation format failed.";
+
+        tempPoly.SetFormat(Format::COEFFICIENT);
+        EXPECT_EQ(tempPoly, coeffPoly) << "Convert values representation from evaluation format to coefficient format failed.";
     }
 }// namespace zhejiangfhe

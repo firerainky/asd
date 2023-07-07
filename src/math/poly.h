@@ -65,6 +65,10 @@ namespace zhejiangfhe {
             return true;
         }
 
+        bool operator!=(const Poly &rhs) const {
+            return !(*this == rhs);
+        }
+
         void SetValue(const VecType &value, Format format);
 
         void SetValueToZero();
@@ -84,6 +88,18 @@ namespace zhejiangfhe {
         const Format GetFormat() const {
             return format;
         }
+
+        void SetFormat(const Format format) {
+            if (GetFormat() != format) {
+                SwitchFormat();
+            }
+        }
+
+        /**
+         * @description: Convert representation from coefficient format to evaluation format or vice versa.
+         *      Using FFT or inverse FFT algorithm.
+         */
+        void SwitchFormat();
 
         Integer &at(uint32_t i);
         const Integer &at(uint32_t i) const;

@@ -271,7 +271,6 @@ namespace zhejiangfhe {
         this->format = format;
     }
 
-
     template<typename VecType>
     void Poly<VecType>::SetValueToZero() {
         value = std::make_unique<VecType>(params->GetRingDimension(), params->GetModulus());
@@ -286,7 +285,6 @@ namespace zhejiangfhe {
             value->operator[](i) = Integer(max);
         }
     }
-
 
     template<typename VecType>
     typename Poly<VecType>::Integer &Poly<VecType>::at(uint32_t i) {
@@ -330,7 +328,7 @@ namespace zhejiangfhe {
     Poly<VecType> Poly<VecType>::MultiplyForEvaluation(const Poly<VecType> &element) const {
         if (format != Format::EVALUATION || element.format != Format::EVALUATION)
             ZJFHE_THROW(NotImplementedException,
-                          "MultiplyForEvaluation for Poly is supported only in Format::EVALUATION format.\n");
+                        "MultiplyForEvaluation for Poly is supported only in Format::EVALUATION format.\n");
 
         if (*this->params != *element.params)
             ZJFHE_THROW(TypeException, "operator* called on Poly's with different params.");
@@ -353,7 +351,16 @@ namespace zhejiangfhe {
         return *this;
     }
 
-
+    template<typename VecType>
+    void Poly<VecType>::SwitchFormat() {
+        if (value == nullptr) {
+            std::string errMsg = "Switch poly format on empty values.";
+            ZJFHE_THROW(NotAvailableError, errMsg);
+        }
+        if (!params->OrderIsPowerOfTwo()) {
+            return;
+        }
+    }
 
     template class zhejiangfhe::Poly<Vector<limbtype>>;
 }// namespace zhejiangfhe
