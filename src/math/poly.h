@@ -101,9 +101,23 @@ namespace zhejiangfhe {
         /**
          * @description: Performs an addition operation in place.
          * @param rhs The polynomial to add with.
-         * @return 
+         * @return Self poly after addition.
          */
         Poly AddEq(const Poly &rhs);
+
+        /**
+         * @description: Performs a subtraction operation on polynomials.
+         * @param rhs The polynomial to sub with.
+         * @return The result polynomial.
+         */
+        Poly Sub(const Poly &rhs) const;
+
+        /**
+         * @description: Performs an subtraction operation in place.
+         * @param rhs The polynomial to sub with.
+         * @return Self poly after subtraction.
+         */
+        Poly SubEq(const Poly &rhs);
 
     protected:
         std::unique_ptr<VecType> value;

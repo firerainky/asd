@@ -59,4 +59,29 @@ namespace zhejiangfhe {
         poly1.AddEq(poly2);
         EXPECT_EQ(poly1, expectedPoly) << "Addition operation in place on polynomials failed.";
     }
+
+    TEST(PolyTest, SubtractPolynomial) {
+        using BPoly = Poly<Vector<limbtype>>;
+        using Params = typename BPoly::Params;
+        uint32_t m = 8;
+        uint32_t bits = 20;
+
+        std::shared_ptr<Params> params = ElemParamFactory::GenElemParams<Params>(m, bits);
+
+        BPoly poly1(params);
+        poly1 = {4, 4, 4, 4};
+
+        BPoly poly2(params);
+        poly2 = {1, 2, 3, 4};
+
+        BPoly expectedPoly(params);
+        expectedPoly = {3, 2, 1, 0};
+
+        BPoly computedPoly(params);
+        computedPoly = poly1.Sub(poly2);
+        EXPECT_EQ(computedPoly, expectedPoly) << "Subtraction operation on polynomials failed.";
+
+        poly1.SubEq(poly2);
+        EXPECT_EQ(poly1, expectedPoly) << "Subtraction operation in place on polynomials failed.";
+    }
 }// namespace zhejiangfhe

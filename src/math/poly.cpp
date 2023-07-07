@@ -247,6 +247,19 @@ namespace zhejiangfhe {
     }
 
     template<typename VecType>
+    Poly<VecType> Poly<VecType>::Sub(const Poly<VecType> &rhs) const {
+        Poly tmp = *this;
+        tmp.value->ModSubEq(*rhs.value);
+        return tmp;
+    }
+
+    template<typename VecType>
+    Poly<VecType> Poly<VecType>::SubEq(const Poly<VecType> &rhs) {
+        value->ModSubEq(*rhs.value);
+        return *this;
+    }
+
+    template<typename VecType>
     void Poly<VecType>::SetValue(const VecType &value, Format format) {
         if (params->GetRootOfUnity() == Integer(0)) {
             ZJFHE_THROW(TypeException, "Polynomial has a 0 root of unity");
