@@ -360,6 +360,11 @@ namespace zhejiangfhe {
         if (!params->OrderIsPowerOfTwo()) {
             return;
         }
+
+        // if (m_format == Format::COEFFICIENT) {
+
+        //     m_format = Format::EVALUATION;
+        // }
     }
 
     template class zhejiangfhe::Poly<Vector<limbtype>>;

@@ -114,5 +114,13 @@ namespace zhejiangfhe {
             BInt powermBy4 = util::ModExp(primitiveRootOfUnity, BInt(m / 4), BMod(primeModulus));
             EXPECT_NE(powermBy4, 1);
         }
+        {
+            uint32_t m = 16;
+            uint32_t nBits = 22;
+            BInt primeModulus = FirstPrime<BInt>(nBits, m);
+            BInt primitiveRootOfUnity = RootOfUnity(m, primeModulus);
+            EXPECT_EQ(primeModulus, 4194353);
+            EXPECT_EQ(primitiveRootOfUnity, 132170);
+        }
     }
 }// namespace zhejiangfhe
