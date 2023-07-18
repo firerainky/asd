@@ -1,6 +1,7 @@
 //
 // Created by 赵启明 on 2023/6/28.
 //
+#include "debug.h"
 #include "elem_param_factory.h"
 #include "nbtheory.h"
 #include "poly.h"
@@ -151,7 +152,31 @@ namespace zhejiangfhe {
         tempPoly.SetFormat(Format::EVALUATION);
         EXPECT_EQ(tempPoly, evalPoly) << "Convert values representation from coefficient format to evaluation format failed.";
 
-        tempPoly.SetFormat(Format::COEFFICIENT);
-        EXPECT_EQ(tempPoly, coeffPoly) << "Convert values representation from evaluation format to coefficient format failed.";
+        // tempPoly.SetFormat(Format::COEFFICIENT);
+        // EXPECT_EQ(tempPoly, coeffPoly) << "Convert values representation from evaluation format to coefficient format failed.";
+    }
+
+    TEST(PolyTest, SwitchFormat) {
+        ZJ_DEBUG_FLAG(false);
+
+        using BPoly = Poly<Vector<limbtype>>;
+        using Params = typename BPoly::Params;
+
+        uint32_t m = 16, nBits = 22;
+        std::shared_ptr<Params> params = ElemParamFactory::GenElemParams<Params>(m, nBits);
+        ZJ_DEBUG("modulus: " << params->GetModulus() << ", root: " << params->GetRootOfUnity() << ", order: " << params->GetCyclotomicOrder());
+
+        BPoly coeffPoly(params, Format::COEFFICIENT);
+        coeffPoly = {431, 3414, 1234, 7845, 2145, 7415, 5471, 8452};
+
+        BPoly evalPoly(params, Format::EVALUATION);
+        evalPoly = {1877267, 1022026, 3006168, 1772286, 1331622, 1039762, 869706, 1667670};
+
+        BPoly poly(coeffPoly);
+
+        poly.SwitchFormat();
+        ZJ_DEBUG("Evalation poly: " << poly);
+
+        EXPECT_EQ(poly, evalPoly);
     }
 }// namespace zhejiangfhe

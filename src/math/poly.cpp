@@ -3,6 +3,7 @@
 //
 
 #include "poly.h"
+#include "ntt.h"
 
 namespace zhejiangfhe {
     template<typename VecType>
@@ -358,13 +359,15 @@ namespace zhejiangfhe {
             ZJFHE_THROW(NotAvailableError, errMsg);
         }
         if (!params->OrderIsPowerOfTwo()) {
+            // TODO: Add switching format for arbitrary order.
             return;
         }
 
-        // if (m_format == Format::COEFFICIENT) {
+        if (format == Format::COEFFICIENT) {
+            format = Format::EVALUATION;
 
-        //     m_format = Format::EVALUATION;
-        // }
+            Ntt<VecType>().NumberTheoryTransformBitReverseInPlace(&(*value), params->GetRootOfUnity(), params->GetCyclotomicOrder());
+        }
     }
 
     template class zhejiangfhe::Poly<Vector<limbtype>>;
