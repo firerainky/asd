@@ -6,7 +6,8 @@ set(TEST_SOURCES
         vector_test.cpp
         numth_util_test.cpp 
         ploy_test.cpp
-        nbtheory_test.cpp)
+        nbtheory_test.cpp
+        fft_test.cpp)
 set(TEST_INCLUDES ./)
 
 add_executable(${TEST_MAIN} ${TEST_SOURCES})

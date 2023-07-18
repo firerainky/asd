@@ -60,6 +60,14 @@ namespace zhejiangfhe {
 
         Vector &operator=(Vector &&rhs);
 
+        Integer* ConvertToIntList() {
+            Integer *result = new Integer[GetLength()];
+            for (int i=0; i<GetLength(); i++) {
+                result[i] = at(i);
+            }
+            return result;
+        }
+
         BigInteger<IntegerType> &at(size_t i) {
             if (!this->IndexCheck(i)) {
                 ZJFHE_THROW(MathException, "Vector index out of range");

@@ -353,15 +353,57 @@ namespace zhejiangfhe {
     }
 
     template<typename VecType>
+    Poly<VecType> Poly<VecType>::MultiplyPloy(const Poly &element) {
+        if (format != Format::COEFFICIENT || element.format != Format::COEFFICIENT)
+            ZJFHE_THROW(NotImplementedException,
+                        "MultiplyPoly is supported only in Format::COEFFICIENT format.\n");
+
+        if (*this->params != *element.params)
+            ZJFHE_THROW(TypeException, "operator* called on Poly's with different params.");
+
+        return DoMultiplyPloy(element);
+    }
+
+
+    template<typename VecType>
+    Poly<VecType> Poly<VecType>::MultiplyPloyEq(const Poly &element) {
+        if (format != Format::COEFFICIENT || element.format != Format::COEFFICIENT)
+            ZJFHE_THROW(NotImplementedException,
+                        "MultiplyPoly is supported only in Format::COEFFICIENT format.\n");
+
+        if (*this->params != *element.params)
+            ZJFHE_THROW(TypeException, "operator* called on Poly's with different params.");
+        return *this = DoMultiplyPloy(element);
+    }
+
+
+    template<typename VecType>
+    Poly<VecType> Poly<VecType>::DoMultiplyPloy(const Poly &element) {
+
+        int lengthA = element.GetLength();
+        int lengthB = this->GetLength();
+
+        //todo ntt
+        std::unique_ptr<Integer[]> mulResult;
+
+
+        Poly tmp(params, COEFFICIENT, true);
+        for (int i=0; i<=lengthA + lengthB-1; i++) {
+            tmp.value.get()->at(i) = mulResult.get()[i];
+        }
+        return tmp;
+    }
+
+    template<typename VecType>
     void Poly<VecType>::SwitchFormat() {
-        if (value == nullptr) {
-            std::string errMsg = "Switch poly format on empty values.";
-            ZJFHE_THROW(NotAvailableError, errMsg);
-        }
-        if (!params->OrderIsPowerOfTwo()) {
-            // TODO: Add switching format for arbitrary order.
-            return;
-        }
+    if (value == nullptr) {
+        std::string errMsg = "Switch poly format on empty values.";
+        ZJFHE_THROW(NotAvailableError, errMsg);
+    }
+    if (!params->OrderIsPowerOfTwo()) {
+        // TODO: Add switching format for arbitrary order.
+        return;
+    }
 
         if (format == Format::COEFFICIENT) {
             format = Format::EVALUATION;

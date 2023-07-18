@@ -169,11 +169,38 @@ namespace zhejiangfhe {
             return os;
         }
 
+
+        /**
+         * @brief 系数模式下，进行多项式乘法
+         * @param &element is the element to multiply with.
+         * @return is the result of the multiplication.
+         */
+        Poly MultiplyPloy(const Poly &element);
+
+
+        /**
+         * @brief 系数模式下，原地进行多项式乘法
+         * @param &element is the element to multiply with.
+         * @return is the result of the multiplication.
+         */
+        Poly MultiplyPloyEq(const Poly &element);
+
+
     protected:
         std::unique_ptr<VecType> value;
         Format format;
 
         std::shared_ptr<Params> params;
+
+
+    private:
+
+        /**
+         * @brief 系数模式下，进行多项式乘法
+         * @param &element is the element to multiply with.
+         * @return is the result of the multiplication.
+         */
+        Poly DoMultiplyPloy(const Poly &element);
     };
 }// namespace zhejiangfhe
 
