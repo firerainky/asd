@@ -164,6 +164,11 @@ namespace zhejiangfhe {
          */
         Poly MultiplyForEvaluationEq(const Poly &element);
 
+        friend std::ostream &operator<<(std::ostream &os, const Poly &poly) {
+            os << (poly.format == Format::EVALUATION ? "EVAL, " : "COEF, ") << poly.GetValue();
+            return os;
+        }
+
     protected:
         std::unique_ptr<VecType> value;
         Format format;

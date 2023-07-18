@@ -158,6 +158,16 @@ namespace zhejiangfhe {
          */
         Vector<IntegerType> GetDigitAtIndexForBase(uint32_t index, uint32_t base) const;
 
+        friend std::ostream &operator<<(std::ostream &os, const Vector &vec) {
+            auto len = vec.data.size();
+            os << "[";
+            for (size_t i = 0; i < len; ++i) {
+                os << vec.data[i] << ((i == (len - 1)) ? "]" : " ");
+            }
+            os << " modulus: " << vec.modulus.GetValue();
+            return os;
+        }
+
     private:
         std::vector<BigInteger<IntegerType>> data;
         Modulus<IntegerType> modulus;

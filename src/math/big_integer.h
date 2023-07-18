@@ -330,7 +330,8 @@ namespace zhejiangfhe {
 
     template<typename NativeInt>
     std::ostream &operator<<(std::ostream &os, const BigInteger<NativeInt> &a) {
-        return os << a.ConvertToString() << ", MSB: " << a.GetMSB() << ", limb_size: " << sizeof(NativeInt) * 8;
+        return os << a.ConvertToString();
+        // return os << a.ConvertToString() << ", MSB: " << a.GetMSB() << ", limb_size: " << sizeof(NativeInt) * 8;
     }
 
 }// namespace zhejiangfhe
