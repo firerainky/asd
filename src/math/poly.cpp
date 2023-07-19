@@ -365,8 +365,10 @@ namespace zhejiangfhe {
 
         if (format == Format::COEFFICIENT) {
             format = Format::EVALUATION;
-
-            Ntt<VecType>().NumberTheoryTransformBitReverseInPlace(&(*value), params->GetRootOfUnity(), params->GetCyclotomicOrder());
+            Ntt<VecType>::getInstance()->NTForwardTransformBitReverseInPlace(&(*value), params->GetRootOfUnity(), params->GetCyclotomicOrder());
+        } else {
+            format = Format::COEFFICIENT;
+            Ntt<VecType>::getInstance()->NTInverseTransformBitReverseInPlace(&(*value), params->GetRootOfUnity(), params->GetCyclotomicOrder());
         }
     }
 

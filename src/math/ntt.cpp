@@ -5,12 +5,15 @@
  */
 
 #include "ntt.h"
+#include "big_integer_modop.h"
+#include "debug.h"
 #include "nbtheory.h"
 
 namespace zhejiangfhe {
 
     template<typename VecType>
-    void Ntt<VecType>::NumberTheoryTransformBitReverseInPlace(VecType *vec, const IntType &root, const uint32_t cycloOrder) {
+    void Ntt<VecType>::NTForwardTransformBitReverseInPlace(VecType *vec, const IntType &root, const uint32_t cycloOrder) {
+        ZJ_DEBUG_FLAG(false);
         if (root == 1 || root == 0) return;
 
         // TODO: Add power of two assertion for cyclo order?
@@ -22,7 +25,12 @@ namespace zhejiangfhe {
 
         // Precompute
         IntType modulus = vec->GetModulus().GetValue();
-        std::vector<typename VecType::Integer> rootReverseVec = precompute(root, cycloOrder, modulus);
+        auto mapSearch = rootReverseMap.find(modulus);
+        if (mapSearch == rootReverseMap.end() || mapSearch->second.size() != halfOrder) {
+            precompute(root, cycloOrder, modulus);
+            ZJ_DEBUG("Precccccompute!!");
+        }
+        std::vector<IntType> rootReverseVec = rootReverseMap[modulus];
 
         // NTT
         uint32_t n = halfOrder;
@@ -63,20 +71,103 @@ namespace zhejiangfhe {
     }
 
     template<typename VecType>
-    std::vector<typename VecType::Integer> Ntt<VecType>::precompute(const IntType &root, const uint32_t cycloOrder, const IntType &modulus) {
+    void Ntt<VecType>::NTInverseTransformBitReverseInPlace(VecType *vec, const IntType &root, const uint32_t cycloOrder) {
+        ZJ_DEBUG_FLAG(false);
+        if (root == 1 || root == 0) return;
+
+        // TODO: Add power of two assertion for cyclo order?
+
+        uint32_t halfOrder = cycloOrder >> 1;
+        if (vec->GetLength() != halfOrder) {
+            ZJFHE_THROW(MathException, "Element size must be equal to half order.");
+        }
+
+        // Precompute
+        IntType modulus = vec->GetModulus().GetValue();
+        auto mapSearch = rootInverseReverseMap.find(modulus);
+        if (mapSearch == rootInverseReverseMap.end() || mapSearch->second.size() != halfOrder) {
+            precompute(root, cycloOrder, modulus);
+            ZJ_DEBUG("Precccccompute!!");
+        }
+        std::vector<IntType> rootInverseReverseVec = rootInverseReverseMap[modulus];
+
+        // Inverse NTT
+        uint32_t n = halfOrder;
+        uint32_t i, m, j1, j2, indexOmega, indexLo, indexHi;
+        IntType omega, omegaFactor, loVal, hiVal, zero(0);
+
+        uint32_t t = 1;
+        uint32_t logt1 = 1;
+        for (m = (n >> 1); m >= 1; m >>= 1) {
+            for (i = 0; i < m; ++i) {
+                j1 = i << logt1;
+                j2 = j1 + t;
+                indexOmega = m + i;
+                omega = rootInverseReverseVec[indexOmega];
+
+                for (indexLo = j1; indexLo < j2; ++indexLo) {
+                    indexHi = indexLo + t;
+
+                    loVal = (*vec)[indexLo];
+                    hiVal = (*vec)[indexHi];
+
+                    omegaFactor = loVal;
+                    if (omegaFactor < hiVal) {
+                        omegaFactor += modulus;
+                    }
+                    omegaFactor -= hiVal;
+
+                    loVal += hiVal;
+                    if (loVal >= modulus) {
+                        loVal -= modulus;
+                    }
+                    omegaFactor = omegaFactor * omega % modulus;
+
+                    (*vec)[indexLo] = loVal;
+                    (*vec)[indexHi] = omegaFactor;
+                }
+            }
+            t <<= 1;
+            logt1++;
+        }
+
+        uint32_t msb = GetMSB64(halfOrder - 1);
+        IntType cycloOrderInv = cycloOrderInverseMap[modulus][msb];
+        for (size_t i = 0; i < n; ++i) {
+            (*vec)[i] = (*vec)[i] * cycloOrderInv % modulus;
+        }
+    }
+
+    template<typename VecType>
+    void Ntt<VecType>::precompute(const IntType &root, const uint32_t cycloOrder, const IntType &modulus) {
         uint32_t halfOrder = (cycloOrder >> 1);
+        IntType rootInverse = util::ModInverse(root, Modulus(modulus));
 
         std::vector<IntType> rootReverseVec(halfOrder);
-        IntType x = 1;
+        std::vector<IntType> rootInverseReverseVec(halfOrder);
+        IntType x = 1, xinv = 1;
         uint32_t msb = GetMSB64(halfOrder - 1);
+
         for (size_t i = 0; i < halfOrder; ++i) {
             uint32_t iinv = ReverseBits(i, msb);
             rootReverseVec[iinv] = x;
+            rootInverseReverseVec[iinv] = xinv;
             x = x * root % modulus;
+            xinv = xinv * rootInverse % modulus;
         }
+        rootReverseMap[modulus] = rootReverseVec;
+        rootInverseReverseMap[modulus] = rootInverseReverseVec;
 
-        return rootReverseVec;
+        std::vector<IntType> cycloOrderInverseVec(msb + 1);
+        for (size_t i = 0; i < msb + 1; ++i) {
+            IntType coInv = util::ModInverse(IntType(1 << i), Modulus(modulus));
+            cycloOrderInverseVec[i] = coInv;
+        }
+        cycloOrderInverseMap[modulus] = cycloOrderInverseVec;
     }
+
+    template<typename VecType>
+    Ntt<VecType> *Ntt<VecType>::instance = nullptr;
 
     template class zhejiangfhe::Ntt<Vector<limbtype>>;
 }// namespace zhejiangfhe

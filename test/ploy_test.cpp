@@ -152,8 +152,8 @@ namespace zhejiangfhe {
         tempPoly.SetFormat(Format::EVALUATION);
         EXPECT_EQ(tempPoly, evalPoly) << "Convert values representation from coefficient format to evaluation format failed.";
 
-        // tempPoly.SetFormat(Format::COEFFICIENT);
-        // EXPECT_EQ(tempPoly, coeffPoly) << "Convert values representation from evaluation format to coefficient format failed.";
+        tempPoly.SetFormat(Format::COEFFICIENT);
+        EXPECT_EQ(tempPoly, coeffPoly) << "Convert values representation from evaluation format to coefficient format failed.";
     }
 
     TEST(PolyTest, SwitchFormat) {
@@ -175,8 +175,11 @@ namespace zhejiangfhe {
         BPoly poly(coeffPoly);
 
         poly.SwitchFormat();
+        EXPECT_EQ(poly, evalPoly) << "Switch format from coefficient format to evaluation format failed";
         ZJ_DEBUG("Evalation poly: " << poly);
 
-        EXPECT_EQ(poly, evalPoly);
+        poly.SwitchFormat();
+        EXPECT_EQ(poly, coeffPoly) << "Switch format from evaluation format to coefficient format failed";
+        ZJ_DEBUG("Coefficient poly: " << poly);
     }
 }// namespace zhejiangfhe
