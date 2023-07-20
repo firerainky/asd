@@ -35,11 +35,21 @@ namespace zhejiangfhe {
 
 
         std::unique_ptr<TypeParam[]> result2 = fft.multiply_iteration(6, v3, 6, v4);
-
         for (int i=0; i<11; i++) {
             EXPECT_EQ(result2.get()[i], mulResult2[i]);
         }
 
+
+        std::unique_ptr<TypeParam[]> result3 = fft.multiply_recursion(2, v1, 3, v2);
+        for (int i=0; i<4; i++) {
+            EXPECT_EQ(result3.get()[i], mulResult1[i]);
+        }
+
+
+        std::unique_ptr<TypeParam[]> result4 = fft.multiply_recursion(6, v3, 6, v4);
+        for (int i=0; i<11; i++) {
+            EXPECT_EQ(result4.get()[i], mulResult2[i]);
+        }
 
         std::unique_ptr<std::complex<double>> fft_forward = fft.fft_forward_transform(6, v3);
         std::unique_ptr<TypeParam[]> origin_vec = fft.fft_inverse_transform(6, fft_forward.get());

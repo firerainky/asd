@@ -91,7 +91,7 @@ namespace zhejiangfhe {
         std::vector<std::complex<double>> cacheW(length/2);
         std::complex<double> p = {1, 0};
         for (int i=0; i<length/2; i++) {
-            cacheW[i] = {cos(2 * pi * i/length), -1 * inverseFlag * sin(2 * pi * i/length)};
+            cacheW[i] = {cos(2 * pi * i/length), inverseFlag * sin(2 * pi * i/length)};
         }
         for (int i = 1; i < length; i<<=1) {
 
