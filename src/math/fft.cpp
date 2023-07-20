@@ -105,6 +105,7 @@ namespace zhejiangfhe {
                     std::complex<double> y = p * vector[j+k+i];
                     vector[j+k] = x + y;
                     vector[j+k+i] = x - y;
+                    printf( "vector[%d]:{%f, %f} vector[%d]: {%f, %f} \n",  j+k, vector[j+k].real(), vector[j+k].imag(), j+k+i, vector[j+k+i].real(), vector[j+k+i].imag());
                 }
             }
         }
