@@ -3,6 +3,7 @@
 //
 
 #include "poly.h"
+#include "debug.h"
 #include "ntt.h"
 
 namespace zhejiangfhe {
@@ -353,7 +354,7 @@ namespace zhejiangfhe {
     }
 
     template<typename VecType>
-    Poly<VecType> Poly<VecType>::MultiplyPloy(const Poly &element) {
+    Poly<VecType> Poly<VecType>::MultiplyPoly(const Poly &element) {
         if (format != Format::COEFFICIENT || element.format != Format::COEFFICIENT)
             ZJFHE_THROW(NotImplementedException,
                         "MultiplyPoly is supported only in Format::COEFFICIENT format.\n");
@@ -361,49 +362,52 @@ namespace zhejiangfhe {
         if (*this->params != *element.params)
             ZJFHE_THROW(TypeException, "operator* called on Poly's with different params.");
 
-        return DoMultiplyPloy(element);
+        return DoMultiplyPoly(element);
     }
 
-
     template<typename VecType>
-    Poly<VecType> Poly<VecType>::MultiplyPloyEq(const Poly &element) {
+    Poly<VecType> Poly<VecType>::MultiplyPolyEq(const Poly &element) {
         if (format != Format::COEFFICIENT || element.format != Format::COEFFICIENT)
             ZJFHE_THROW(NotImplementedException,
                         "MultiplyPoly is supported only in Format::COEFFICIENT format.\n");
 
         if (*this->params != *element.params)
             ZJFHE_THROW(TypeException, "operator* called on Poly's with different params.");
-        return *this = DoMultiplyPloy(element);
+        return *this = DoMultiplyPoly(element);
     }
 
 
     template<typename VecType>
-    Poly<VecType> Poly<VecType>::DoMultiplyPloy(const Poly &element) {
+    Poly<VecType> Poly<VecType>::DoMultiplyPoly(const Poly &element) {
+        ZJ_DEBUG_FLAG(false);
 
         int lengthA = element.GetLength();
         int lengthB = this->GetLength();
 
-        //todo ntt
-        std::unique_ptr<Integer[]> mulResult;
+        Poly<VecType> resPoly(*this);
+        Poly<VecType> another(element);
 
+        resPoly.SwitchFormat();
+        another.SwitchFormat();
 
-        Poly tmp(params, COEFFICIENT, true);
-        for (int i=0; i<=lengthA + lengthB-1; i++) {
-            tmp.value.get()->at(i) = mulResult.get()[i];
-        }
-        return tmp;
+        ZJ_DEBUG("resPoly: " << resPoly << ", another: " << another);
+
+        resPoly.MultiplyForEvaluationEq(another);
+        resPoly.SwitchFormat();
+
+        return resPoly;
     }
 
     template<typename VecType>
     void Poly<VecType>::SwitchFormat() {
-    if (value == nullptr) {
-        std::string errMsg = "Switch poly format on empty values.";
-        ZJFHE_THROW(NotAvailableError, errMsg);
-    }
-    if (!params->OrderIsPowerOfTwo()) {
-        // TODO: Add switching format for arbitrary order.
-        return;
-    }
+        if (value == nullptr) {
+            std::string errMsg = "Switch poly format on empty values.";
+            ZJFHE_THROW(NotAvailableError, errMsg);
+        }
+        if (!params->OrderIsPowerOfTwo()) {
+            // TODO: Add switching format for arbitrary order.
+            return;
+        }
 
         if (format == Format::COEFFICIENT) {
             format = Format::EVALUATION;

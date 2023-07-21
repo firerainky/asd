@@ -175,7 +175,7 @@ namespace zhejiangfhe {
          * @param &element is the element to multiply with.
          * @return is the result of the multiplication.
          */
-        Poly MultiplyPloy(const Poly &element);
+        Poly MultiplyPoly(const Poly &element);
 
 
         /**
@@ -183,7 +183,7 @@ namespace zhejiangfhe {
          * @param &element is the element to multiply with.
          * @return is the result of the multiplication.
          */
-        Poly MultiplyPloyEq(const Poly &element);
+        Poly MultiplyPolyEq(const Poly &element);
 
 
     protected:
@@ -194,13 +194,12 @@ namespace zhejiangfhe {
 
 
     private:
-
         /**
          * @brief 系数模式下，进行多项式乘法
          * @param &element is the element to multiply with.
          * @return is the result of the multiplication.
          */
-        Poly DoMultiplyPloy(const Poly &element);
+        Poly DoMultiplyPoly(const Poly &element);
     };
 }// namespace zhejiangfhe
 
