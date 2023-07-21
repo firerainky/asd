@@ -24,7 +24,7 @@ namespace zhejiangfhe {
           * @param vectorB 多项式B系数表示
           * @return
           */
-        std::unique_ptr<IntType[]> multiply_recursion(int lengthA, IntType * vectorA, int lengthB, IntType * vectorB);
+        std::unique_ptr<IntType[]> multiply_recursion(std::vector<IntType>& vectorA, std::vector<IntType>& vectorB);
 
 
 
@@ -34,7 +34,7 @@ namespace zhejiangfhe {
           * @param vectorB 多项式B系数表示
           * @return
           */
-        std::unique_ptr<IntType[]> multiply_iteration(int lengthA, IntType * vectorA, int lengthB, IntType * vectorB);
+        std::unique_ptr<IntType[]> multiply_iteration(std::vector<IntType>& vectorA, std::vector<IntType>& vectorB);
 
 
         /**
@@ -42,7 +42,7 @@ namespace zhejiangfhe {
          * @param length
          * @param vector
          */
-        std::unique_ptr<std::complex<double>> fft_forward_transform(int lengthA, IntType *vector);
+        std::unique_ptr<std::complex<double>[]> fft_forward_transform(std::vector<IntType>& vector);
 
 
         /**
@@ -63,7 +63,7 @@ namespace zhejiangfhe {
          * @param vector
          * @param inverseFlag
          */
-        void fft_iteration(int *index, int length, std::complex<double> *vector, int inverseFlag);
+        void fft_iteration(std::vector<int>& index, std::vector<std::complex<double>>& vector, int inverseFlag);
 
 
         /**
@@ -81,7 +81,7 @@ namespace zhejiangfhe {
          * @param bitSize
          * @param index
          */
-        void rearrange(int length, int bitSize, int *index);
+        void rearrange(int bitSize, std::vector<int>& index);
     };
 }
 
