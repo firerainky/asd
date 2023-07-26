@@ -5,10 +5,24 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_INSTALL_RPATH "${LIBINSTALL}")
 
+# Add sanitizer to project for detecting memory error
+option(ENABLE_SANITIZE_ADDR "Enable address sanitize." ON)
+option(ENABLE_SANITIZE_UNDEF "Enable undefined sanitize." ON)
+option(ENABLE_SANITIZE_LEAK "Enable leak sanitize (Gcc/Clang only)." ON)
+option(ENABLE_SANITIZE_THREAD "Enable thread sanitize (Gcc/Clang only)." OFF)
+
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/)
+
+if(ENABLE_SANITIZE_ADDR OR ENABLE_SANITIZE_UNDEF)
+    message(STATUS "Sanitizers enabled")
+    include(Sanitizer)
+    add_sanitizer_flags()
+endif()
+
 add_subdirectory(src bin)
 
 add_executable(zj_fhe_lib main.cpp)
-target_link_libraries(zj_fhe_lib MathFunctions)
+target_link_libraries(zj_fhe_lib PRIVATE MathFunctions)
 
 # Get third libraries: just googletest & googlebenchmark for now.
 include(FetchContent)

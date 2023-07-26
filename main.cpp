@@ -15,6 +15,9 @@ int main() {
     std::cout << testIntA.ConvertToString().c_str() << std::endl;
     std::cout << ans.ConvertToString().c_str() << std::endl;
 
+    // Uncomment below 2 lines you will see memory error if address sanitizer is enabled.
+    // int *x = new int[42];
+    // x[100] = 5;// Boom!
 
     BInt testBigIntA("52");
     std::cout << testBigIntA.ConvertToString().c_str() << std::endl;
