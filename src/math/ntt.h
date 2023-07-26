@@ -30,7 +30,9 @@ namespace zhejiangfhe {
          * @param root 2d-th primitive root of unity in Z_q.
          * @param cycloOrder 2d, must be a power of two.
          */
-        void NTForwardTransformBitReverseInPlace(VecType *vec, const IntType &root, const uint32_t cycloOrder);
+        void NTForwardTransformBitReverseInPlace(VecType *vec,
+                                                 const IntType &root,
+                                                 const uint32_t cycloOrder);
 
         /**
          * @description: In place perform inverse number theory transform in the ring Z_q[x]/(x^d+1)
@@ -40,14 +42,21 @@ namespace zhejiangfhe {
          * @param root 2d-th primitive root of unity in Z_q.
          * @param cycloOrder 2d, must be a power of two.
          */
-        void NTInverseTransformBitReverseInPlace(VecType *vec, const IntType &root, const uint32_t cycloOrder);
+        void NTInverseTransformBitReverseInPlace(VecType *vec,
+                                                 const IntType &root,
+                                                 const uint32_t cycloOrder);
 
     private:
-        void precompute(const IntType &root, const uint32_t cycloOrder, const IntType &modulus);
+        void precompute(const IntType &root,
+                        const uint32_t cycloOrder,
+                        const IntType &modulus);
 
-        std::map<IntType, std::vector<IntType>> rootReverseMap;       // [modulus : rootReverseVec]
-        std::map<IntType, std::vector<IntType>> rootInverseReverseMap;// [modulus : rootInverseReverseVec]
-        std::map<IntType, std::vector<IntType>> cycloOrderInverseMap; // [modulus : cycloOrderInverseVec]
+        std::map<IntType, std::vector<IntType>>
+                rootReverseMap;// [modulus : rootReverseVec]
+        std::map<IntType, std::vector<IntType>>
+                rootInverseReverseMap;// [modulus : rootInverseReverseVec]
+        std::map<IntType, std::vector<IntType>>
+                cycloOrderInverseMap;// [modulus : cycloOrderInverseVec]
 
         static Ntt *instance;
         Ntt(){};

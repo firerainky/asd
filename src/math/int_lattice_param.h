@@ -17,8 +17,11 @@ namespace zhejiangfhe {
 
     public:
         using Integer = IntegerType;
-        IntLatticeParam(uint32_t order, const IntegerType &ctModulus, const IntegerType &rUnity = IntegerType(0),
-                        const IntegerType &bigCtModulus = IntegerType(0), const IntegerType &bigRUnity = IntegerType(0)) {
+        IntLatticeParam(uint32_t order,
+                        const IntegerType &ctModulus,
+                        const IntegerType &rUnity = IntegerType(0),
+                        const IntegerType &bigCtModulus = IntegerType(0),
+                        const IntegerType &bigRUnity = IntegerType(0)) {
             cyclotomicOrder = order;
             ringDimension = GetTotient(order);
             isPowerOfTwo = ringDimension == cyclotomicOrder / 2;
@@ -60,13 +63,21 @@ namespace zhejiangfhe {
         }
 
         bool operator==(const IntLatticeParam &rhs) const {
-            return cyclotomicOrder == rhs.cyclotomicOrder && ringDimension == rhs.ringDimension && ciphertextModulus == rhs.ciphertextModulus
-                   && rootOfUnity == rhs.rootOfUnity && bigCiphertextModulus == rhs.bigCiphertextModulus && bigRootOfUnity == rhs.bigRootOfUnity;
+            return cyclotomicOrder == rhs.cyclotomicOrder &&
+                   ringDimension == rhs.ringDimension &&
+                   ciphertextModulus == rhs.ciphertextModulus &&
+                   rootOfUnity == rhs.rootOfUnity &&
+                   bigCiphertextModulus == rhs.bigCiphertextModulus &&
+                   bigRootOfUnity == rhs.bigRootOfUnity;
         }
 
         bool operator!=(const IntLatticeParam &rhs) const {
-            return !(cyclotomicOrder == rhs.cyclotomicOrder && ringDimension == rhs.ringDimension && ciphertextModulus == rhs.ciphertextModulus
-                     && rootOfUnity == rhs.rootOfUnity && bigCiphertextModulus == rhs.bigCiphertextModulus && bigRootOfUnity == rhs.bigRootOfUnity);
+            return !(cyclotomicOrder == rhs.cyclotomicOrder &&
+                     ringDimension == rhs.ringDimension &&
+                     ciphertextModulus == rhs.ciphertextModulus &&
+                     rootOfUnity == rhs.rootOfUnity &&
+                     bigCiphertextModulus == rhs.bigCiphertextModulus &&
+                     bigRootOfUnity == rhs.bigRootOfUnity);
         }
 
         uint32_t GetCyclotomicOrder() const {

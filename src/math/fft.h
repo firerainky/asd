@@ -17,15 +17,15 @@ namespace zhejiangfhe {
     class FFT {
 
     public:
-
         /**
           * 多项式乘法，fft实现  递归版本
           * @param vectorA 多项式A系数表示
           * @param vectorB 多项式B系数表示
           * @return
           */
-        std::unique_ptr<IntType[]> multiply_recursion(std::vector<IntType>& vectorA, std::vector<IntType>& vectorB);
-
+        std::unique_ptr<IntType[]> multiply_recursion(
+                std::vector<IntType> &vectorA,
+                std::vector<IntType> &vectorB);
 
 
         /**
@@ -34,7 +34,9 @@ namespace zhejiangfhe {
           * @param vectorB 多项式B系数表示
           * @return
           */
-        std::unique_ptr<IntType[]> multiply_iteration(std::vector<IntType>& vectorA, std::vector<IntType>& vectorB);
+        std::unique_ptr<IntType[]> multiply_iteration(
+                std::vector<IntType> &vectorA,
+                std::vector<IntType> &vectorB);
 
 
         /**
@@ -42,7 +44,8 @@ namespace zhejiangfhe {
          * @param length
          * @param vector
          */
-        std::unique_ptr<std::complex<double>[]> fft_forward_transform(std::vector<IntType>& vector);
+        std::unique_ptr<std::complex<double>[]> fft_forward_transform(
+                std::vector<IntType> &vector);
 
 
         /**
@@ -50,10 +53,11 @@ namespace zhejiangfhe {
          * @param length
          * @param vector
          */
-        std::unique_ptr<IntType[]> fft_inverse_transform(int size, std::complex<double> *vectorA);
+        std::unique_ptr<IntType[]> fft_inverse_transform(
+                int size,
+                std::complex<double> *vectorA);
 
     private:
-
         double pi = acos(-1.0);
 
         /**
@@ -63,7 +67,9 @@ namespace zhejiangfhe {
          * @param vector
          * @param inverseFlag
          */
-        void fft_iteration(std::vector<int>& index, std::vector<std::complex<double>>& vector, int inverseFlag);
+        void fft_iteration(std::vector<int> &index,
+                           std::vector<std::complex<double>> &vector,
+                           int inverseFlag);
 
 
         /**
@@ -72,7 +78,9 @@ namespace zhejiangfhe {
          * @param vector 多项式向量表示
          * @param inverseFlag -1表示FFT逆变换
          */
-        void fft_recursion(int length, std::complex<double> *vector, int inverseFlag);
+        void fft_recursion(int length,
+                           std::complex<double> *vector,
+                           int inverseFlag);
 
 
         /**
@@ -81,8 +89,8 @@ namespace zhejiangfhe {
          * @param bitSize
          * @param index
          */
-        void rearrange(int bitSize, std::vector<int>& index);
+        void rearrange(int bitSize, std::vector<int> &index);
     };
-}
+}// namespace zhejiangfhe
 
 #endif//ZJ_FHE_LIB_FFT_H

@@ -15,16 +15,16 @@ namespace zhejiangfhe {
         std::string message;
 
     public:
-        ZJException(const std::string& file, int line, const std::string& what)
+        ZJException(const std::string &file, int line, const std::string &what)
             : std::runtime_error(what), fileName(file), lineNum(line) {
             message = fileName + ":" + std::to_string(lineNum) + " " + what;
         }
 
-        const char* what() const throw() {
+        const char *what() const throw() {
             return message.c_str();
         }
 
-        const std::string& GetFileName() const {
+        const std::string &GetFileName() const {
             return fileName;
         }
         int GetLineNum() const {
@@ -33,47 +33,63 @@ namespace zhejiangfhe {
     };
 
 
-
     class ConfigException : public ZJException {
     public:
-        ConfigException(const std::string& file, int line, const std::string& what) : ZJException(file, line, what) {}
+        ConfigException(const std::string &file, int line, const std::string &what)
+            : ZJException(file, line, what) {
+        }
     };
 
     class MathException : public ZJException {
     public:
-        MathException(const std::string& file, int line, const std::string& what) : ZJException(file, line, what) {}
+        MathException(const std::string &file, int line, const std::string &what)
+            : ZJException(file, line, what) {
+        }
     };
 
     class NotImplementedException : public ZJException {
     public:
-        NotImplementedException(const std::string& file, int line, const std::string& what)
-            : ZJException(file, line, what) {}
+        NotImplementedException(const std::string &file,
+                                int line,
+                                const std::string &what)
+            : ZJException(file, line, what) {
+        }
     };
 
     class NotAvailableError : public ZJException {
     public:
-        NotAvailableError(const std::string& file, int line, const std::string& what) : ZJException(file, line, what) {}
+        NotAvailableError(const std::string &file,
+                          int line,
+                          const std::string &what)
+            : ZJException(file, line, what) {
+        }
     };
 
     class TypeException : public ZJException {
     public:
-        TypeException(const std::string& file, int line, const std::string& what) : ZJException(file, line, what) {}
+        TypeException(const std::string &file, int line, const std::string &what)
+            : ZJException(file, line, what) {
+        }
     };
 
 
     class SerializeError : public ZJException {
     public:
-        SerializeError(const std::string& file, int line, const std::string& what) : ZJException(file, line, what) {}
+        SerializeError(const std::string &file, int line, const std::string &what)
+            : ZJException(file, line, what) {
+        }
     };
 
 
     class DeserializeError : public ZJException {
     public:
-        DeserializeError(const std::string& file, int line, const std::string& what) : ZJException(file, line, what) {}
+        DeserializeError(const std::string &file, int line, const std::string &what)
+            : ZJException(file, line, what) {
+        }
     };
 
 #define ZJFHE_THROW(exc, expr) throw exc(__FILE__, __LINE__, (expr))
-}
+}// namespace zhejiangfhe
 
 
 #endif//ZJ_FHE_LIB_EXCEPTION_H

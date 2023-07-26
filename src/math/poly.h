@@ -14,8 +14,10 @@
 #include <iosfwd>
 
 namespace zhejiangfhe {
-    enum Format { EVALUATION = 0,
-                  COEFFICIENT = 1 };
+    enum Format {
+        EVALUATION = 0,
+        COEFFICIENT = 1
+    };
 
     template<typename VecType>
     class Poly {
@@ -26,7 +28,8 @@ namespace zhejiangfhe {
 
         Poly();
 
-        Poly(const std::shared_ptr<Params> params, Format format = Format::EVALUATION,
+        Poly(const std::shared_ptr<Params> params,
+             Format format = Format::EVALUATION,
              bool initializeElementToZero = false);
 
         /**
@@ -55,7 +58,9 @@ namespace zhejiangfhe {
         const Poly &operator=(uint64_t val);
 
         bool operator==(const Poly &rhs) const {
-            if (GetFormat() != rhs.GetFormat()) { return false; }
+            if (GetFormat() != rhs.GetFormat()) {
+                return false;
+            }
             if (params->GetRootOfUnity() != rhs.params->GetRootOfUnity()) {
                 return false;
             }
@@ -165,7 +170,8 @@ namespace zhejiangfhe {
         Poly MultiplyForEvaluationEq(const Poly &element);
 
         friend std::ostream &operator<<(std::ostream &os, const Poly &poly) {
-            os << (poly.format == Format::EVALUATION ? "EVAL, " : "COEF, ") << poly.GetValue();
+            os << (poly.format == Format::EVALUATION ? "EVAL, " : "COEF, ")
+               << poly.GetValue();
             return os;
         }
 

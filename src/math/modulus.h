@@ -13,7 +13,8 @@ namespace zhejiangfhe {
     class Modulus {
 
     public:
-        Modulus() {}
+        Modulus() {
+        }
 
         Modulus(BigInteger<NativeInt> value) {
             set_value(value);

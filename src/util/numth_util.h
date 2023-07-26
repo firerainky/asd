@@ -12,14 +12,14 @@
 namespace zhejiangfhe {
     namespace util {
 
-        template <typename IntType>
-        void PrimeFactorize(IntType n, std::set<IntType>& primeFactors);
+        template<typename IntType>
+        void PrimeFactorize(IntType n, std::set<IntType> &primeFactors);
 
-        template <typename IntType>
-        const IntType PollardRhoFactorization(const IntType& n);
+        template<typename IntType>
+        const IntType PollardRhoFactorization(const IntType &n);
 
-        template <typename IntType>
-        bool MillerRabinPrimalityTest(const IntType& p, const uint32_t niter = 100);
+        template<typename IntType>
+        bool MillerRabinPrimalityTest(const IntType &p, const uint32_t niter = 100);
 
         /**
          * 计算n的欧拉函数值
@@ -103,8 +103,8 @@ namespace zhejiangfhe {
                 ZJFHE_THROW(zhejiangfhe::TypeException, "not support native int type");
             }
         }
-    }
-};
+    }// namespace util
+};   // namespace zhejiangfhe
 
 
 #endif//ZJ_FHE_LIB_NUMTHUTIL_H

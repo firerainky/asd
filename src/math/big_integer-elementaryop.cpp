@@ -8,21 +8,29 @@
 namespace zhejiangfhe {
 
     template<typename NativeInt>
-    uint8_t BigInteger<NativeInt>::addWithCarry(NativeInt operand1, NativeInt operand2, uint8_t carry, NativeInt *result) {
+    uint8_t BigInteger<NativeInt>::addWithCarry(NativeInt operand1,
+                                                NativeInt operand2,
+                                                uint8_t carry,
+                                                NativeInt *result) {
         operand1 += operand2;
         *result = operand1 + carry;
         return (operand1 < operand2) || (~operand1 < carry);
     }
 
     template<typename NativeInt>
-    uint8_t BigInteger<NativeInt>::subWithBorrow(NativeInt operand1, NativeInt operand2, uint8_t borrow, NativeInt *result) {
+    uint8_t BigInteger<NativeInt>::subWithBorrow(NativeInt operand1,
+                                                 NativeInt operand2,
+                                                 uint8_t borrow,
+                                                 NativeInt *result) {
         auto diff = operand1 - operand2;
         *result = diff - (borrow != 0);
         return (diff > operand1) || (diff < borrow);
     }
 
     template<typename NativeInt>
-    BigInteger<NativeInt> BigInteger<NativeInt>::AddWithSameSign(const BigInteger<NativeInt> &num, bool sign) const {
+    BigInteger<NativeInt> BigInteger<NativeInt>::AddWithSameSign(
+            const BigInteger<NativeInt> &num,
+            bool sign) const {
         std::vector<NativeInt> resultVectors;
 
         uint8_t carry = 0;
@@ -48,7 +56,9 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
-    BigInteger<NativeInt> BigInteger<NativeInt>::SubWithSameSign(const BigInteger<NativeInt> &num, bool sign) const {
+    BigInteger<NativeInt> BigInteger<NativeInt>::SubWithSameSign(
+            const BigInteger<NativeInt> &num,
+            bool sign) const {
 
         std::vector<NativeInt> resultVectors;
 
@@ -60,7 +70,8 @@ namespace zhejiangfhe {
                 borrow = subWithBorrow(value[i], 0, borrow, &currentLimb);
                 resultVectors.push_back(currentLimb);
             } else {
-                borrow = subWithBorrow(value[i], num.value[i], borrow, &currentLimb);
+                borrow =
+                        subWithBorrow(value[i], num.value[i], borrow, &currentLimb);
                 resultVectors.push_back(currentLimb);
             }
         }
@@ -70,7 +81,8 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
-    BigInteger<NativeInt> BigInteger<NativeInt>::Add(const BigInteger<NativeInt> &num) const {
+    BigInteger<NativeInt> BigInteger<NativeInt>::Add(
+            const BigInteger<NativeInt> &num) const {
         int absoluteCompare = AbsoluteCompare(num);
         if (sign == false && num.sign == true) {
             if (AbsoluteCompare(num) == 0) {
@@ -94,7 +106,8 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
-    const BigInteger<NativeInt> &BigInteger<NativeInt>::AddEq(const BigInteger<NativeInt> &num) {
+    const BigInteger<NativeInt> &BigInteger<NativeInt>::AddEq(
+            const BigInteger<NativeInt> &num) {
         int absoluteCompare = AbsoluteCompare(num);
         if (sign == false && num.sign == true) {
             if (AbsoluteCompare(num) == 0) {
@@ -126,7 +139,8 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
-    BigInteger<NativeInt> BigInteger<NativeInt>::Sub(const BigInteger<NativeInt> &num) const {
+    BigInteger<NativeInt> BigInteger<NativeInt>::Sub(
+            const BigInteger<NativeInt> &num) const {
         int absoluteCompare = AbsoluteCompare(num);
         if (sign == false && num.sign == true) {
             return AddWithSameSign(num, sign);
@@ -144,7 +158,8 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
-    const BigInteger<NativeInt> &BigInteger<NativeInt>::SubEq(const BigInteger<NativeInt> &num) {
+    const BigInteger<NativeInt> &BigInteger<NativeInt>::SubEq(
+            const BigInteger<NativeInt> &num) {
         int absoluteCompare = AbsoluteCompare(num);
         if (sign == false && num.sign == true) {
             // AssignObj(AddWithSameSign(num, sign));
@@ -168,7 +183,9 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
-    void BigInteger<NativeInt>::MultiplyWithKaratsuba(NativeInt operand1, NativeInt operand2, NativeInt *resultTwo) {
+    void BigInteger<NativeInt>::MultiplyWithKaratsuba(NativeInt operand1,
+                                                      NativeInt operand2,
+                                                      NativeInt *resultTwo) {
         NativeInt mask = 0x0;
         uint32_t halfLimbLength = m_limbBitLength / 2;
         for (int i = 0; i < halfLimbLength; ++i) {
@@ -182,15 +199,19 @@ namespace zhejiangfhe {
 
         NativeInt right = b * d;
         NativeInt middle;
-        NativeInt left = a * c + (static_cast<NativeInt>(addWithCarry(a * d, b * c, 0, &middle)) << halfLimbLength);
+        NativeInt left =
+                a * c + (static_cast<NativeInt>(addWithCarry(a * d, b * c, 0, &middle))
+                         << halfLimbLength);
         NativeInt temp_sum = (right >> halfLimbLength) + (middle & mask);
 
-        resultTwo[1] = left + (middle >> halfLimbLength) + (temp_sum >> halfLimbLength);
+        resultTwo[1] =
+                left + (middle >> halfLimbLength) + (temp_sum >> halfLimbLength);
         resultTwo[0] = (temp_sum << halfLimbLength) | (right & mask);
     }
 
     template<typename NativeInt>
-    BigInteger<NativeInt> BigInteger<NativeInt>::Mul(const BigInteger<NativeInt> &b) const {
+    BigInteger<NativeInt> BigInteger<NativeInt>::Mul(
+            const BigInteger<NativeInt> &b) const {
 
         std::vector<NativeInt> values;
         for (int i = 0; i < value.size(); ++i) {
@@ -202,7 +223,8 @@ namespace zhejiangfhe {
                 if (i + j + 1 > values.size()) {
                     values.push_back(temp_result[0]);
                 } else {
-                    carry = addWithCarry(temp_result[0], values[i + j], carry, &sum);
+                    carry =
+                            addWithCarry(temp_result[0], values[i + j], carry, &sum);
                     values[i + j] = sum;
                     temp_result[1] += carry;
                     carry = 0;
@@ -211,14 +233,18 @@ namespace zhejiangfhe {
                 if (i + j + 2 > values.size()) {
                     values.push_back(temp_result[1]);
                 } else {
-                    carry = addWithCarry(temp_result[1], values[i + j + 1], carry, &sum);
+                    carry = addWithCarry(temp_result[1],
+                                         values[i + j + 1],
+                                         carry,
+                                         &sum);
                     values[i + j + 1] = sum;
                     uint8_t currentIdx = i + j + 2;
                     while (carry) {
                         if (currentIdx > values.size()) {
                             values.push_back(carry);
                         } else {
-                            carry = addWithCarry(0, values[currentIdx], carry, &sum);
+                            carry =
+                                    addWithCarry(0, values[currentIdx], carry, &sum);
                             values[currentIdx] = sum;
                         }
                     }
@@ -230,19 +256,23 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
-    const BigInteger<NativeInt> &BigInteger<NativeInt>::MulEq(const BigInteger<NativeInt> &b) {
+    const BigInteger<NativeInt> &BigInteger<NativeInt>::MulEq(
+            const BigInteger<NativeInt> &b) {
         return *this = this->Mul(b);
     }
 
 
     template<typename NativeInt>
-    const BigInteger<NativeInt> &BigInteger<NativeInt>::DividedByEq(const BigInteger<NativeInt> &b) {
-        std::pair<BigInteger<NativeInt>, BigInteger<NativeInt>> resultPair = this->DividedBy(b);
+    const BigInteger<NativeInt> &BigInteger<NativeInt>::DividedByEq(
+            const BigInteger<NativeInt> &b) {
+        std::pair<BigInteger<NativeInt>, BigInteger<NativeInt>> resultPair =
+                this->DividedBy(b);
         return *this = resultPair.first;
     }
 
     template<typename NativeInt>
-    std::pair<BigInteger<NativeInt>, BigInteger<NativeInt>> BigInteger<NativeInt>::DividedBy(const BigInteger<NativeInt> &denominator) const {
+    std::pair<BigInteger<NativeInt>, BigInteger<NativeInt>> BigInteger<
+            NativeInt>::DividedBy(const BigInteger<NativeInt> &denominator) const {
 
         bool finalSign = sign xor denominator.sign;
 
@@ -253,7 +283,10 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
-    bool BigInteger<NativeInt>::Divide(BigInteger &quotientIn, BigInteger &remainderIn, const BigInteger &uIn, const BigInteger &vIn) const {
+    bool BigInteger<NativeInt>::Divide(BigInteger &quotientIn,
+                                       BigInteger &remainderIn,
+                                       const BigInteger &uIn,
+                                       const BigInteger &vIn) const {
 
         std::vector<NativeInt> &quotient = quotientIn.value;
         std::vector<NativeInt> &remainder = remainderIn.value;
@@ -275,7 +308,8 @@ namespace zhejiangfhe {
 
 
         if (m < n || n <= 0 || v[n - 1] == 0) {
-            std::cout << "Error in Divide m, n, v[n-1] " << m << ", " << n << ", " << v[n - 1] << std::endl;
+            std::cout << "Error in Divide m, n, v[n-1] " << m << ", " << n << ", "
+                      << v[n - 1] << std::endl;
             return false;// Return if invalid param.
         }
 
@@ -360,8 +394,10 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
-    BigInteger<NativeInt> BigInteger<NativeInt>::operator%(const BigInteger<NativeInt> &modulus) const {
-        if (GetMSB() < modulus.GetMSB() || GetMSB() == modulus.GetMSB() && AbsoluteCompare(modulus) < 0) {
+    BigInteger<NativeInt> BigInteger<NativeInt>::operator%(
+            const BigInteger<NativeInt> &modulus) const {
+        if (GetMSB() < modulus.GetMSB() ||
+            GetMSB() == modulus.GetMSB() && AbsoluteCompare(modulus) < 0) {
             if (getSign()) {
                 return *this + modulus;
             } else {
@@ -390,12 +426,15 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
-    const BigInteger<NativeInt> &BigInteger<NativeInt>::operator%=(const BigInteger<NativeInt> &modulus) {
+    const BigInteger<NativeInt> &BigInteger<NativeInt>::operator%=(
+            const BigInteger<NativeInt> &modulus) {
         return *this = *this % modulus;
     }
 
     template<typename NativeInt>
-    BigInteger<NativeInt> BigInteger<NativeInt>::ModMul(const BigInteger<NativeInt> &b, const BigInteger<NativeInt> &modulus) const {
+    BigInteger<NativeInt> BigInteger<NativeInt>::ModMul(
+            const BigInteger<NativeInt> &b,
+            const BigInteger<NativeInt> &modulus) const {
         BigInteger a(*this);
         BigInteger ans = 0;
         size_t nSize = a.value.size();

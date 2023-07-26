@@ -12,9 +12,13 @@
 namespace zhejiangfhe {
 
     template<typename VecType>
-    void Ntt<VecType>::NTForwardTransformBitReverseInPlace(VecType *vec, const IntType &root, const uint32_t cycloOrder) {
+    void Ntt<VecType>::NTForwardTransformBitReverseInPlace(
+            VecType *vec,
+            const IntType &root,
+            const uint32_t cycloOrder) {
         ZJ_DEBUG_FLAG(false);
-        if (root == 1 || root == 0) return;
+        if (root == 1 || root == 0)
+            return;
 
         // TODO: Add power of two assertion for cyclo order?
 
@@ -26,7 +30,8 @@ namespace zhejiangfhe {
         // Precompute
         IntType modulus = vec->GetModulus().GetValue();
         auto mapSearch = rootReverseMap.find(modulus);
-        if (mapSearch == rootReverseMap.end() || mapSearch->second.size() != halfOrder) {
+        if (mapSearch == rootReverseMap.end() ||
+            mapSearch->second.size() != halfOrder) {
             precompute(root, cycloOrder, modulus);
             ZJ_DEBUG("Precccccompute!!");
         }
@@ -71,9 +76,13 @@ namespace zhejiangfhe {
     }
 
     template<typename VecType>
-    void Ntt<VecType>::NTInverseTransformBitReverseInPlace(VecType *vec, const IntType &root, const uint32_t cycloOrder) {
+    void Ntt<VecType>::NTInverseTransformBitReverseInPlace(
+            VecType *vec,
+            const IntType &root,
+            const uint32_t cycloOrder) {
         ZJ_DEBUG_FLAG(false);
-        if (root == 1 || root == 0) return;
+        if (root == 1 || root == 0)
+            return;
 
         // TODO: Add power of two assertion for cyclo order?
 
@@ -85,7 +94,8 @@ namespace zhejiangfhe {
         // Precompute
         IntType modulus = vec->GetModulus().GetValue();
         auto mapSearch = rootInverseReverseMap.find(modulus);
-        if (mapSearch == rootInverseReverseMap.end() || mapSearch->second.size() != halfOrder) {
+        if (mapSearch == rootInverseReverseMap.end() ||
+            mapSearch->second.size() != halfOrder) {
             precompute(root, cycloOrder, modulus);
             ZJ_DEBUG("Precccccompute!!");
         }
@@ -139,7 +149,9 @@ namespace zhejiangfhe {
     }
 
     template<typename VecType>
-    void Ntt<VecType>::precompute(const IntType &root, const uint32_t cycloOrder, const IntType &modulus) {
+    void Ntt<VecType>::precompute(const IntType &root,
+                                  const uint32_t cycloOrder,
+                                  const IntType &modulus) {
         uint32_t halfOrder = (cycloOrder >> 1);
         IntType rootInverse = util::ModInverse(root, Modulus(modulus));
 

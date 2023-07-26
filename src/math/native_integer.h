@@ -5,8 +5,8 @@
 #ifndef ZJ_FHE_LIB_NATIVE_INTEGER_H
 #define ZJ_FHE_LIB_NATIVE_INTEGER_H
 
-#include "integer_interface.h"
 #include "../util/exception.h"
+#include "integer_interface.h"
 
 namespace zhejiangfhe {
     template<typename NativeInt>
@@ -22,7 +22,6 @@ namespace zhejiangfhe {
         }
         const NativeInteger<NativeInt> &AddEq(const NativeInteger<NativeInt> &b) {
             return NativeInteger("0");
-
         }
         NativeInteger<NativeInt> Sub(const NativeInteger<NativeInt> &b) const {
             return NativeInteger("0");
@@ -39,7 +38,8 @@ namespace zhejiangfhe {
         NativeInteger<NativeInt> DividedBy(const NativeInteger<NativeInt> &b) const {
             return NativeInteger("0");
         }
-        const NativeInteger<NativeInt> &DividedByEq(const NativeInteger<NativeInt> &b) {
+        const NativeInteger<NativeInt> &DividedByEq(
+                const NativeInteger<NativeInt> &b) {
             return NativeInteger("0");
         }
 
@@ -60,13 +60,16 @@ namespace zhejiangfhe {
             for (size_t i = 0; i < str.length(); i++) {
                 int v = str[i] - '0';
                 if (v < 0 || v > 9) {
-                    ZJFHE_THROW(zhejiangfhe::TypeException, "String contains a non-digit");
+                    ZJFHE_THROW(zhejiangfhe::TypeException,
+                                "String contains a non-digit");
                 }
                 value *= 10;
                 value += v;
 
                 if (value < test_value) {
-                    ZJFHE_THROW(zhejiangfhe::MathException, str + " is too large to fit in this native integer object");
+                    ZJFHE_THROW(
+                            zhejiangfhe::MathException,
+                            str + " is too large to fit in this native integer object");
                 }
                 test_value = value;
             }
@@ -78,5 +81,5 @@ namespace zhejiangfhe {
         bool sign;
     };
 
-}
+}// namespace zhejiangfhe
 #endif//ZJ_FHE_LIB_NATIVE_INTEGER_H

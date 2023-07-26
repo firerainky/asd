@@ -365,16 +365,21 @@ namespace zhejiangfhe {
                 return (reverse_byte((num) &0xff) >> shift_trick[msb & 0x7]);
 
             case 2:
-                return (reverse_byte((num) &0xff) << 8 | reverse_byte((num >> 8) & 0xff)) >> shift_trick[msb & 0x7];
+                return (reverse_byte((num) &0xff) << 8 |
+                        reverse_byte((num >> 8) & 0xff)) >>
+                       shift_trick[msb & 0x7];
 
             case 3:
-                return (reverse_byte((num) &0xff) << 16 | reverse_byte((num >> 8) & 0xff) << 8 |
+                return (reverse_byte((num) &0xff) << 16 |
+                        reverse_byte((num >> 8) & 0xff) << 8 |
                         reverse_byte((num >> 16) & 0xff)) >>
                        shift_trick[msb & 0x7];
 
             case 4:
-                return (reverse_byte((num) &0xff) << 24 | reverse_byte((num >> 8) & 0xff) << 16 |
-                        reverse_byte((num >> 16) & 0xff) << 8 | reverse_byte((num >> 24) & 0xff)) >>
+                return (reverse_byte((num) &0xff) << 24 |
+                        reverse_byte((num >> 8) & 0xff) << 16 |
+                        reverse_byte((num >> 16) & 0xff) << 8 |
+                        reverse_byte((num >> 24) & 0xff)) >>
                        shift_trick[msb & 0x7];
             default:
                 return -1;
@@ -395,7 +400,8 @@ namespace zhejiangfhe {
         return msb + 1;
 #else
         // a wrapper for GCC
-        return 64 - (sizeof(unsigned long) == 8 ? __builtin_clzl(x) : __builtin_clzll(x));// NOLINT
+        return 64 - (sizeof(unsigned long) == 8 ? __builtin_clzl(x)
+                                                : __builtin_clzll(x));// NOLINT
 #endif
     }
 

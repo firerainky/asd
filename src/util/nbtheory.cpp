@@ -46,7 +46,10 @@ namespace zhejiangfhe {
       false if p is likely prime
     */
     template<typename IntType>
-    static bool WitnessFunction(const IntType &a, const IntType &d, uint32_t s, const IntType &p) {
+    static bool WitnessFunction(const IntType &a,
+                                const IntType &d,
+                                uint32_t s,
+                                const IntType &p) {
         IntType mod = util::ModExp(a, d, BMod(p));
         bool prevMod = false;
         for (uint32_t i = 1; i < s + 1; i++) {
@@ -93,7 +96,8 @@ namespace zhejiangfhe {
 
             for (auto it = primeFactors.begin(); it != primeFactors.end(); ++it) {
                 IntType t = qm1 / (*it);
-                ZJ_DEBUG(qm1 << " / " << *it << " " << util::ModExp(gen, t, BMod(q)));
+                ZJ_DEBUG(qm1 << " / " << *it << " "
+                             << util::ModExp(gen, t, BMod(q)));
                 if (util::ModExp(gen, t, BMod(q)) == IntType(1))
                     break;
                 else
@@ -133,7 +137,8 @@ namespace zhejiangfhe {
     IntType FirstPrime(uint64_t nBits, uint64_t m) {
         IntType r = util::ModExp(IntType(2), IntType(nBits - 1), BMod(IntType(m)));
         IntType qNew = (IntType(1) << nBits);
-        IntType qNew2 = (r > IntType(0)) ? (qNew + (IntType(m) - r) + IntType(1)) : (qNew + IntType(1));// if r == 0
+        IntType qNew2 = (r > IntType(0)) ? (qNew + (IntType(m) - r) + IntType(1))
+                                         : (qNew + IntType(1));// if r == 0
         qNew = qNew2;
 
         while (!IsPrime(qNew)) {

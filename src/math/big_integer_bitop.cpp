@@ -7,7 +7,8 @@
 namespace zhejiangfhe {
 
     template<typename NativeInt>
-    BigInteger<NativeInt> BigInteger<NativeInt>::And(const BigInteger<NativeInt> another) const {
+    BigInteger<NativeInt> BigInteger<NativeInt>::And(
+            const BigInteger<NativeInt> another) const {
         std::vector<NativeInt> vals;
         for (auto i = 0; i < value.size() && i < another.value.size(); ++i) {
             vals.push_back(value[i] & another.value[i]);
@@ -17,12 +18,14 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
-    const BigInteger<NativeInt> &BigInteger<NativeInt>::AndEq(const BigInteger<NativeInt> another) {
+    const BigInteger<NativeInt> &BigInteger<NativeInt>::AndEq(
+            const BigInteger<NativeInt> another) {
         return *this = this->And(another);
     }
 
     template<typename NativeInt>
-    BigInteger<NativeInt> BigInteger<NativeInt>::Or(const BigInteger<NativeInt> another) const {
+    BigInteger<NativeInt> BigInteger<NativeInt>::Or(
+            const BigInteger<NativeInt> another) const {
         std::vector<NativeInt> vals;
         for (auto i = 0; (i < value.size() || i < another.value.size()); ++i) {
             if (i >= value.size()) {
@@ -38,7 +41,8 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
-    const BigInteger<NativeInt> &BigInteger<NativeInt>::OrEq(const BigInteger<NativeInt> another) {
+    const BigInteger<NativeInt> &BigInteger<NativeInt>::OrEq(
+            const BigInteger<NativeInt> another) {
         return *this = this->Or(another);
     }
 
@@ -57,7 +61,8 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
-    BigInteger<NativeInt> BigInteger<NativeInt>::Xor(const BigInteger<NativeInt> another) const {
+    BigInteger<NativeInt> BigInteger<NativeInt>::Xor(
+            const BigInteger<NativeInt> another) const {
         std::vector<NativeInt> vals;
         for (auto i = 0; (i < value.size() || i < another.value.size()); ++i) {
             if (i >= value.size()) {
@@ -73,7 +78,8 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
-    const BigInteger<NativeInt> &BigInteger<NativeInt>::XorEq(const BigInteger<NativeInt> another) {
+    const BigInteger<NativeInt> &BigInteger<NativeInt>::XorEq(
+            const BigInteger<NativeInt> another) {
         return *this = Xor(another);
     }
 
@@ -112,7 +118,9 @@ namespace zhejiangfhe {
         if (remainingShift != 0) {
             size_t i;
             for (i = ceilIntByUInt(m_MSB) - 1; i > 0; i--) {
-                ans.value[i] = (ans.value[i] << remainingShift) | ans.value[i - 1] >> (m_limbBitLength - remainingShift);
+                ans.value[i] =
+                        (ans.value[i] << remainingShift) |
+                        ans.value[i - 1] >> (m_limbBitLength - remainingShift);
             }
             ans.value[0] = ans.value[0] << remainingShift;
         }
@@ -152,9 +160,11 @@ namespace zhejiangfhe {
         // remainderShift bit shifts
         if (remainingShift != 0) {
             for (uint32_t i = 0; i < ans.value.size() - 1; i++) {
-                ans.value[i] = (ans.value[i] >> remainingShift) | ans.value[i + 1] << negativeShift;
+                ans.value[i] = (ans.value[i] >> remainingShift) |
+                               ans.value[i + 1] << negativeShift;
             }
-            ans.value[ans.value.size() - 1] = ans.value[ans.value.size() - 1] >> remainingShift;
+            ans.value[ans.value.size() - 1] =
+                    ans.value[ans.value.size() - 1] >> remainingShift;
         }
         while (!ans.value.back()) {
             ans.value.pop_back();

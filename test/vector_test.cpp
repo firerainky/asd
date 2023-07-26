@@ -12,7 +12,8 @@
 namespace zhejiangfhe {
     // 创建继承自 Test 的 test fixture
     template<typename T>
-    class VectorTest : public testing::Test {};
+    class VectorTest : public testing::Test {
+    };
 
     // 将 test fixture 与类型列表绑定在一起，这样下面的测试就可以自动对类型列表中的每一种都执行一遍了
     TYPED_TEST_SUITE(VectorTest, LimbTypes);

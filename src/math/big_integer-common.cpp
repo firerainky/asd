@@ -60,7 +60,8 @@ namespace zhejiangfhe {
             v = "0";// set to one zero
         }
         size_t arr_size = v.length();
-        std::unique_ptr<u_int8_t[]> dec_arr = std::make_unique<u_int8_t[]>(arr_size);
+        std::unique_ptr<u_int8_t[]> dec_arr =
+                std::make_unique<u_int8_t[]>(arr_size);
         for (size_t i = 0; i < arr_size; i++)// store the string to decimal array
             dec_arr[i] = (uint8_t) stoi(v.substr(i, 1));
 
@@ -70,7 +71,8 @@ namespace zhejiangfhe {
         size_t zero_ptr = 0;
         // index of highest non-zero number in decimal number
         // define  bit register array
-        std::unique_ptr<u_int8_t[]> bit_arr = std::make_unique<u_int8_t[]>(m_limbBitLength);
+        std::unique_ptr<u_int8_t[]> bit_arr =
+                std::make_unique<u_int8_t[]>(m_limbBitLength);
         int cnt = m_limbBitLength - 1;
         // cnt is a pointer to the bit position in bit_arr, when bit_arr is complete it
         // is ready to be transfered to Value
@@ -101,11 +103,13 @@ namespace zhejiangfhe {
 
     template<typename NativeInt>
     uint8_t BigInteger<NativeInt>::GetBitAtIndex(uint32_t index) const {
-        if (index > m_MSB) return 0;
+        if (index > m_MSB)
+            return 0;
         uint32_t i = MSB2NLimbs(index) - 1;
         // uint32_t i = index / m_limbBitLength;
         NativeInt x = value[i];
-        uint32_t remain = index % m_limbBitLength == 0 ? m_limbBitLength : index % m_limbBitLength;
+        uint32_t remain = index % m_limbBitLength == 0 ? m_limbBitLength
+                                                       : index % m_limbBitLength;
         NativeInt bMask = 1;
         bMask <<= (remain - 1);
         return x & bMask ? 1 : 0;
@@ -115,7 +119,8 @@ namespace zhejiangfhe {
     uint32_t BigInteger<NativeInt>::MSB2NLimbs(const uint32_t number) {
         static uint32_t mask = m_limbBitLength - 1;
 
-        if (!number) return 1;
+        if (!number)
+            return 1;
         if ((number & mask) != 0) {
             return (number >> m_log2LimbBitLength) + 1;
         } else {
@@ -124,7 +129,8 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
-    uint32_t BigInteger<NativeInt>::GetDigitAtIndexForBase(uint32_t index, uint32_t base) const {
+    uint32_t BigInteger<NativeInt>::GetDigitAtIndexForBase(uint32_t index,
+                                                           uint32_t base) const {
         uint32_t digitLength = ceil(log2(base));
         uint32_t digit = 0;
         uint32_t newIndex = 1 + (index - 1) * digitLength;
@@ -149,7 +155,8 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
-    int BigInteger<NativeInt>::AbsoluteCompare(const BigInteger<NativeInt> &another) const {
+    int BigInteger<NativeInt>::AbsoluteCompare(
+            const BigInteger<NativeInt> &another) const {
         if (m_MSB < another.m_MSB) {
             return -1;
         } else if (m_MSB > another.m_MSB) {
@@ -182,7 +189,8 @@ namespace zhejiangfhe {
             if (value[0] == 0) {
                 negative = false;
             }
-            return std::string(negative ? "-" : "").append(std::to_string(value[0]));
+            return std::string(negative ? "-" : "")
+                    .append(std::to_string(value[0]));
         }
 
         std::vector<uint8_t> decimalArr;
@@ -271,17 +279,20 @@ namespace zhejiangfhe {
 
     template<typename NativeInt>
     void BigInteger<NativeInt>::RefreshMSB() {
-        m_MSB = (value.size() - 1) * m_limbBitLength + m_GetMSBForLimb(value.back());
+        m_MSB =
+                (value.size() - 1) * m_limbBitLength + m_GetMSBForLimb(value.back());
     }
 
     template<typename NativeInt>
     const uint32_t BigInteger<NativeInt>::m_limbBitLength = sizeof(NativeInt) * 8;
 
     template<typename NativeInt>
-    const NativeInt BigInteger<NativeInt>::m_MaxLimb = std::numeric_limits<NativeInt>::max();
+    const NativeInt BigInteger<NativeInt>::m_MaxLimb =
+            std::numeric_limits<NativeInt>::max();
 
     template<typename NativeInt>
-    const uint32_t BigInteger<NativeInt>::m_log2LimbBitLength = Log2<m_limbBitLength>::value;
+    const uint32_t BigInteger<NativeInt>::m_log2LimbBitLength =
+            Log2<m_limbBitLength>::value;
 
     template class zhejiangfhe::BigInteger<limbtype>;
 }// namespace zhejiangfhe

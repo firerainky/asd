@@ -8,11 +8,14 @@
 
 namespace zhejiangfhe {
     template<typename VecType>
-    Poly<VecType>::Poly() : value(nullptr), format(Format::EVALUATION) {}
+    Poly<VecType>::Poly() : value(nullptr), format(Format::EVALUATION) {
+    }
 
 
     template<typename VecType>
-    Poly<VecType>::Poly(const std::shared_ptr<Poly::Params> params, Format format, bool initializeElementToZero)
+    Poly<VecType>::Poly(const std::shared_ptr<Poly::Params> params,
+                        Format format,
+                        bool initializeElementToZero)
         : value(nullptr), format(format), params(params) {
         if (initializeElementToZero) {
             this->SetValueToZero();
@@ -53,7 +56,8 @@ namespace zhejiangfhe {
     }
 
     template<typename VecType>
-    const Poly<VecType> &Poly<VecType>::operator=(std::initializer_list<std::string> rhs) {
+    const Poly<VecType> &Poly<VecType>::operator=(
+            std::initializer_list<std::string> rhs) {
         static Integer ZERO(0);
         uint32_t len = rhs.size();
         if (!IsEmpty()) {
@@ -76,7 +80,8 @@ namespace zhejiangfhe {
     }
 
     template<typename VecType>
-    const Poly<VecType> &Poly<VecType>::operator=(std::initializer_list<uint64_t> rhs) {
+    const Poly<VecType> &Poly<VecType>::operator=(
+            std::initializer_list<uint64_t> rhs) {
         static Integer ZERO(0);
         uint32_t len = rhs.size();
 
@@ -227,7 +232,8 @@ namespace zhejiangfhe {
     const Poly<VecType> &Poly<VecType>::operator=(uint64_t val) {
         format = Format::EVALUATION;
         if (value == nullptr) {
-            value = std::make_unique<VecType>(params->GetRingDimension(), params->GetModulus());
+            value = std::make_unique<VecType>(params->GetRingDimension(),
+                                              params->GetModulus());
         }
         for (size_t i = 0; i < GetLength(); ++i) {
             this->operator[](i) = Integer(val);
@@ -266,8 +272,10 @@ namespace zhejiangfhe {
         if (params->GetRootOfUnity() == Integer(0)) {
             ZJFHE_THROW(TypeException, "Polynomial has a 0 root of unity");
         }
-        if (params->GetRingDimension() != value.GetLength() || params->GetModulus() != value.GetModulus().GetValue()) {
-            ZJFHE_THROW(TypeException, "Parameter mismatch on SetValues for Polynomial");
+        if (params->GetRingDimension() != value.GetLength() ||
+            params->GetModulus() != value.GetModulus().GetValue()) {
+            ZJFHE_THROW(TypeException,
+                        "Parameter mismatch on SetValues for Polynomial");
         }
         this->value = std::make_unique<VecType>(value);
         this->format = format;
@@ -275,14 +283,16 @@ namespace zhejiangfhe {
 
     template<typename VecType>
     void Poly<VecType>::SetValueToZero() {
-        value = std::make_unique<VecType>(params->GetRingDimension(), params->GetModulus());
+        value = std::make_unique<VecType>(params->GetRingDimension(),
+                                          params->GetModulus());
     }
 
     template<typename VecType>
     void Poly<VecType>::SetValuesToMax() {
         Integer max = params->GetModulus() - Integer(1);
         uint32_t size = params->GetRingDimension();
-        value = std::make_unique<VecType>(params->GetRingDimension(), params->GetModulus());
+        value = std::make_unique<VecType>(params->GetRingDimension(),
+                                          params->GetModulus());
         for (uint32_t i = 0; i < size; i++) {
             value->operator[](i) = Integer(max);
         }
@@ -308,7 +318,8 @@ namespace zhejiangfhe {
     }
 
     template<typename VecType>
-    const typename Poly<VecType>::Integer &Poly<VecType>::operator[](uint32_t i) const {
+    const typename Poly<VecType>::Integer &Poly<VecType>::operator[](
+            uint32_t i) const {
         return (*value)[i];
     }
 
@@ -327,13 +338,16 @@ namespace zhejiangfhe {
     }
 
     template<typename VecType>
-    Poly<VecType> Poly<VecType>::MultiplyForEvaluation(const Poly<VecType> &element) const {
+    Poly<VecType> Poly<VecType>::MultiplyForEvaluation(
+            const Poly<VecType> &element) const {
         if (format != Format::EVALUATION || element.format != Format::EVALUATION)
             ZJFHE_THROW(NotImplementedException,
-                        "MultiplyForEvaluation for Poly is supported only in Format::EVALUATION format.\n");
+                        "MultiplyForEvaluation for Poly is supported only in "
+                        "Format::EVALUATION format.\n");
 
         if (*this->params != *element.params)
-            ZJFHE_THROW(TypeException, "operator* called on Poly's with different params.");
+            ZJFHE_THROW(TypeException,
+                        "operator* called on Poly's with different params.");
 
         Poly tmp = *this;
         tmp.value->ModMulEq(*element.value);
@@ -341,13 +355,16 @@ namespace zhejiangfhe {
     }
 
     template<typename VecType>
-    Poly<VecType> Poly<VecType>::MultiplyForEvaluationEq(const Poly<VecType> &element) {
+    Poly<VecType> Poly<VecType>::MultiplyForEvaluationEq(
+            const Poly<VecType> &element) {
         if (format != Format::EVALUATION || element.format != Format::EVALUATION)
             ZJFHE_THROW(NotImplementedException,
-                        "MultiplyForEvaluationEq for Poly is supported only in Format::EVALUATION format.\n");
+                        "MultiplyForEvaluationEq for Poly is supported only in "
+                        "Format::EVALUATION format.\n");
 
         if (*this->params != *element.params)
-            ZJFHE_THROW(TypeException, "operator* called on Poly's with different params.");
+            ZJFHE_THROW(TypeException,
+                        "operator* called on Poly's with different params.");
 
         value->ModMulEq(*element.value);
         return *this;
@@ -356,11 +373,13 @@ namespace zhejiangfhe {
     template<typename VecType>
     Poly<VecType> Poly<VecType>::MultiplyPoly(const Poly &element) {
         if (format != Format::COEFFICIENT || element.format != Format::COEFFICIENT)
-            ZJFHE_THROW(NotImplementedException,
-                        "MultiplyPoly is supported only in Format::COEFFICIENT format.\n");
+            ZJFHE_THROW(
+                    NotImplementedException,
+                    "MultiplyPoly is supported only in Format::COEFFICIENT format.\n");
 
         if (*this->params != *element.params)
-            ZJFHE_THROW(TypeException, "operator* called on Poly's with different params.");
+            ZJFHE_THROW(TypeException,
+                        "operator* called on Poly's with different params.");
 
         return DoMultiplyPoly(element);
     }
@@ -368,11 +387,13 @@ namespace zhejiangfhe {
     template<typename VecType>
     Poly<VecType> Poly<VecType>::MultiplyPolyEq(const Poly &element) {
         if (format != Format::COEFFICIENT || element.format != Format::COEFFICIENT)
-            ZJFHE_THROW(NotImplementedException,
-                        "MultiplyPoly is supported only in Format::COEFFICIENT format.\n");
+            ZJFHE_THROW(
+                    NotImplementedException,
+                    "MultiplyPoly is supported only in Format::COEFFICIENT format.\n");
 
         if (*this->params != *element.params)
-            ZJFHE_THROW(TypeException, "operator* called on Poly's with different params.");
+            ZJFHE_THROW(TypeException,
+                        "operator* called on Poly's with different params.");
         return *this = DoMultiplyPoly(element);
     }
 
@@ -411,10 +432,16 @@ namespace zhejiangfhe {
 
         if (format == Format::COEFFICIENT) {
             format = Format::EVALUATION;
-            Ntt<VecType>::getInstance()->NTForwardTransformBitReverseInPlace(&(*value), params->GetRootOfUnity(), params->GetCyclotomicOrder());
+            Ntt<VecType>::getInstance()->NTForwardTransformBitReverseInPlace(
+                    &(*value),
+                    params->GetRootOfUnity(),
+                    params->GetCyclotomicOrder());
         } else {
             format = Format::COEFFICIENT;
-            Ntt<VecType>::getInstance()->NTInverseTransformBitReverseInPlace(&(*value), params->GetRootOfUnity(), params->GetCyclotomicOrder());
+            Ntt<VecType>::getInstance()->NTInverseTransformBitReverseInPlace(
+                    &(*value),
+                    params->GetRootOfUnity(),
+                    params->GetCyclotomicOrder());
         }
     }
 

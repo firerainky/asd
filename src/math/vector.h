@@ -15,8 +15,10 @@
 
 namespace zhejiangfhe {
 
-    enum State { INITIALIZED,
-                 GARBAGE };
+    enum State {
+        INITIALIZED,
+        GARBAGE
+    };
 
     template<typename IntegerType>
     class Vector {
@@ -30,23 +32,34 @@ namespace zhejiangfhe {
 
         Vector(uint32_t length, const Modulus<IntegerType> &modulus);
 
-        Vector(uint32_t length, const IntegerType &modulus) : Vector(length, Modulus<IntegerType>(modulus)){};
+        Vector(uint32_t length, const IntegerType &modulus)
+            : Vector(length, Modulus<IntegerType>(modulus)){};
 
-        Vector(const uint32_t length, const std::string &modulus) : Vector(length, Modulus<IntegerType>(modulus)){};
+        Vector(const uint32_t length, const std::string &modulus)
+            : Vector(length, Modulus<IntegerType>(modulus)){};
 
         Vector(const Vector &bigVector);
 
         Vector(Vector &&bigVector);
 
-        Vector(uint32_t length, const IntegerType &modulus, std::initializer_list<std::string> rhs);
+        Vector(uint32_t length,
+               const IntegerType &modulus,
+               std::initializer_list<std::string> rhs);
 
-        Vector(uint32_t length, const IntegerType &modulus, std::initializer_list<uint64_t> rhs);
+        Vector(uint32_t length,
+               const IntegerType &modulus,
+               std::initializer_list<uint64_t> rhs);
 
-        explicit Vector(const std::vector<std::string> &s, const Modulus<IntegerType> &modulus);
+        explicit Vector(const std::vector<std::string> &s,
+                        const Modulus<IntegerType> &modulus);
 
-        explicit Vector(const std::vector<std::string> &s, const IntegerType &modulus) : Vector(s, Modulus<IntegerType>(modulus)){};
+        explicit Vector(const std::vector<std::string> &s,
+                        const IntegerType &modulus)
+            : Vector(s, Modulus<IntegerType>(modulus)){};
 
-        explicit Vector(const std::vector<std::string> &s, const std::string &modulus) : Vector(s, Modulus<IntegerType>(modulus)){};
+        explicit Vector(const std::vector<std::string> &s,
+                        const std::string &modulus)
+            : Vector(s, Modulus<IntegerType>(modulus)){};
 
         const Vector &operator=(std::initializer_list<std::string> rhs);
         const Vector &operator=(std::initializer_list<uint64_t> rhs);
@@ -60,9 +73,9 @@ namespace zhejiangfhe {
 
         Vector &operator=(Vector &&rhs);
 
-        Integer* ConvertToIntList() {
+        Integer *ConvertToIntList() {
             Integer *result = new Integer[GetLength()];
-            for (int i=0; i<GetLength(); i++) {
+            for (int i = 0; i < GetLength(); i++) {
                 result[i] = at(i);
             }
             return result;
@@ -140,9 +153,11 @@ namespace zhejiangfhe {
 
         const Vector MultiplyEq(const Vector &b);
 
-        Vector MultiplyAndRound(const BigInteger<IntegerType> &p, const BigInteger<IntegerType> &q) const;
+        Vector MultiplyAndRound(const BigInteger<IntegerType> &p,
+                                const BigInteger<IntegerType> &q) const;
 
-        const Vector &MultiplyAndRoundEq(const BigInteger<IntegerType> &p, const BigInteger<IntegerType> &q);
+        const Vector &MultiplyAndRoundEq(const BigInteger<IntegerType> &p,
+                                         const BigInteger<IntegerType> &q);
 
         Vector DivideAndRound(const BigInteger<IntegerType> &q) const;
 
@@ -164,7 +179,8 @@ namespace zhejiangfhe {
          * @return is the digit at a specific index for all entries for a given number
          * base
          */
-        Vector<IntegerType> GetDigitAtIndexForBase(uint32_t index, uint32_t base) const;
+        Vector<IntegerType> GetDigitAtIndexForBase(uint32_t index,
+                                                   uint32_t base) const;
 
         friend std::ostream &operator<<(std::ostream &os, const Vector &vec) {
             auto len = vec.data.size();
