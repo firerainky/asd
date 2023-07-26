@@ -5,4 +5,6 @@ add_library (MathFunctions ${MATH_LIB_SRCS} ${UTIL_LIB_SRCS})
 target_include_directories(MathFunctions PUBLIC math util)
 target_compile_options(MathFunctions PRIVATE -Werror)
 
+add_clang_tidy_to_target(MathFunctions)
+
 MESSAGE(STATUS "math lib done !")
