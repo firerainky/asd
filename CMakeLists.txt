@@ -14,6 +14,7 @@ option(ENABLE_SANITIZE_THREAD "Enable thread sanitize (Gcc/Clang only)." OFF)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/)
 include(Tools)
 add_cmake_format_target()
+add_clang_format_target()
 
 if(ENABLE_SANITIZE_ADDR OR ENABLE_SANITIZE_UNDEF)
     message(STATUS "Sanitizers enabled")
