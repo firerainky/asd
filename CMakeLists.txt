@@ -30,10 +30,9 @@ target_link_libraries(zj_fhe_lib PRIVATE MathFunctions)
 include(FetchContent)
 
 FetchContent_Declare(
-  googletest
-  GIT_REPOSITORY https://github.com/google/googletest.git
-  GIT_TAG        v1.13.0
-)
+    googletest
+    GIT_REPOSITORY https://github.com/google/googletest.git
+    GIT_TAG v1.13.0)
 FetchContent_MakeAvailable(googletest)
 
 add_library(GTest::GTest INTERFACE IMPORTED)
@@ -45,8 +44,7 @@ set(BENCHMARK_ENABLE_TESTING NO)
 FetchContent_Declare(
     googlebenchmark
     GIT_REPOSITORY https://github.com/google/benchmark.git
-    GIT_TAG        v1.7.1
-)
+    GIT_TAG v1.7.1)
 FetchContent_MakeAvailable(googlebenchmark)
 
 # If the option does not change after we changing, we can run `cmake -S . -B build -UFHE_BUILD_TEST to force cmake updating the option
@@ -54,12 +52,12 @@ option(FHE_BUILD_TEST "IF BUILD TEST TARGET" ON)
 message(STATUS "FHE_BUILD_TEST: ${FHE_BUILD_TEST}")
 
 if(FHE_BUILD_TEST)
-  add_subdirectory(test)
+    add_subdirectory(test)
 endif()
 
 option(FHE_BUILD_BENCHMARK "IF BUILD BENCHMARK TARGET" ON)
 message(STATUS "FHE_BUILD_BENCHMARK: ${FHE_BUILD_BENCHMARK}")
 
 if(FHE_BUILD_BENCHMARK)
-  add_subdirectory(benchmark)
+    add_subdirectory(benchmark)
 endif()
