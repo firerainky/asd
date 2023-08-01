@@ -7,7 +7,7 @@ set(UNIT_TEST_SOURCES
     numth_util_test.cpp
     ploy_test.cpp
     nbtheory_test.cpp
-    fft_test.cpp)
+    fft_test.cpp whole_process/encrypt_params_test.cpp)
 set(UNIT_TEST_INCLUDES ./)
 
 add_executable(${UNIT_TEST_NAME} ${UNIT_TEST_SOURCES})
