@@ -68,6 +68,8 @@ If you are using vscode, you can install Xaver's Clang-Format extension and add 
 
 fhe_lib uses the linting tool clang-tidy for static analysis.
 
+You can run clang-tidy with CMake build target: `MathFunctions_clangtidy`
+
 #### Install clang-tidy
 
 Ubuntu: `sudo apt-get install -y clang-tidy`
