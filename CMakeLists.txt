@@ -5,11 +5,13 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_INSTALL_RPATH "${LIBINSTALL}")
 
-# Add sanitizer to project for detecting memory error
+# Options
 option(ENABLE_SANITIZE_ADDR "Enable address sanitize." ON)
 option(ENABLE_SANITIZE_UNDEF "Enable undefined sanitize." ON)
 option(ENABLE_SANITIZE_LEAK "Enable leak sanitize (Gcc/Clang only)." ON)
 option(ENABLE_SANITIZE_THREAD "Enable thread sanitize (Gcc/Clang only)." OFF)
+
+option(ENABLE_COVERAGE "Enable a Code Coverage build." OFF)
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/)
 include(Tools)
@@ -21,6 +23,11 @@ if(ENABLE_SANITIZE_ADDR OR ENABLE_SANITIZE_UNDEF)
     message(STATUS "Sanitizers enabled")
     include(Sanitizer)
     add_sanitizer_flags()
+endif()
+
+if (ENABLE_COVERAGE)
+    include(CodeCoverage)
+    append_coverage_compiler_flags()
 endif()
 
 add_subdirectory(src bin)
