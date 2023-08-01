@@ -95,9 +95,8 @@ namespace zhejiangfhe {
 
         NativeInt ConvertToLimb() const;
 
-        template<typename T,
-                 typename std::enable_if<!std::is_same<T, const BigInteger>::value,
-                                         bool>::type = true>
+        template<typename T, typename std::enable_if<!std::is_same<T, const BigInteger>::value,
+                                                     bool>::type = true>
         const BigInteger &operator=(const T &val) {
             return (*this = BigInteger(val));
         }
@@ -107,11 +106,10 @@ namespace zhejiangfhe {
          *
          * @param val is the initial integer represented as a basic integer type.
          */
-        template<typename T,
-                 typename std::enable_if<std::is_integral<T>::value &&
-                                                 !std::is_same<T, char>::value &&
-                                                 !std::is_same<T, uint64_t>::value,
-                                         bool>::type = true>
+        template<typename T, typename std::enable_if<std::is_integral<T>::value &&
+                                                             !std::is_same<T, char>::value &&
+                                                             !std::is_same<T, uint64_t>::value,
+                                                     bool>::type = true>
         BigInteger(T val) {
             if (val < 0) {
                 *this = BigInteger(static_cast<uint64_t>(-val), true);
@@ -142,37 +140,26 @@ namespace zhejiangfhe {
 
         BigInteger<NativeInt> Sub(const BigInteger<NativeInt> &num) const;
         const BigInteger<NativeInt> &SubEq(const BigInteger<NativeInt> &num);
-        BigInteger<NativeInt> operator-() {
-            return BigInteger(this->value, !this->sign);
-        }
+        BigInteger<NativeInt> operator-() { return BigInteger(this->value, !this->sign); }
 
-        std::size_t length() const {
-            return value.size();
-        }
-        std::vector<NativeInt> getValue() const {
-            return value;
-        }
+        std::size_t length() const { return value.size(); }
+        std::vector<NativeInt> getValue() const { return value; }
 
-        NativeInt getValueOfIndex(uint32_t index) const {
-            return value[index];
-        }
+        NativeInt getValueOfIndex(uint32_t index) const { return value[index]; }
 
-        bool getSign() const {
-            return sign;
-        }
+        bool getSign() const { return sign; }
 
         BigInteger<NativeInt> Mul(const BigInteger<NativeInt> &b) const;
 
         const BigInteger<NativeInt> &MulEq(const BigInteger<NativeInt> &b);
 
-        std::pair<BigInteger<NativeInt>, BigInteger<NativeInt>> DividedBy(
-                const BigInteger<NativeInt> &b) const;
+        std::pair<BigInteger<NativeInt>, BigInteger<NativeInt>>
+        DividedBy(const BigInteger<NativeInt> &b) const;
         const BigInteger<NativeInt> &DividedByEq(const BigInteger<NativeInt> &b);
 
         // Mod
         BigInteger<NativeInt> operator%(const BigInteger<NativeInt> &modulus) const;
-        const BigInteger<NativeInt> &operator%=(
-                const BigInteger<NativeInt> &modulus);
+        const BigInteger<NativeInt> &operator%=(const BigInteger<NativeInt> &modulus);
 
         BigInteger<NativeInt> ModMul(const BigInteger<NativeInt> &b,
                                      const BigInteger<NativeInt> &modulus) const;
@@ -198,9 +185,7 @@ namespace zhejiangfhe {
 
         BigInteger<NativeInt> Not() const;
         const BigInteger<NativeInt> &NotEq();
-        BigInteger<NativeInt> operator~() const {
-            return Not();
-        }
+        BigInteger<NativeInt> operator~() const { return Not(); }
 
         BigInteger<NativeInt> Xor(const BigInteger<NativeInt>) const;
         const BigInteger<NativeInt> &XorEq(const BigInteger<NativeInt>);
@@ -215,27 +200,19 @@ namespace zhejiangfhe {
         const BigInteger<NativeInt> &NegateEq();
 
         BigInteger<NativeInt> LeftShift(uint16_t shift) const;
-        BigInteger<NativeInt> operator<<(uint16_t shift) const {
-            return LeftShift(shift);
-        }
+        BigInteger<NativeInt> operator<<(uint16_t shift) const { return LeftShift(shift); }
         const BigInteger<NativeInt> &operator<<=(uint16_t shift) {
             return *this = this->LeftShift(shift);
         }
         BigInteger<NativeInt> RightShift(uint16_t shift) const;
-        BigInteger<NativeInt> operator>>(uint16_t shift) const {
-            return RightShift(shift);
-        }
+        BigInteger<NativeInt> operator>>(uint16_t shift) const { return RightShift(shift); }
         const BigInteger<NativeInt> &operator>>=(uint16_t shift) {
             return *this = this->RightShift(shift);
         }
 
         inline BigInteger Exp(uint32_t p) {
-            if (p == 0) {
-                return BigInteger(1);
-            }
-            if (p == 1) {
-                return *this;
-            }
+            if (p == 0) { return BigInteger(1); }
+            if (p == 1) { return *this; }
             BigInteger tmp = Exp(p / 2);
             if (p % 2 == 0) {
                 return tmp * tmp;
@@ -244,17 +221,11 @@ namespace zhejiangfhe {
             }
         }
 
-        uint32_t GetMSB() const {
-            return m_MSB;
-        }
+        uint32_t GetMSB() const { return m_MSB; }
 
-        std::vector<NativeInt> GetValue() const {
-            return value;
-        }
+        std::vector<NativeInt> GetValue() const { return value; }
 
-        bool GetSign() {
-            return sign;
-        }
+        bool GetSign() { return sign; }
 
         /**
          * Gets the bit at the specified index.
@@ -300,21 +271,16 @@ namespace zhejiangfhe {
             if (y == 0) {
                 return 0;
             } else {
-                return 64 - (sizeof(unsigned long) == 8 ? __builtin_clzl(y)
-                                                        : __builtin_clzll(y));
+                return 64 - (sizeof(unsigned long) == 8 ? __builtin_clzl(y) : __builtin_clzll(y));
             }
         }
         void NormalizeLimbs(void);
 
         NativeInt UintInBinaryToDecimal(uint8_t *a);
 
-        static uint8_t addWithCarry(NativeInt operand1,
-                                    NativeInt operand2,
-                                    uint8_t carry,
+        static uint8_t addWithCarry(NativeInt operand1, NativeInt operand2, uint8_t carry,
                                     NativeInt *result);
-        static uint8_t subWithBorrow(NativeInt operand1,
-                                     NativeInt operand2,
-                                     uint8_t borrow,
+        static uint8_t subWithBorrow(NativeInt operand1, NativeInt operand2, uint8_t borrow,
                                      NativeInt *result);
 
         BigInteger<NativeInt> AddWithSameSign(const BigInteger<NativeInt> &num,
@@ -330,9 +296,7 @@ namespace zhejiangfhe {
          * @param v
          * @return
          */
-        bool Divide(BigInteger &quotientIn,
-                    BigInteger &remainderIn,
-                    const BigInteger &uIn,
+        bool Divide(BigInteger &quotientIn, BigInteger &remainderIn, const BigInteger &uIn,
                     const BigInteger &vIn) const;
 
         /**
@@ -341,8 +305,7 @@ namespace zhejiangfhe {
          * (a * 2^n + b) * (c * 2^n + d) = ac*2^2n + (ad + bc)*2^n + bd
          * 这里 n = NativeInt 长度 / 2，下面的计算时由于进位的原因，做了多次平移。
          */
-        static void MultiplyWithKaratsuba(NativeInt operand1,
-                                          NativeInt operand2,
+        static void MultiplyWithKaratsuba(NativeInt operand1, NativeInt operand2,
                                           NativeInt *resultTwo);
 
         /**

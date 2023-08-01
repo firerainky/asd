@@ -3,8 +3,7 @@
 
 // 创建继承自 Test 的 test fixture
 template<typename T>
-class BigIntegerTest : public testing::Test {
-};
+class BigIntegerTest : public testing::Test {};
 
 // 将 test fixture 与类型列表绑定在一起，这样下面的测试就可以自动对类型列表中的每一种都执行一遍了
 TYPED_TEST_SUITE(BigIntegerTest, LimbTypes);
@@ -38,11 +37,9 @@ TYPED_TEST(BigIntegerTest, CreatesPositiveBigIntegersWithStringRepresentation) {
     EXPECT_EQ(bigInt.ConvertToString(), "123456789012345678901");
 
     bigInt = BInt("1234567890123456789012345678901234567890");
-    EXPECT_EQ(bigInt.ConvertToString(),
-              "1234567890123456789012345678901234567890");
+    EXPECT_EQ(bigInt.ConvertToString(), "1234567890123456789012345678901234567890");
 
-    bigInt =
-            BInt("123456789012345678901234567890123456789012345678901234567890");
+    bigInt = BInt("123456789012345678901234567890123456789012345678901234567890");
     EXPECT_EQ(bigInt.ConvertToString(),
               "123456789012345678901234567890123456789012345678901234567890");
 }
@@ -69,11 +66,9 @@ TYPED_TEST(BigIntegerTest, CreatesNegativeBigIntegersWithStringRepresentation) {
     EXPECT_EQ(bigInt.ConvertToString(), "-123456789012345678901");
 
     bigInt = BInt("-1234567890123456789012345678901234567890");
-    EXPECT_EQ(bigInt.ConvertToString(),
-              "-1234567890123456789012345678901234567890");
+    EXPECT_EQ(bigInt.ConvertToString(), "-1234567890123456789012345678901234567890");
 
-    bigInt =
-            BInt("-123456789012345678901234567890123456789012345678901234567890");
+    bigInt = BInt("-123456789012345678901234567890123456789012345678901234567890");
     EXPECT_EQ(bigInt.ConvertToString(),
               "-123456789012345678901234567890123456789012345678901234567890");
 }
@@ -95,32 +90,28 @@ TYPED_TEST(BigIntegerTest, CompareTwoBigInteger) {
     EXPECT_EQ(BInt("-2").Compare(BInt("3")), -1);
     EXPECT_EQ(BInt("-2").Compare(BInt("-3")), 1);
     EXPECT_EQ(BInt("2").Compare(BInt("4")), -1);
-    EXPECT_EQ(
-            BInt("8").Compare(BInt("1234567890123456789012345678901234567890")),
-            -1);
-    EXPECT_EQ(
-            BInt("123456789012345678901234567890123456789012345678901234567890")
-                    .Compare(BInt("1234567890123456789012345678901234567890")),
-            1);
-    EXPECT_EQ(
-            BInt("123456789012345678901234567890123456789012345678901234567890")
-                    .Compare(BInt("18446744073709551615")),
-            1);
-    EXPECT_EQ(
-            BInt("-123456789012345678901234567890123456789012345678901234567890")
-                    .Compare(BInt("-18446744073709551615")),
-            -1);
+    EXPECT_EQ(BInt("8").Compare(BInt("1234567890123456789012345678901234567890")), -1);
+    EXPECT_EQ(BInt("123456789012345678901234567890123456789012345678901234567890")
+                      .Compare(BInt("1234567890123456789012345678901234567890")),
+              1);
+    EXPECT_EQ(BInt("123456789012345678901234567890123456789012345678901234567890")
+                      .Compare(BInt("18446744073709551615")),
+              1);
+    EXPECT_EQ(BInt("-1234567890123456789012345678901234567890123456789012345678"
+                   "90")
+                      .Compare(BInt("-18446744073709551615")),
+              -1);
     EXPECT_EQ(BInt("18446744073709551615")
                       .Compare(BInt("-123456789012345678901234567890123456789012345"
                                     "678901234567890")),
               1);
 
-    EXPECT_TRUE(
-            BInt("18446744073709551615") >
-            BInt("-123456789012345678901234567890123456789012345678901234567890"));
-    EXPECT_TRUE(
-            BInt("-123456789012345678901234567890123456789012345678901234567890") ==
-            BInt("-123456789012345678901234567890123456789012345678901234567890"));
+    EXPECT_TRUE(BInt("18446744073709551615") >
+                BInt("-12345678901234567890123456789012345678901234567890123456"
+                     "7890"));
+    EXPECT_TRUE(BInt("-12345678901234567890123456789012345678901234567890123456"
+                     "7890") == BInt("-1234567890123456789012345678901234567890"
+                                     "12345678901234567890"));
 
     std::vector<TypeParam> vals1;
     std::vector<TypeParam> vals2;
@@ -149,8 +140,7 @@ TYPED_TEST(BigIntegerTest, AddTwoUnsignedBigIntegers) {
     EXPECT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(), "1234567");
     bigIntOne = BInt("0");
     bigIntTwo = BInt("123456789012345678901234567890");
-    EXPECT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(),
-              "123456789012345678901234567890");
+    EXPECT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(), "123456789012345678901234567890");
     bigIntOne = BInt("123456789012345678901234567890");
     bigIntTwo = BInt("-123456789012345678901234567890");
     EXPECT_EQ(bigIntOne.Add(bigIntTwo).ConvertToString(), "0");
@@ -187,8 +177,7 @@ TYPED_TEST(BigIntegerTest, BiggerIntegerSubtractSmallerInteger) {
     bigIntOne = BInt("123456789012345678901234567890");
     bigIntTwo = BInt("0");
 
-    EXPECT_EQ(bigIntOne.Sub(bigIntTwo).ConvertToString(),
-              "123456789012345678901234567890");
+    EXPECT_EQ(bigIntOne.Sub(bigIntTwo).ConvertToString(), "123456789012345678901234567890");
     bigIntOne = BInt("123456789012345678901234567890");
     bigIntTwo = BInt("123456789012345678901234567890");
     EXPECT_EQ(bigIntOne.Sub(bigIntTwo).ConvertToString(), "0");
@@ -223,14 +212,10 @@ TYPED_TEST(BigIntegerTest, MultiplyTwoBigInteger) {
     EXPECT_EQ(BInt().Mul(BInt("5")).ConvertToString(), "0");
     EXPECT_EQ(BInt("3").Mul(BInt("4")).ConvertToString(), "12");
     EXPECT_EQ(BInt("1234567").Mul(BInt()).ConvertToString(), "0");
-    EXPECT_EQ(BInt("1234567").Mul(BInt("1234567")).ConvertToString(),
-              "1524155677489");
-    EXPECT_EQ(
-            BInt("123456789012345678901234567890").Mul(BInt("1")).ConvertToString(),
-            "123456789012345678901234567890");
-    EXPECT_EQ(
-            BInt("123456789012345678901234567890").Mul(BInt("0")).ConvertToString(),
-            "0");
+    EXPECT_EQ(BInt("1234567").Mul(BInt("1234567")).ConvertToString(), "1524155677489");
+    EXPECT_EQ(BInt("123456789012345678901234567890").Mul(BInt("1")).ConvertToString(),
+              "123456789012345678901234567890");
+    EXPECT_EQ(BInt("123456789012345678901234567890").Mul(BInt("0")).ConvertToString(), "0");
     EXPECT_EQ(BInt("123456789012345678901234567890")
                       .Mul(BInt("123456789012345678901234567890"))
                       .ConvertToString(),
@@ -244,22 +229,15 @@ TYPED_TEST(BigIntegerTest, MultiplyTwoBigInteger) {
     EXPECT_EQ(BInt().Mul(BInt("-5")).ConvertToString(), "0");
     EXPECT_EQ(BInt("4").Mul(BInt("-5")).ConvertToString(), "-20");
     EXPECT_EQ((BInt("-3") * BInt("-5")).ConvertToString(), "15");
-    EXPECT_EQ(BInt("1234567").Mul(BInt("-1234567")).ConvertToString(),
-              "-1524155677489");
-    EXPECT_EQ(BInt("123456789012345678901234567890")
-                      .Mul(BInt("-1"))
-                      .ConvertToString(),
+    EXPECT_EQ(BInt("1234567").Mul(BInt("-1234567")).ConvertToString(), "-1524155677489");
+    EXPECT_EQ(BInt("123456789012345678901234567890").Mul(BInt("-1")).ConvertToString(),
               "-123456789012345678901234567890");
-    EXPECT_EQ(BInt("-123456789012345678901234567890")
-                      .Mul(BInt("0"))
-                      .ConvertToString(),
-              "0");
+    EXPECT_EQ(BInt("-123456789012345678901234567890").Mul(BInt("0")).ConvertToString(), "0");
     EXPECT_EQ(BInt("123456789012345678901234567890")
                       .Mul(BInt("-123456789012345678901234567890"))
                       .ConvertToString(),
               "-15241578753238836750495351562536198787501905199875019052100");
-    EXPECT_EQ((BInt("-999999999999999999999999999999") *
-               BInt("-999999999999999999999999999999"))
+    EXPECT_EQ((BInt("-999999999999999999999999999999") * BInt("-999999999999999999999999999999"))
                       .ConvertToString(),
               "999999999999999999999999999998000000000000000000000000000001");
 }
@@ -288,10 +266,7 @@ TYPED_TEST(BigIntegerTest, DivideTwoBigInteger) {
     using BInt = zhejiangfhe::BigInteger<TypeParam>;
 
     EXPECT_EQ(BInt(10).DividedBy(BInt(5)).first.ConvertToString(), "2");
-    EXPECT_EQ(BInt("12884901888")
-                      .DividedBy(BInt("4294967296"))
-                      .first.ConvertToString(),
-              "3");
+    EXPECT_EQ(BInt("12884901888").DividedBy(BInt("4294967296")).first.ConvertToString(), "3");
 
     BInt num("12884901888");
     num.DividedByEq(BInt("4294967296"));
@@ -301,9 +276,8 @@ TYPED_TEST(BigIntegerTest, DivideTwoBigInteger) {
                       .DividedBy(BInt("33333333333333333333333333333"))
                       .first.ConvertToString(),
               "3");
-    std::pair<BInt, BInt> ans =
-            BInt("999999999999999999999999999998000000000000000000000000000001")
-                    .DividedBy(BInt("999999999999999999999999999999"));
+    std::pair<BInt, BInt> ans = BInt("999999999999999999999999999998000000000000000000000000000001")
+                                        .DividedBy(BInt("999999999999999999999999999999"));
     EXPECT_EQ(ans.first.ConvertToString(), "999999999999999999999999999999");
 
     num = BInt("12234");
@@ -355,33 +329,25 @@ TYPED_TEST(BigIntegerTest, BitwiseAnd) {
     EXPECT_EQ(BInt("1").And(BInt("1")).ConvertToString(), "1");
     EXPECT_EQ(BInt("2").And(BInt("1")).ConvertToString(), "0");
 
-    EXPECT_EQ(BInt("4294967295").And(BInt("4294967295")).ConvertToString(),
-              "4294967295");
+    EXPECT_EQ(BInt("4294967295").And(BInt("4294967295")).ConvertToString(), "4294967295");
     EXPECT_EQ(BInt("1234567890123456789012345678901234567890")
                       .And(BInt("9876543210987654321098765432109876543210"))
                       .ConvertToString(),
               "340661406314991781975327611074046724802");
-    EXPECT_EQ(BInt("1234567890123456789012345678901234567891")
-                      .And(BInt("1"))
-                      .ConvertToString(),
+    EXPECT_EQ(BInt("1234567890123456789012345678901234567891").And(BInt("1")).ConvertToString(),
               "1");
 
-    EXPECT_EQ(BInt("1234567890123456789012345678901234567891")
-                      .And(BInt("-1"))
-                      .ConvertToString(),
+    EXPECT_EQ(BInt("1234567890123456789012345678901234567891").And(BInt("-1")).ConvertToString(),
               "-1");
     EXPECT_EQ(BInt("1").And(BInt("-0")).ConvertToString(), "0");
-    EXPECT_EQ(BInt("-1234567890123456789012345678901234567891")
-                      .And(BInt("-1"))
-                      .ConvertToString(),
+    EXPECT_EQ(BInt("-1234567890123456789012345678901234567891").And(BInt("-1")).ConvertToString(),
               "-1");
 
     BInt num = BInt("-1234567890123456789012345678901234567891");
     EXPECT_TRUE(num.AndEq(BInt("-1")) == BInt("-1"));
     EXPECT_TRUE(num == BInt("-1"));
 
-    EXPECT_TRUE((BInt("-1234567890123456789012345678901234567891") &
-                 BInt("-1")) == BInt("-1"));
+    EXPECT_TRUE((BInt("-1234567890123456789012345678901234567891") & BInt("-1")) == BInt("-1"));
 }
 
 TYPED_TEST(BigIntegerTest, BitwiseOr) {
@@ -390,44 +356,33 @@ TYPED_TEST(BigIntegerTest, BitwiseOr) {
     EXPECT_EQ(BInt("1").Or(BInt("1")).ConvertToString(), "1");
     EXPECT_EQ(BInt("2").Or(BInt("1")).ConvertToString(), "3");
 
-    EXPECT_EQ(BInt("4294967295").Or(BInt("4294967295")).ConvertToString(),
-              "4294967295");
+    EXPECT_EQ(BInt("4294967295").Or(BInt("4294967295")).ConvertToString(), "4294967295");
     EXPECT_EQ(BInt("1234567890123456789012345678901234567890")
                       .Or(BInt("9876543210987654321098765432109876543210"))
                       .ConvertToString(),
               "10770449694796119328135783499937064386298");
-    EXPECT_EQ(BInt("1234567890123456789012345678901234567890")
-                      .Or(BInt("1"))
-                      .ConvertToString(),
+    EXPECT_EQ(BInt("1234567890123456789012345678901234567890").Or(BInt("1")).ConvertToString(),
               "1234567890123456789012345678901234567891");
 
-    EXPECT_EQ(BInt("1234567890123456789012345678901234567890")
-                      .Or(BInt("-1"))
-                      .ConvertToString(),
+    EXPECT_EQ(BInt("1234567890123456789012345678901234567890").Or(BInt("-1")).ConvertToString(),
               "-1234567890123456789012345678901234567891");
     EXPECT_EQ(BInt("1").Or(BInt("-0")).ConvertToString(), "-1");
-    EXPECT_EQ(BInt("-1234567890123456789012345678901234567890")
-                      .Or(BInt("-1"))
-                      .ConvertToString(),
+    EXPECT_EQ(BInt("-1234567890123456789012345678901234567890").Or(BInt("-1")).ConvertToString(),
               "-1234567890123456789012345678901234567891");
 
     BInt num = BInt("-1234567890123456789012345678901234567890");
-    EXPECT_TRUE(num.OrEq(BInt("-1")) ==
-                BInt("-1234567890123456789012345678901234567891"));
+    EXPECT_TRUE(num.OrEq(BInt("-1")) == BInt("-1234567890123456789012345678901234567891"));
     EXPECT_TRUE(num == BInt("-1234567890123456789012345678901234567891"));
 
-    EXPECT_TRUE(
-            (BInt("-1234567890123456789012345678901234567890") | BInt("-1")) ==
-            BInt("-1234567890123456789012345678901234567891"));
+    EXPECT_TRUE((BInt("-1234567890123456789012345678901234567890") | BInt("-1")) ==
+                BInt("-1234567890123456789012345678901234567891"));
 }
 
 template<typename T>
 T maxT() {
     auto ret = T(0);
     auto lengthOfT = sizeof(T) * 8;
-    for (auto i = 0; i < lengthOfT; ++i) {
-        ret += T(1) << i;
-    }
+    for (auto i = 0; i < lengthOfT; ++i) { ret += T(1) << i; }
     return ret;
 }
 
@@ -458,9 +413,8 @@ TYPED_TEST(BigIntegerTest, BitwiseXor) {
     EXPECT_TRUE(BInt().Xor(BInt("1")) == BInt("1"));
     EXPECT_TRUE(BInt("1").Xor(BInt("1")) == BInt("0"));
     EXPECT_TRUE(BInt("4294967295").Xor(BInt("4294967295")) == BInt("0"));
-    EXPECT_TRUE(
-            BInt("1234567890123456789012345678901234567890").Xor(BInt("1")) ==
-            BInt("1234567890123456789012345678901234567891"));
+    EXPECT_TRUE(BInt("1234567890123456789012345678901234567890").Xor(BInt("1")) ==
+                BInt("1234567890123456789012345678901234567891"));
     EXPECT_TRUE(BInt("1234567890123456789012345678901234567890")
                         .Xor(BInt("9876543210987654321098765432109876543210")) ==
                 BInt("10429788288481127546160455888863017661496"));
@@ -508,14 +462,12 @@ TYPED_TEST(BigIntegerTest, OperatorMod) {
     EXPECT_EQ(BInt() % BInt("1"), BInt());
     EXPECT_EQ(BInt("-2") % BInt("3"), BInt("1"));
 
-    BInt operand(
-            "12345678901234567890123456789031234567890123456789012345678903");
+    BInt operand("12345678901234567890123456789031234567890123456789012345678903");
     BInt modulus("1234567890123456789012345678900");
     EXPECT_EQ(operand % modulus, BInt("370370637037037063703703706403"));
 
-    EXPECT_EQ(
-            operand,
-            BInt("12345678901234567890123456789031234567890123456789012345678903"));
+    EXPECT_EQ(operand, BInt("12345678901234567890123456789031234567890123456789"
+                            "012345678903"));
     operand %= modulus;
     EXPECT_EQ(operand, BInt("370370637037037063703703706403"));
 }
@@ -550,8 +502,7 @@ TYPED_TEST(BigIntegerTest, ModMul) {
     operand1 = BInt("123456789012345678901234567890");
     operand2 = BInt("987654321098765432109876543210");
     modulus = BInt("9999999999999999999912");
-    EXPECT_EQ(operand1.ModMul(operand2, modulus),
-              BInt("237334552122396220044"));
+    EXPECT_EQ(operand1.ModMul(operand2, modulus), BInt("237334552122396220044"));
 }
 
 TYPED_TEST(BigIntegerTest, GetBitAtIndex) {

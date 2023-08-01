@@ -16,9 +16,7 @@ namespace zhejiangfhe {
 
     public:
         static Ntt *getInstance() {
-            if (!instance) {
-                instance = new Ntt();
-            }
+            if (!instance) { instance = new Ntt(); }
             return instance;
         }
 
@@ -30,8 +28,7 @@ namespace zhejiangfhe {
          * @param root 2d-th primitive root of unity in Z_q.
          * @param cycloOrder 2d, must be a power of two.
          */
-        void NTForwardTransformBitReverseInPlace(VecType *vec,
-                                                 const IntType &root,
+        void NTForwardTransformBitReverseInPlace(VecType *vec, const IntType &root,
                                                  const uint32_t cycloOrder);
 
         /**
@@ -42,17 +39,13 @@ namespace zhejiangfhe {
          * @param root 2d-th primitive root of unity in Z_q.
          * @param cycloOrder 2d, must be a power of two.
          */
-        void NTInverseTransformBitReverseInPlace(VecType *vec,
-                                                 const IntType &root,
+        void NTInverseTransformBitReverseInPlace(VecType *vec, const IntType &root,
                                                  const uint32_t cycloOrder);
 
     private:
-        void precompute(const IntType &root,
-                        const uint32_t cycloOrder,
-                        const IntType &modulus);
+        void precompute(const IntType &root, const uint32_t cycloOrder, const IntType &modulus);
 
-        std::map<IntType, std::vector<IntType>>
-                rootReverseMap;// [modulus : rootReverseVec]
+        std::map<IntType, std::vector<IntType>> rootReverseMap;// [modulus : rootReverseVec]
         std::map<IntType, std::vector<IntType>>
                 rootInverseReverseMap;// [modulus : rootInverseReverseVec]
         std::map<IntType, std::vector<IntType>>

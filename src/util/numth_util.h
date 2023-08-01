@@ -33,9 +33,7 @@ namespace zhejiangfhe {
 
         inline int nlz64(uint64_t x) {
             int n;
-            if (x == 0) {
-                return (64);
-            }
+            if (x == 0) { return (64); }
             n = 0;
             if (x <= 0x00000000FFFFFFFF) {
                 n = n + 32;
@@ -57,18 +55,14 @@ namespace zhejiangfhe {
                 n = n + 2;
                 x = x << 2;
             }
-            if (x <= 0x7FFFFFFFFFFFFFFF) {
-                n = n + 1;
-            }
+            if (x <= 0x7FFFFFFFFFFFFFFF) { n = n + 1; }
             return n;
         }
 
         inline int nlz32(uint32_t x) {
             int n;
 
-            if (x == 0) {
-                return (32);
-            }
+            if (x == 0) { return (32); }
             n = 0;
             if (x <= 0x0000FFFF) {
                 n = n + 16;
@@ -86,9 +80,7 @@ namespace zhejiangfhe {
                 n = n + 2;
                 x = x << 2;
             }
-            if (x <= 0x7FFFFFFF) {
-                n = n + 1;
-            }
+            if (x <= 0x7FFFFFFF) { n = n + 1; }
             return n;
         }
 

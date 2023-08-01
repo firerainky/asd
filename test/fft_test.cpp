@@ -9,8 +9,7 @@
 namespace zhejiangfhe {
     // 创建继承自 Test 的 test fixture
     template<typename T>
-    class FFTtest : public testing::Test {
-    };
+    class FFTtest : public testing::Test {};
 
 
     TYPED_TEST_SUITE(FFTtest, LimbTypes);
@@ -59,10 +58,8 @@ namespace zhejiangfhe {
         }
         printf("\n");
 
-        std::unique_ptr<std::complex<double>[]> fft_forward =
-                fft.fft_forward_transform(v3);
-        std::unique_ptr<TypeParam[]> origin_vec =
-                fft.fft_inverse_transform(6, fft_forward.get());
+        std::unique_ptr<std::complex<double>[]> fft_forward = fft.fft_forward_transform(v3);
+        std::unique_ptr<TypeParam[]> origin_vec = fft.fft_inverse_transform(6, fft_forward.get());
 
         for (int i = 0; i < 6; i++) {
             //            printf ( "%lld ", origin_vec[i]);

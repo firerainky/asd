@@ -28,12 +28,10 @@ namespace zhejiangfhe {
             return ret < modulus.GetValue() ? ret : ret - modulus.GetValue();
         }
 
-        inline uint64_t ModBarrett64(uint64_t &operand,
-                                     const Modulus<uint64_t> &modulus) {
+        inline uint64_t ModBarrett64(uint64_t &operand, const Modulus<uint64_t> &modulus) {
             uint64_t modulusValue = modulus.GetValue().getValueOfIndex(0);
             uint64_t ration1 = modulus.GetConstRatio().getValueOfIndex(1);
-            __int128 estimated =
-                    static_cast<__int128>(operand) * static_cast<__int128>(ration1);
+            __int128 estimated = static_cast<__int128>(operand) * static_cast<__int128>(ration1);
             estimated >>= 64;
 
             estimated *= modulusValue;
@@ -47,12 +45,8 @@ namespace zhejiangfhe {
                                      const Modulus<NativeInt> &modulus) {
             BigInteger<NativeInt> a(operand1);
             BigInteger<NativeInt> b(operand2);
-            if (a >= modulus.GetValue()) {
-                a = Mod(a, modulus);
-            }
-            if (b >= modulus.GetValue()) {
-                b = Mod(b, modulus);
-            }
+            if (a >= modulus.GetValue()) { a = Mod(a, modulus); }
+            if (b >= modulus.GetValue()) { b = Mod(b, modulus); }
             a.AddEq(b);
             return Mod(a, modulus);
         }
@@ -65,8 +59,7 @@ namespace zhejiangfhe {
         }
 
         template<typename NativeInt>
-        BigInteger<NativeInt> ModSub(const BigInteger<NativeInt> &a,
-                                     const BigInteger<NativeInt> &b,
+        BigInteger<NativeInt> ModSub(const BigInteger<NativeInt> &a, const BigInteger<NativeInt> &b,
                                      const Modulus<NativeInt> &modulus) {
             BigInteger<NativeInt> difference = a.Sub(b);
             BigInteger<NativeInt> modulusValue = modulus.GetValue();
@@ -137,37 +130,24 @@ namespace zhejiangfhe {
             BigInteger<NativeInt> product(1);
             BigInteger<NativeInt> exp(exponent);
 
-            if (exponent == 0) {
-                return 1;
-            }
+            if (exponent == 0) { return 1; }
 
-            if (operand == 1) {
-                return operand;
-            }
-            if (exponent == 1) {
-                return Mod(operand, modulus);
-            }
+            if (operand == 1) { return operand; }
+            if (exponent == 1) { return Mod(operand, modulus); }
             while (true) {
-                if (exp.getValueOfIndex(0) % 2 == 1) {
-                    product = product * mid;
-                }
-                if (product >= modulusValue) {
-                    product = Mod(product, modulus);
-                }
+                if (exp.getValueOfIndex(0) % 2 == 1) { product = product * mid; }
+                if (product >= modulusValue) { product = Mod(product, modulus); }
                 exp = exp.RightShift(1);
-                if (exp == 0) {
-                    break;
-                }
+                if (exp == 0) { break; }
                 mid = mid * mid;
                 mid = Mod(mid, modulus);
             }
             return product;
         }
         template<typename NativeInt>
-        BigInteger<NativeInt> ExtendedEuclideanAlgorithm(const BigInteger<NativeInt> &a,
-                                                         const BigInteger<NativeInt> &b,
-                                                         BigInteger<NativeInt> &x,
-                                                         BigInteger<NativeInt> &y) {
+        BigInteger<NativeInt>
+        ExtendedEuclideanAlgorithm(const BigInteger<NativeInt> &a, const BigInteger<NativeInt> &b,
+                                   BigInteger<NativeInt> &x, BigInteger<NativeInt> &y) {
             if (a == 0) {
                 x = 0;
                 y = 1;
@@ -181,12 +161,8 @@ namespace zhejiangfhe {
             y = x1;
 
             // Handle negative coefficients
-            if (a < 0) {
-                x = -x;
-            }
-            if (b < 0) {
-                y = -y;
-            }
+            if (a < 0) { x = -x; }
+            if (b < 0) { y = -y; }
 
             return gcd;
         }
@@ -202,8 +178,7 @@ namespace zhejiangfhe {
 
             // Step 2: If gcd(a, b) is not 1, then a has no inverse mod b
             if (gcd != 1) {
-                ZJFHE_THROW(zhejiangfhe::MathException,
-                            "Modular inverse does not exist");
+                ZJFHE_THROW(zhejiangfhe::MathException, "Modular inverse does not exist");
             }
 
             // Step 3: Compute a^-1 mod b using coefficient x
@@ -212,21 +187,16 @@ namespace zhejiangfhe {
                 inverse += (b < 0 ? -b : b);// inverse = inverse + |b| if inverse < 0
             }
             if (modulus.GetValue() < 0) {
-                inverse =
-                        -inverse;// if modulus is negative, inverse should be negative
+                inverse = -inverse;// if modulus is negative, inverse should be negative
             }
             if (operand < 0) {
-                inverse =
-                        -inverse;// if operand is negative, inverse should be negative
+                inverse = -inverse;// if operand is negative, inverse should be negative
             }
             return inverse;
         }
         template<typename NativeInt>
-        BigInteger<NativeInt> Gcd(const BigInteger<NativeInt> &a,
-                                  const BigInteger<NativeInt> &b) {
-            if (a == 0 || b == 0) {
-                return a != 0 ? a : b;
-            }
+        BigInteger<NativeInt> Gcd(const BigInteger<NativeInt> &a, const BigInteger<NativeInt> &b) {
+            if (a == 0 || b == 0) { return a != 0 ? a : b; }
 
             BigInteger<NativeInt> absA = a.Abs();
             BigInteger<NativeInt> absB = b.Abs();
@@ -240,10 +210,8 @@ namespace zhejiangfhe {
         }
 
         template<typename NativeInt>
-        void ExtendedGcd(const BigInteger<NativeInt> &a,
-                         const BigInteger<NativeInt> &b,
-                         BigInteger<NativeInt> &x,
-                         BigInteger<NativeInt> &y) {
+        void ExtendedGcd(const BigInteger<NativeInt> &a, const BigInteger<NativeInt> &b,
+                         BigInteger<NativeInt> &x, BigInteger<NativeInt> &y) {
             if (b == 0) {
                 x = 1;
                 y = 0;
@@ -299,17 +267,14 @@ namespace zhejiangfhe {
                     (is_neg_modulus ? -absOperand : mod - absOperand) % mod;
 
             // If the operand was negative, return the negation
-            if (operand < 0) {
-                return negation;
-            }
+            if (operand < 0) { return negation; }
 
             // If the operand was non-negative, return the negation or 0, whichever is smaller
             BigInteger<NativeInt> result = (negation == 0 ? 0 : negation);
 
             // Make sure the result is non-negative and less than the modulus
             if (result < 0 || result >= mod) {
-                ZJFHE_THROW(zhejiangfhe::MathException,
-                            "Modular negation is not possible");
+                ZJFHE_THROW(zhejiangfhe::MathException, "Modular negation is not possible");
             }
 
             return result;

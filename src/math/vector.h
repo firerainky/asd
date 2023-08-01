@@ -15,10 +15,7 @@
 
 namespace zhejiangfhe {
 
-    enum State {
-        INITIALIZED,
-        GARBAGE
-    };
+    enum State { INITIALIZED, GARBAGE };
 
     template<typename IntegerType>
     class Vector {
@@ -42,23 +39,16 @@ namespace zhejiangfhe {
 
         Vector(Vector &&bigVector);
 
-        Vector(uint32_t length,
-               const IntegerType &modulus,
-               std::initializer_list<std::string> rhs);
+        Vector(uint32_t length, const IntegerType &modulus, std::initializer_list<std::string> rhs);
 
-        Vector(uint32_t length,
-               const IntegerType &modulus,
-               std::initializer_list<uint64_t> rhs);
+        Vector(uint32_t length, const IntegerType &modulus, std::initializer_list<uint64_t> rhs);
 
-        explicit Vector(const std::vector<std::string> &s,
-                        const Modulus<IntegerType> &modulus);
+        explicit Vector(const std::vector<std::string> &s, const Modulus<IntegerType> &modulus);
 
-        explicit Vector(const std::vector<std::string> &s,
-                        const IntegerType &modulus)
+        explicit Vector(const std::vector<std::string> &s, const IntegerType &modulus)
             : Vector(s, Modulus<IntegerType>(modulus)){};
 
-        explicit Vector(const std::vector<std::string> &s,
-                        const std::string &modulus)
+        explicit Vector(const std::vector<std::string> &s, const std::string &modulus)
             : Vector(s, Modulus<IntegerType>(modulus)){};
 
         const Vector &operator=(std::initializer_list<std::string> rhs);
@@ -75,37 +65,25 @@ namespace zhejiangfhe {
 
         Integer *ConvertToIntList() {
             Integer *result = new Integer[GetLength()];
-            for (int i = 0; i < GetLength(); i++) {
-                result[i] = at(i);
-            }
+            for (int i = 0; i < GetLength(); i++) { result[i] = at(i); }
             return result;
         }
 
         BigInteger<IntegerType> &at(size_t i) {
-            if (!this->IndexCheck(i)) {
-                ZJFHE_THROW(MathException, "Vector index out of range");
-            }
+            if (!this->IndexCheck(i)) { ZJFHE_THROW(MathException, "Vector index out of range"); }
             return this->data[i];
         }
 
         const BigInteger<IntegerType> &at(size_t i) const {
-            if (!this->IndexCheck(i)) {
-                ZJFHE_THROW(MathException, "Vector index out of range");
-            }
+            if (!this->IndexCheck(i)) { ZJFHE_THROW(MathException, "Vector index out of range"); }
             return this->data[i];
         }
 
-        BigInteger<IntegerType> &operator[](size_t idx) {
-            return (this->data[idx]);
-        }
+        BigInteger<IntegerType> &operator[](size_t idx) { return (this->data[idx]); }
 
-        const BigInteger<IntegerType> &operator[](size_t idx) const {
-            return (this->data[idx]);
-        }
+        const BigInteger<IntegerType> &operator[](size_t idx) const { return (this->data[idx]); }
 
-        size_t GetLength() const {
-            return data.size();
-        }
+        size_t GetLength() const { return data.size(); }
 
         void SetModulus(const Modulus<IntegerType> &value);
 
@@ -179,8 +157,7 @@ namespace zhejiangfhe {
          * @return is the digit at a specific index for all entries for a given number
          * base
          */
-        Vector<IntegerType> GetDigitAtIndexForBase(uint32_t index,
-                                                   uint32_t base) const;
+        Vector<IntegerType> GetDigitAtIndexForBase(uint32_t index, uint32_t base) const;
 
         friend std::ostream &operator<<(std::ostream &os, const Vector &vec) {
             auto len = vec.data.size();
@@ -197,9 +174,7 @@ namespace zhejiangfhe {
         Modulus<IntegerType> modulus;
         State state;
 
-        bool IndexCheck(size_t index) const {
-            return index < this->data.size();
-        }
+        bool IndexCheck(size_t index) const { return index < this->data.size(); }
 
         void Mod();
     };

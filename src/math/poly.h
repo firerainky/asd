@@ -14,10 +14,7 @@
 #include <iosfwd>
 
 namespace zhejiangfhe {
-    enum Format {
-        EVALUATION = 0,
-        COEFFICIENT = 1
-    };
+    enum Format { EVALUATION = 0, COEFFICIENT = 1 };
 
     template<typename VecType>
     class Poly {
@@ -28,8 +25,7 @@ namespace zhejiangfhe {
 
         Poly();
 
-        Poly(const std::shared_ptr<Params> params,
-             Format format = Format::EVALUATION,
+        Poly(const std::shared_ptr<Params> params, Format format = Format::EVALUATION,
              bool initializeElementToZero = false);
 
         /**
@@ -58,21 +54,13 @@ namespace zhejiangfhe {
         const Poly &operator=(uint64_t val);
 
         bool operator==(const Poly &rhs) const {
-            if (GetFormat() != rhs.GetFormat()) {
-                return false;
-            }
-            if (params->GetRootOfUnity() != rhs.params->GetRootOfUnity()) {
-                return false;
-            }
-            if (GetValue() != rhs.GetValue()) {
-                return false;
-            }
+            if (GetFormat() != rhs.GetFormat()) { return false; }
+            if (params->GetRootOfUnity() != rhs.params->GetRootOfUnity()) { return false; }
+            if (GetValue() != rhs.GetValue()) { return false; }
             return true;
         }
 
-        bool operator!=(const Poly &rhs) const {
-            return !(*this == rhs);
-        }
+        bool operator!=(const Poly &rhs) const { return !(*this == rhs); }
 
         void SetValue(const VecType &value, Format format);
 
@@ -86,18 +74,12 @@ namespace zhejiangfhe {
 
         uint32_t GetLength() const;
 
-        const std::shared_ptr<Params> GetParams() const {
-            return params;
-        }
+        const std::shared_ptr<Params> GetParams() const { return params; }
 
-        const Format GetFormat() const {
-            return format;
-        }
+        const Format GetFormat() const { return format; }
 
         void SetFormat(const Format format) {
-            if (GetFormat() != format) {
-                SwitchFormat();
-            }
+            if (GetFormat() != format) { SwitchFormat(); }
         }
 
         /**
@@ -170,8 +152,7 @@ namespace zhejiangfhe {
         Poly MultiplyForEvaluationEq(const Poly &element);
 
         friend std::ostream &operator<<(std::ostream &os, const Poly &poly) {
-            os << (poly.format == Format::EVALUATION ? "EVAL, " : "COEF, ")
-               << poly.GetValue();
+            os << (poly.format == Format::EVALUATION ? "EVAL, " : "COEF, ") << poly.GetValue();
             return os;
         }
 

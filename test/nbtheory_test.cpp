@@ -19,20 +19,16 @@ namespace zhejiangfhe {
         EXPECT_FALSE(IsPrime(a)) << "Expected a(" << a << ") be not a prime.";
 
         a = 24469;
-        EXPECT_TRUE(IsPrime(a))
-                << "Expected small integer a(" << a << ") is a prime.";
+        EXPECT_TRUE(IsPrime(a)) << "Expected small integer a(" << a << ") is a prime.";
 
         a = 10403;
-        EXPECT_FALSE(IsPrime(a))
-                << "Expected small integer a(" << a << ") is a composite.";
+        EXPECT_FALSE(IsPrime(a)) << "Expected small integer a(" << a << ") is a composite.";
 
         a = 952229140957;
-        EXPECT_TRUE(IsPrime(a))
-                << "Expected big integer a(" << a << ") is a prime.";
+        EXPECT_TRUE(IsPrime(a)) << "Expected big integer a(" << a << ") is a prime.";
 
         a = 952229140959;
-        EXPECT_FALSE(IsPrime(a))
-                << "Expected big integer a(" << a << ") is a composite.";
+        EXPECT_FALSE(IsPrime(a)) << "Expected big integer a(" << a << ") is a composite.";
     }
 
     TEST(NbTheoryTest, FirstPrime) {
@@ -61,15 +57,13 @@ namespace zhejiangfhe {
             BInt a = 10403, b = 103;
             BInt computedResult = 103;
             BInt expectedResult = GCD(a, b);
-            EXPECT_EQ(computedResult, expectedResult)
-                    << "Compute GCD for small integers failed.";
+            EXPECT_EQ(computedResult, expectedResult) << "Compute GCD for small integers failed.";
         }
         {
             BInt a("883035439563027"), b("3042269397984931");
             BInt computedResult = GCD(a, b);
             BInt expectedResult = 1;
-            EXPECT_EQ(expectedResult, computedResult)
-                    << "Compute GCD for big integers failed.";
+            EXPECT_EQ(expectedResult, computedResult) << "Compute GCD for big integers failed.";
         }
     }
 
@@ -97,18 +91,15 @@ namespace zhejiangfhe {
             BInt primeModulus = FirstPrime<BInt>(nBits, m);
             BInt primitiveRootOfUnity = RootOfUnity(m, primeModulus);
 
-            BInt powerm =
-                    util::ModExp(primitiveRootOfUnity, BInt(m), BMod(primeModulus));
-            ZJ_DEBUG("First Prime: " << primeModulus << ", Root of Unity: "
-                                     << primitiveRootOfUnity);
+            BInt powerm = util::ModExp(primitiveRootOfUnity, BInt(m), BMod(primeModulus));
+            ZJ_DEBUG("First Prime: " << primeModulus
+                                     << ", Root of Unity: " << primitiveRootOfUnity);
             EXPECT_EQ(powerm, 1);
 
-            BInt powermBy2 =
-                    util::ModExp(primitiveRootOfUnity, BInt(m / 2), BMod(primeModulus));
+            BInt powermBy2 = util::ModExp(primitiveRootOfUnity, BInt(m / 2), BMod(primeModulus));
             EXPECT_NE(powermBy2, 1);
 
-            BInt powermBy4 =
-                    util::ModExp(primitiveRootOfUnity, BInt(m / 4), BMod(primeModulus));
+            BInt powermBy4 = util::ModExp(primitiveRootOfUnity, BInt(m / 4), BMod(primeModulus));
             EXPECT_NE(powermBy4, 1);
         }
         {
@@ -118,18 +109,15 @@ namespace zhejiangfhe {
             BInt primeModulus = FirstPrime<BInt>(nBits, m);
             BInt primitiveRootOfUnity = RootOfUnity(m, primeModulus);
 
-            BInt powerm =
-                    util::ModExp(primitiveRootOfUnity, BInt(m), BMod(primeModulus));
-            ZJ_DEBUG("First Prime: " << primeModulus << ", Root of Unity: "
-                                     << primitiveRootOfUnity);
+            BInt powerm = util::ModExp(primitiveRootOfUnity, BInt(m), BMod(primeModulus));
+            ZJ_DEBUG("First Prime: " << primeModulus
+                                     << ", Root of Unity: " << primitiveRootOfUnity);
             EXPECT_EQ(powerm, 1);
 
-            BInt powermBy2 =
-                    util::ModExp(primitiveRootOfUnity, BInt(m / 2), BMod(primeModulus));
+            BInt powermBy2 = util::ModExp(primitiveRootOfUnity, BInt(m / 2), BMod(primeModulus));
             EXPECT_NE(powermBy2, 1);
 
-            BInt powermBy4 =
-                    util::ModExp(primitiveRootOfUnity, BInt(m / 4), BMod(primeModulus));
+            BInt powermBy4 = util::ModExp(primitiveRootOfUnity, BInt(m / 4), BMod(primeModulus));
             EXPECT_NE(powermBy4, 1);
         }
         {

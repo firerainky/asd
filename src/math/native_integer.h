@@ -13,9 +13,7 @@ namespace zhejiangfhe {
     class NativeInteger : public IntegerInterface<NativeInteger<NativeInt>> {
 
     public:
-        NativeInteger(const std::string &strValue) {
-            AssignVal(strValue);
-        }
+        NativeInteger(const std::string &strValue) { AssignVal(strValue); }
 
         NativeInteger<NativeInt> Add(const NativeInteger<NativeInt> &b) {
             return NativeInteger("0");
@@ -38,14 +36,11 @@ namespace zhejiangfhe {
         NativeInteger<NativeInt> DividedBy(const NativeInteger<NativeInt> &b) const {
             return NativeInteger("0");
         }
-        const NativeInteger<NativeInt> &DividedByEq(
-                const NativeInteger<NativeInt> &b) {
+        const NativeInteger<NativeInt> &DividedByEq(const NativeInteger<NativeInt> &b) {
             return NativeInteger("0");
         }
 
-        const std::string ConvertToString() {
-            return "NativeInteger test";
-        }
+        const std::string ConvertToString() { return "NativeInteger test"; }
 
 
     protected:
@@ -60,16 +55,15 @@ namespace zhejiangfhe {
             for (size_t i = 0; i < str.length(); i++) {
                 int v = str[i] - '0';
                 if (v < 0 || v > 9) {
-                    ZJFHE_THROW(zhejiangfhe::TypeException,
-                                "String contains a non-digit");
+                    ZJFHE_THROW(zhejiangfhe::TypeException, "String contains a non-digit");
                 }
                 value *= 10;
                 value += v;
 
                 if (value < test_value) {
-                    ZJFHE_THROW(
-                            zhejiangfhe::MathException,
-                            str + " is too large to fit in this native integer object");
+                    ZJFHE_THROW(zhejiangfhe::MathException,
+                                str + " is too large to fit in this native "
+                                      "integer object");
                 }
                 test_value = value;
             }

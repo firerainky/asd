@@ -7,8 +7,7 @@
 namespace zhejiangfhe {
 
     template<typename NativeInt>
-    BigInteger<NativeInt> BigInteger<NativeInt>::And(
-            const BigInteger<NativeInt> another) const {
+    BigInteger<NativeInt> BigInteger<NativeInt>::And(const BigInteger<NativeInt> another) const {
         std::vector<NativeInt> vals;
         for (auto i = 0; i < value.size() && i < another.value.size(); ++i) {
             vals.push_back(value[i] & another.value[i]);
@@ -18,14 +17,12 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
-    const BigInteger<NativeInt> &BigInteger<NativeInt>::AndEq(
-            const BigInteger<NativeInt> another) {
+    const BigInteger<NativeInt> &BigInteger<NativeInt>::AndEq(const BigInteger<NativeInt> another) {
         return *this = this->And(another);
     }
 
     template<typename NativeInt>
-    BigInteger<NativeInt> BigInteger<NativeInt>::Or(
-            const BigInteger<NativeInt> another) const {
+    BigInteger<NativeInt> BigInteger<NativeInt>::Or(const BigInteger<NativeInt> another) const {
         std::vector<NativeInt> vals;
         for (auto i = 0; (i < value.size() || i < another.value.size()); ++i) {
             if (i >= value.size()) {
@@ -41,17 +38,14 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
-    const BigInteger<NativeInt> &BigInteger<NativeInt>::OrEq(
-            const BigInteger<NativeInt> another) {
+    const BigInteger<NativeInt> &BigInteger<NativeInt>::OrEq(const BigInteger<NativeInt> another) {
         return *this = this->Or(another);
     }
 
     template<typename NativeInt>
     BigInteger<NativeInt> BigInteger<NativeInt>::Not() const {
         std::vector<NativeInt> vals;
-        for (auto val: value) {
-            vals.push_back(~val);
-        }
+        for (auto val: value) { vals.push_back(~val); }
         return BigInteger(vals, sign);
     }
 
@@ -61,8 +55,7 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
-    BigInteger<NativeInt> BigInteger<NativeInt>::Xor(
-            const BigInteger<NativeInt> another) const {
+    BigInteger<NativeInt> BigInteger<NativeInt>::Xor(const BigInteger<NativeInt> another) const {
         std::vector<NativeInt> vals;
         for (auto i = 0; (i < value.size() || i < another.value.size()); ++i) {
             if (i >= value.size()) {
@@ -78,8 +71,7 @@ namespace zhejiangfhe {
     }
 
     template<typename NativeInt>
-    const BigInteger<NativeInt> &BigInteger<NativeInt>::XorEq(
-            const BigInteger<NativeInt> another) {
+    const BigInteger<NativeInt> &BigInteger<NativeInt>::XorEq(const BigInteger<NativeInt> another) {
         return *this = Xor(another);
     }
 
@@ -92,9 +84,7 @@ namespace zhejiangfhe {
             carry = addWithCarry(~val, 1, carry, &temp_val);
             vals.push_back(temp_val);
         }
-        if (carry) {
-            vals.push_back(carry);
-        }
+        if (carry) { vals.push_back(carry); }
         return BigInteger(vals, sign);
     }
 
@@ -105,9 +95,7 @@ namespace zhejiangfhe {
 
     template<typename NativeInt>
     BigInteger<NativeInt> BigInteger<NativeInt>::LeftShift(uint16_t shift) const {
-        if (this->m_MSB == 0) {
-            return BigInteger();
-        }
+        if (this->m_MSB == 0) { return BigInteger(); }
         BigInteger ans(*this);
         // compute the number of whole limb shifts
         uint32_t shiftByLimb = shift >> m_log2LimbBitLength;
@@ -118,9 +106,8 @@ namespace zhejiangfhe {
         if (remainingShift != 0) {
             size_t i;
             for (i = ceilIntByUInt(m_MSB) - 1; i > 0; i--) {
-                ans.value[i] =
-                        (ans.value[i] << remainingShift) |
-                        ans.value[i - 1] >> (m_limbBitLength - remainingShift);
+                ans.value[i] = (ans.value[i] << remainingShift) |
+                               ans.value[i - 1] >> (m_limbBitLength - remainingShift);
             }
             ans.value[0] = ans.value[0] << remainingShift;
         }
@@ -130,9 +117,7 @@ namespace zhejiangfhe {
             for (int i = currentSize - 1; i >= 0; i--) {// shift limbs required # of indicies
                 ans.value[i + shiftByLimb] = ans.value[i];
             }
-            for (int i = shiftByLimb - 1; i >= 0; i--) {
-                ans.value[i] = 0;
-            }
+            for (int i = shiftByLimb - 1; i >= 0; i--) { ans.value[i] = 0; }
         }
         ans.m_MSB += remainingShift + shiftByLimb * m_limbBitLength;
         return ans;
@@ -140,9 +125,7 @@ namespace zhejiangfhe {
 
     template<typename NativeInt>
     BigInteger<NativeInt> BigInteger<NativeInt>::RightShift(uint16_t shift) const {
-        if (this->m_MSB == 0 || this->m_MSB <= shift) {
-            return BigInteger();
-        }
+        if (this->m_MSB == 0 || this->m_MSB <= shift) { return BigInteger(); }
 
         BigInteger ans(*this);
         uint16_t shiftByLimb = shift >> m_log2LimbBitLength;
@@ -152,23 +135,17 @@ namespace zhejiangfhe {
             for (auto i = shiftByLimb; i < ans.value.size(); ++i) {
                 ans.value[i - shiftByLimb] = ans.value[i];
             }
-            for (uint32_t i = 0; i < shiftByLimb; ++i) {
-                ans.value.pop_back();
-            }
+            for (uint32_t i = 0; i < shiftByLimb; ++i) { ans.value.pop_back(); }
         }
 
         // remainderShift bit shifts
         if (remainingShift != 0) {
             for (uint32_t i = 0; i < ans.value.size() - 1; i++) {
-                ans.value[i] = (ans.value[i] >> remainingShift) |
-                               ans.value[i + 1] << negativeShift;
+                ans.value[i] = (ans.value[i] >> remainingShift) | ans.value[i + 1] << negativeShift;
             }
-            ans.value[ans.value.size() - 1] =
-                    ans.value[ans.value.size() - 1] >> remainingShift;
+            ans.value[ans.value.size() - 1] = ans.value[ans.value.size() - 1] >> remainingShift;
         }
-        while (!ans.value.back()) {
-            ans.value.pop_back();
-        }
+        while (!ans.value.back()) { ans.value.pop_back(); }
         ans.RefreshMSB();
         return ans;
     }

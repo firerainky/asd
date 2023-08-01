@@ -17,8 +17,7 @@ namespace zhejiangfhe {
 
     public:
         using Integer = IntegerType;
-        IntLatticeParam(uint32_t order,
-                        const IntegerType &ctModulus,
+        IntLatticeParam(uint32_t order, const IntegerType &ctModulus,
                         const IntegerType &rUnity = IntegerType(0),
                         const IntegerType &bigCtModulus = IntegerType(0),
                         const IntegerType &bigRUnity = IntegerType(0)) {
@@ -63,50 +62,32 @@ namespace zhejiangfhe {
         }
 
         bool operator==(const IntLatticeParam &rhs) const {
-            return cyclotomicOrder == rhs.cyclotomicOrder &&
-                   ringDimension == rhs.ringDimension &&
-                   ciphertextModulus == rhs.ciphertextModulus &&
-                   rootOfUnity == rhs.rootOfUnity &&
+            return cyclotomicOrder == rhs.cyclotomicOrder && ringDimension == rhs.ringDimension &&
+                   ciphertextModulus == rhs.ciphertextModulus && rootOfUnity == rhs.rootOfUnity &&
                    bigCiphertextModulus == rhs.bigCiphertextModulus &&
                    bigRootOfUnity == rhs.bigRootOfUnity;
         }
 
         bool operator!=(const IntLatticeParam &rhs) const {
-            return !(cyclotomicOrder == rhs.cyclotomicOrder &&
-                     ringDimension == rhs.ringDimension &&
-                     ciphertextModulus == rhs.ciphertextModulus &&
-                     rootOfUnity == rhs.rootOfUnity &&
+            return !(cyclotomicOrder == rhs.cyclotomicOrder && ringDimension == rhs.ringDimension &&
+                     ciphertextModulus == rhs.ciphertextModulus && rootOfUnity == rhs.rootOfUnity &&
                      bigCiphertextModulus == rhs.bigCiphertextModulus &&
                      bigRootOfUnity == rhs.bigRootOfUnity);
         }
 
-        uint32_t GetCyclotomicOrder() const {
-            return cyclotomicOrder;
-        }
+        uint32_t GetCyclotomicOrder() const { return cyclotomicOrder; }
 
-        uint32_t GetRingDimension() const {
-            return ringDimension;
-        }
+        uint32_t GetRingDimension() const { return ringDimension; }
 
-        bool OrderIsPowerOfTwo() const {
-            return isPowerOfTwo;
-        }
+        bool OrderIsPowerOfTwo() const { return isPowerOfTwo; }
 
-        const IntegerType &GetModulus() const {
-            return ciphertextModulus;
-        }
+        const IntegerType &GetModulus() const { return ciphertextModulus; }
 
-        const IntegerType &GetBigModulus() const {
-            return bigCiphertextModulus;
-        }
+        const IntegerType &GetBigModulus() const { return bigCiphertextModulus; }
 
-        const IntegerType &GetRootOfUnity() const {
-            return rootOfUnity;
-        }
+        const IntegerType &GetRootOfUnity() const { return rootOfUnity; }
 
-        const IntegerType &GetBigRootOfUnity() const {
-            return bigRootOfUnity;
-        }
+        const IntegerType &GetBigRootOfUnity() const { return bigRootOfUnity; }
 
 
     protected:

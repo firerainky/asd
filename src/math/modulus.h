@@ -13,29 +13,18 @@ namespace zhejiangfhe {
     class Modulus {
 
     public:
-        Modulus() {
-        }
+        Modulus() {}
 
-        Modulus(BigInteger<NativeInt> value) {
-            set_value(value);
-        }
+        Modulus(BigInteger<NativeInt> value) { set_value(value); }
 
 
-        Modulus(NativeInt val) {
-            set_value(BigInteger<NativeInt>(val));
-        }
+        Modulus(NativeInt val) { set_value(BigInteger<NativeInt>(val)); }
 
-        Modulus(std::string val) {
-            set_value(BigInteger<NativeInt>(val));
-        }
+        Modulus(std::string val) { set_value(BigInteger<NativeInt>(val)); }
 
-        inline const BigInteger<NativeInt> GetConstRatio() const {
-            return const_ratio;
-        };
+        inline const BigInteger<NativeInt> GetConstRatio() const { return const_ratio; };
 
-        inline const BigInteger<NativeInt> GetValue() const {
-            return value;
-        };
+        inline const BigInteger<NativeInt> GetValue() const { return value; };
 
 
         const Modulus &operator=(const Modulus &val);

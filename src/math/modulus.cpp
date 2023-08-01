@@ -7,8 +7,8 @@
 namespace zhejiangfhe {
 
     template<typename NativeInt>
-    const BigInteger<NativeInt> Modulus<NativeInt>::numerator =
-            Modulus<NativeInt>::ValueInit::InitB();
+    const BigInteger<NativeInt>
+            Modulus<NativeInt>::numerator = Modulus<NativeInt>::ValueInit::InitB();
 
     template<typename NativeInt>
     void Modulus<NativeInt>::set_value(BigInteger<NativeInt> input) {
@@ -23,21 +23,15 @@ namespace zhejiangfhe {
 
 
     template<typename NativeInt>
-    const Modulus<NativeInt> &Modulus<NativeInt>::operator=(
-            const Modulus<NativeInt> &val) {
-        if (this != &val) {
-            this->set_value(val.value);
-        }
+    const Modulus<NativeInt> &Modulus<NativeInt>::operator=(const Modulus<NativeInt> &val) {
+        if (this != &val) { this->set_value(val.value); }
         return *this;
     }
 
 
     template<typename NativeInt>
-    const Modulus<NativeInt> &Modulus<NativeInt>::operator=(
-            Modulus<NativeInt> &&val) {
-        if (this != &val) {
-            this->set_value(val.value);
-        }
+    const Modulus<NativeInt> &Modulus<NativeInt>::operator=(Modulus<NativeInt> &&val) {
+        if (this != &val) { this->set_value(val.value); }
         return *this;
     }
 

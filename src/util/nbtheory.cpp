@@ -46,10 +46,7 @@ namespace zhejiangfhe {
       false if p is likely prime
     */
     template<typename IntType>
-    static bool WitnessFunction(const IntType &a,
-                                const IntType &d,
-                                uint32_t s,
-                                const IntType &p) {
+    static bool WitnessFunction(const IntType &a, const IntType &d, uint32_t s, const IntType &p) {
         IntType mod = util::ModExp(a, d, BMod(p));
         bool prevMod = false;
         for (uint32_t i = 1; i < s + 1; i++) {
@@ -59,9 +56,7 @@ namespace zhejiangfhe {
                 prevMod = false;
             }
             mod = mod * mod % p;
-            if (mod == IntType(1) && prevMod) {
-                return true;
-            }
+            if (mod == IntType(1) && prevMod) { return true; }
         }
         return (mod != IntType(1));
     }
@@ -82,9 +77,7 @@ namespace zhejiangfhe {
 
         ZJ_DEBUG("Find Generator(" << q << ")，calling prime factorization.");
         ZJ_DEBUG("Prime factors of " << qm1);
-        for (auto &v: primeFactors) {
-            ZJ_DEBUG(v << " ");
-        }
+        for (auto &v: primeFactors) { ZJ_DEBUG(v << " "); }
 
         bool generatorFound = false;
         IntType gen;
@@ -96,25 +89,20 @@ namespace zhejiangfhe {
 
             for (auto it = primeFactors.begin(); it != primeFactors.end(); ++it) {
                 IntType t = qm1 / (*it);
-                ZJ_DEBUG(qm1 << " / " << *it << " "
-                             << util::ModExp(gen, t, BMod(q)));
-                if (util::ModExp(gen, t, BMod(q)) == IntType(1))
-                    break;
+                ZJ_DEBUG(qm1 << " / " << *it << " " << util::ModExp(gen, t, BMod(q)));
+                if (util::ModExp(gen, t, BMod(q)) == IntType(1)) break;
                 else
                     count++;
             }
-            if (count == primeFactors.size())
-                generatorFound = true;
+            if (count == primeFactors.size()) generatorFound = true;
         }
         return gen;
     }
 
     template<typename IntType>
     bool IsPrime(const IntType &p, const uint32_t iterCount) {
-        if (p < IntType(2) || p == IntType(2) || p == IntType(3) || p == IntType(5))
-            return true;
-        if (p % 2 == IntType(0))
-            return false;
+        if (p < IntType(2) || p == IntType(2) || p == IntType(3) || p == IntType(5)) return true;
+        if (p % 2 == IntType(0)) return false;
 
         IntType d = p - IntType(1);
         uint32_t s = 0;
@@ -126,8 +114,7 @@ namespace zhejiangfhe {
         for (uint32_t i = 0; i < iterCount; ++i) {
             IntType a = RNG(p - IntType(3)) + IntType(2);
             composite = (WitnessFunction(a, d, s, p));
-            if (composite)
-                break;
+            if (composite) break;
         }
         return (!composite);
     }
@@ -166,8 +153,7 @@ namespace zhejiangfhe {
     template<typename IntType>
     void PrimeFactorize(IntType n, std::set<IntType> &primeFactors) {
 
-        if (n == IntType(0) || n == IntType(1))
-            return;
+        if (n == IntType(0) || n == IntType(1)) return;
 
         if (IsPrime(n)) {
             primeFactors.insert(n);
@@ -190,8 +176,7 @@ namespace zhejiangfhe {
         IntType xx(x);
 
         // check divisibility by 2
-        if (n % 2 == IntType(0))
-            return IntType(2);
+        if (n % 2 == IntType(0)) return IntType(2);
 
         do {
             x = (x * x + c) % n;
@@ -209,9 +194,7 @@ namespace zhejiangfhe {
         std::vector<IntType> result;
         IntType one(1);
         for (IntType i = IntType(1); i < n; i = i + IntType(1)) {
-            if (GCD(i, n) == one) {
-                result.push_back(i);
-            }
+            if (GCD(i, n) == one) { result.push_back(i); }
         }
         return result;
     }
@@ -247,9 +230,7 @@ namespace zhejiangfhe {
         IntType mid = (modulo - IntType(1)).DividedByEq(M);
         ZJ_DEBUG("mid = " << mid);
         result = util::ModExp(gen, mid, BMod(modulo));
-        if (result == IntType(1)) {
-            result = RootOfUnity(m, modulo);
-        }
+        if (result == IntType(1)) { result = RootOfUnity(m, modulo); }
         ZJ_DEBUG("result = " << result);
 
         /**
@@ -273,12 +254,8 @@ namespace zhejiangfhe {
         for (uint32_t i = 0; i < coprimes.size(); i++) {
             auto nextPowIdx = coprimes[i];
             IntType diffPow(nextPowIdx - curPowIdx);
-            for (IntType j(0); j < diffPow; j += IntType(1)) {
-                x = (x * result) % modulo;
-            }
-            if (x < minRU && x != IntType(1)) {
-                minRU = x;
-            }
+            for (IntType j(0); j < diffPow; j += IntType(1)) { x = (x * result) % modulo; }
+            if (x < minRU && x != IntType(1)) { minRU = x; }
             curPowIdx = nextPowIdx;
         }
         return minRU;

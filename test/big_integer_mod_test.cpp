@@ -7,8 +7,7 @@
 namespace zhejiangfhe {
     // 创建继承自 Test 的 test fixture
     template<typename T>
-    class BigIntegerModTest : public testing::Test {
-    };
+    class BigIntegerModTest : public testing::Test {};
 
     // 将 test fixture 与类型列表绑定在一起，这样下面的测试就可以自动对类型列表中的每一种都执行一遍了
     TYPED_TEST_SUITE(BigIntegerModTest, LimbTypes);
@@ -47,13 +46,11 @@ namespace zhejiangfhe {
 
         operand = BInt("123456789012345678901234567890");
         modulus = Modulus(BInt("1234567890123456789012345678903"));
-        EXPECT_EQ(util::Mod(operand, modulus),
-                  BInt("123456789012345678901234567890"));
+        EXPECT_EQ(util::Mod(operand, modulus), BInt("123456789012345678901234567890"));
 
         operand = BInt("123456789012345678901234567890");
         modulus = Modulus(BInt("1234567890123456789012345678901"));
-        EXPECT_EQ(util::Mod(operand, modulus),
-                  BInt("123456789012345678901234567890"));
+        EXPECT_EQ(util::Mod(operand, modulus), BInt("123456789012345678901234567890"));
 
 
         operand = BInt("123456789012345678901234567891");
@@ -64,11 +61,10 @@ namespace zhejiangfhe {
         modulus = Modulus(BInt("1234567890123456789012345678900"));
         EXPECT_EQ(util::Mod(operand, modulus), BInt("3"));
 
-        operand =
-                BInt("12345678901234567890123456789031234567890123456789012345678903");
+        operand = BInt("1234567890123456789012345678903123456789012345678901234"
+                       "5678903");
         modulus = Modulus(BInt("1234567890123456789012345678900"));
-        EXPECT_EQ(util::Mod(operand, modulus),
-                  BInt("370370637037037063703703706403"));
+        EXPECT_EQ(util::Mod(operand, modulus), BInt("370370637037037063703703706403"));
     }
 
     // TYPED_TEST(BigIntegerModTest, ModBarrett) {
@@ -208,8 +204,7 @@ namespace zhejiangfhe {
         operand1 = BInt("123456789012345678901234567890");
         operand2 = BInt("987654321098765432109876543210");
         modulus = Modulus(BInt("9999999999999999999912"));
-        EXPECT_EQ(util::ModMul(operand1, operand2, modulus),
-                  BInt("237334552122396220044"));
+        EXPECT_EQ(util::ModMul(operand1, operand2, modulus), BInt("237334552122396220044"));
     }
 
 
@@ -256,8 +251,7 @@ namespace zhejiangfhe {
         operand = BInt("2");
         exponent = BInt("59");
         modulus = Modulus(BInt(0x1000000000000000ULL, false));
-        EXPECT_EQ(util::ModExp(operand, exponent, modulus),
-                  BInt((1ULL << 59), false));
+        EXPECT_EQ(util::ModExp(operand, exponent, modulus), BInt((1ULL << 59), false));
 
         operand = BInt("2424242424");
         exponent = BInt("16");
@@ -273,8 +267,7 @@ namespace zhejiangfhe {
 
         BInt operand2 = BInt("4");
         Modulus modulus2 = Modulus(BInt("6"));
-        EXPECT_THROW(util::ModInverse(operand2, modulus2),
-                     zhejiangfhe::MathException);
+        EXPECT_THROW(util::ModInverse(operand2, modulus2), zhejiangfhe::MathException);
 
         BInt operand3 = BInt("-2");
         Modulus modulus3 = Modulus(BInt("5"));
