@@ -159,8 +159,5 @@ namespace zhejiangfhe {
         cycloOrderInverseMap[modulus] = cycloOrderInverseVec;
     }
 
-    template<typename VecType>
-    Ntt<VecType> *Ntt<VecType>::instance = nullptr;
-
     template class zhejiangfhe::Ntt<Vector<limbtype>>;
 }// namespace zhejiangfhe

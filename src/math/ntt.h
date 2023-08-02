@@ -51,7 +51,6 @@ namespace zhejiangfhe {
         std::map<IntType, std::vector<IntType>>
                 cycloOrderInverseMap;// [modulus : cycloOrderInverseVec]
 
-        static Ntt *instance;
-        Ntt(){};
+        static inline Ntt *instance;
     };
 }// namespace zhejiangfhe
