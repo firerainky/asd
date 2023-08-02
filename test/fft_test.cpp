@@ -4,7 +4,7 @@
 #include "big_integer_test.h"
 #include "fft.h"
 #include "vector.h"
-
+#include "logger.h"
 
 namespace zhejiangfhe {
     // 创建继承自 Test 的 test fixture
@@ -31,41 +31,37 @@ namespace zhejiangfhe {
         std::unique_ptr<TypeParam[]> result1 = fft.multiply_iteration(v1, v2);
 
         for (int i = 0; i < 4; i++) {
-            //            printf ( "%lld ", result1[i]);
+
+            ZJDebug("{:d}", result1[i]);
             EXPECT_EQ(result1.get()[i], mulResult1[i]);
         }
-        printf("\n");
 
         std::unique_ptr<TypeParam[]> result2 = fft.multiply_iteration(v3, v4);
 
         for (int i = 0; i < 11; i++) {
-            //            printf ( "%lld ", result2[i]);
+
+            ZJDebug("{:d}", result2[i]);
             EXPECT_EQ(result2.get()[i], mulResult2[i]);
         }
-        printf("\n");
-
         std::unique_ptr<TypeParam[]> result3 = fft.multiply_recursion(v1, v2);
         for (int i = 0; i < 4; i++) {
-            //            printf ( "%lld ", result3[i]);
+            ZJDebug("{:d}", result3[i]);
             EXPECT_EQ(result3.get()[i], mulResult1[i]);
         }
-        printf("\n");
 
         std::unique_ptr<TypeParam[]> result4 = fft.multiply_recursion(v3, v4);
         for (int i = 0; i < 11; i++) {
-            //            printf ( "%lld ", result4[i]);
+            ZJInfo("{:d} ", result4[i]);
             EXPECT_EQ(result4.get()[i], mulResult2[i]);
         }
-        printf("\n");
 
         std::unique_ptr<std::complex<double>[]> fft_forward = fft.fft_forward_transform(v3);
         std::unique_ptr<TypeParam[]> origin_vec = fft.fft_inverse_transform(6, fft_forward.get());
 
         for (int i = 0; i < 6; i++) {
-            //            printf ( "%lld ", origin_vec[i]);
+            ZJDebug("{:d}", origin_vec[i]);
             EXPECT_EQ(v3[i], origin_vec[i]);
         }
-        printf("\n");
     }
 
 }// namespace zhejiangfhe

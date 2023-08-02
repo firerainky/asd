@@ -9,6 +9,7 @@
 #include "integer_interface.h"
 #include "numth_util.h"
 #include <cstdint>
+#include <fmt/ostream.h>
 #include <iosfwd>
 #include <iostream>
 #include <memory>
@@ -325,5 +326,11 @@ namespace zhejiangfhe {
     }
 
 }// namespace zhejiangfhe
+
+using namespace zhejiangfhe;
+template <typename NativeInt> struct fmt::formatter<BigInteger<NativeInt>> : ostream_formatter {};
+
+
+
 
 #endif//ZJ_FHE_LIB_BigInteger_H

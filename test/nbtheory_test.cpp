@@ -8,6 +8,7 @@
 #include "big_integer_modop.h"
 #include "debug.h"
 #include "nbtheory.h"
+#include "logger.h"
 #include <gtest/gtest.h>
 
 namespace zhejiangfhe {
@@ -92,8 +93,7 @@ namespace zhejiangfhe {
             BInt primitiveRootOfUnity = RootOfUnity(m, primeModulus);
 
             BInt powerm = util::ModExp(primitiveRootOfUnity, BInt(m), BMod(primeModulus));
-            ZJ_DEBUG("First Prime: " << primeModulus
-                                     << ", Root of Unity: " << primitiveRootOfUnity);
+            ZJDebug("First Prime: {}, Root of Unity: {}", primeModulus, primitiveRootOfUnity);
             EXPECT_EQ(powerm, 1);
 
             BInt powermBy2 = util::ModExp(primitiveRootOfUnity, BInt(m / 2), BMod(primeModulus));
@@ -110,8 +110,7 @@ namespace zhejiangfhe {
             BInt primitiveRootOfUnity = RootOfUnity(m, primeModulus);
 
             BInt powerm = util::ModExp(primitiveRootOfUnity, BInt(m), BMod(primeModulus));
-            ZJ_DEBUG("First Prime: " << primeModulus
-                                     << ", Root of Unity: " << primitiveRootOfUnity);
+            ZJDebug("First Prime: {}, Root of Unity: {}", primeModulus, primitiveRootOfUnity);
             EXPECT_EQ(powerm, 1);
 
             BInt powermBy2 = util::ModExp(primitiveRootOfUnity, BInt(m / 2), BMod(primeModulus));

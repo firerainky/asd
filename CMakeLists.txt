@@ -19,6 +19,11 @@ include(Tools)
 add_cmake_format_target()
 add_clang_format_target()
 
+if(NOT TARGET spdlog)
+    # Stand-alone build
+    find_package(spdlog REQUIRED)
+endif()
+
 if(ENABLE_SANITIZE_ADDR OR ENABLE_SANITIZE_UNDEF)
     message(STATUS "Sanitizers enabled")
     include(Sanitizer)

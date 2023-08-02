@@ -80,3 +80,14 @@ macOS:
 brew install llvm
 sudo ln -s "$(brew --prefix llvm)/bin/clang-tidy" "/usr/local/bin/clang-tidy"
 ```
+
+## log
+宏变量定义在 util/logger.h中
+#define CONSOLE_LOG  控制是否在控制台打印日志
+
+#define LOG_FILE_NAME "zj_fhe_log.log" 日志文件名称
+
+#define LOG_FILE_PATH "logs/" 日志文件保存路径
+
+#define CONSOLE_LOG_LEVEL spdlog::level::debug  控制台日志显示等级
+#define FILE_LOG_LEVEL spdlog::level::info 文件日志显示等级
