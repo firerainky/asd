@@ -8,13 +8,13 @@
 #include "big_integer_modop.h"
 #include "debug.h"
 #include "nbtheory.h"
+#include "logger.h"
 
 namespace zhejiangfhe {
 
     template<typename VecType>
     void Ntt<VecType>::NTForwardTransformBitReverseInPlace(VecType *vec, const IntType &root,
                                                            const uint32_t cycloOrder) {
-        ZJ_DEBUG_FLAG(false);
         if (root == 1 || root == 0) return;
 
         // TODO: Add power of two assertion for cyclo order?
@@ -29,7 +29,7 @@ namespace zhejiangfhe {
         auto mapSearch = rootReverseMap.find(modulus);
         if (mapSearch == rootReverseMap.end() || mapSearch->second.size() != halfOrder) {
             precompute(root, cycloOrder, modulus);
-            ZJ_DEBUG("Precccccompute!!");
+            ZJTrace("Precccccompute!!");
         }
         std::vector<IntType> rootReverseVec = rootReverseMap[modulus];
 
@@ -85,7 +85,7 @@ namespace zhejiangfhe {
         auto mapSearch = rootInverseReverseMap.find(modulus);
         if (mapSearch == rootInverseReverseMap.end() || mapSearch->second.size() != halfOrder) {
             precompute(root, cycloOrder, modulus);
-            ZJ_DEBUG("Precccccompute!!");
+            ZJTrace("Precccccompute!!");
         }
         std::vector<IntType> rootInverseReverseVec = rootInverseReverseMap[modulus];
 

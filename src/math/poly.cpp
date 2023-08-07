@@ -373,7 +373,6 @@ namespace zhejiangfhe {
 
     template<typename VecType>
     Poly<VecType> Poly<VecType>::DoMultiplyPoly(const Poly &element) {
-        ZJ_DEBUG_FLAG(false);
 
         int lengthA = element.GetLength();
         int lengthB = this->GetLength();
@@ -384,7 +383,7 @@ namespace zhejiangfhe {
         resPoly.SwitchFormat();
         another.SwitchFormat();
 
-        ZJ_DEBUG("resPoly: " << resPoly << ", another: " << another);
+        ZJTrace("resPoly: {}, another: {}", resPoly, another);
 
         resPoly.MultiplyForEvaluationEq(another);
         resPoly.SwitchFormat();

@@ -8,6 +8,7 @@
 #include "exception.h"
 #include "integer_interface.h"
 #include "numth_util.h"
+#include "format_base.h"
 #include <cstdint>
 #include <fmt/ostream.h>
 #include <iosfwd>
@@ -78,7 +79,7 @@ namespace zhejiangfhe {
     typedef BigInteger<limbtype> BInt;
 
     template<typename NativeInt>
-    class BigInteger : public IntegerInterface<BigInteger<NativeInt>> {
+    class BigInteger : public IntegerInterface<BigInteger<NativeInt>>, public FormatBase{
 
     public:
         // CONSTRUCTORS
@@ -319,17 +320,7 @@ namespace zhejiangfhe {
         static uint32_t MSB2NLimbs(const uint32_t number);
     };
 
-    template<typename NativeInt>
-    std::ostream &operator<<(std::ostream &os, const BigInteger<NativeInt> &a) {
-        return os << a.ConvertToString();
-        // return os << a.ConvertToString() << ", MSB: " << a.GetMSB() << ", limb_size: " << sizeof(NativeInt) * 8;
-    }
-
 }// namespace zhejiangfhe
-
-using namespace zhejiangfhe;
-template <typename NativeInt> struct fmt::formatter<BigInteger<NativeInt>> : ostream_formatter {};
-
 
 
 

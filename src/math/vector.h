@@ -18,7 +18,7 @@ namespace zhejiangfhe {
     enum State { INITIALIZED, GARBAGE };
 
     template<typename IntegerType>
-    class Vector {
+    class Vector : public FormatBase {
 
     public:
         typedef BigInteger<IntegerType> Integer;
@@ -159,14 +159,15 @@ namespace zhejiangfhe {
          */
         Vector<IntegerType> GetDigitAtIndexForBase(uint32_t index, uint32_t base) const;
 
-        friend std::ostream &operator<<(std::ostream &os, const Vector &vec) {
-            auto len = vec.data.size();
-            os << "[";
+
+        const std::string ConvertToString() const {
+            auto len = data.size();
+            std::string str = "[";
             for (size_t i = 0; i < len; ++i) {
-                os << vec.data[i] << ((i == (len - 1)) ? "]" : " ");
+                str += data[i].ConvertToString() + ((i == (len - 1)) ? "]" : " ");
             }
-            os << " modulus: " << vec.modulus.GetValue();
-            return os;
+            str += " modulus: " + modulus.GetValue().ConvertToString();
+            return str;
         }
 
     private:

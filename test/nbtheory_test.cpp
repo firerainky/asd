@@ -85,7 +85,6 @@ namespace zhejiangfhe {
 
     TEST(NbTheoryTest, RootOfUnity) {
         {
-            ZJ_DEBUG_FLAG(false);
             uint32_t m = 4096;
             uint32_t nBits = 33;
 
@@ -93,7 +92,7 @@ namespace zhejiangfhe {
             BInt primitiveRootOfUnity = RootOfUnity(m, primeModulus);
 
             BInt powerm = util::ModExp(primitiveRootOfUnity, BInt(m), BMod(primeModulus));
-            ZJDebug("First Prime: {}, Root of Unity: {}", primeModulus, primitiveRootOfUnity);
+            ZJTrace("First Prime: {}, Root of Unity: {}", primeModulus, primitiveRootOfUnity);
             EXPECT_EQ(powerm, 1);
 
             BInt powermBy2 = util::ModExp(primitiveRootOfUnity, BInt(m / 2), BMod(primeModulus));
@@ -103,14 +102,13 @@ namespace zhejiangfhe {
             EXPECT_NE(powermBy4, 1);
         }
         {
-            ZJ_DEBUG_FLAG(false);
             uint32_t m = 32768 * 2;
             uint32_t nBits = 59;
             BInt primeModulus = FirstPrime<BInt>(nBits, m);
             BInt primitiveRootOfUnity = RootOfUnity(m, primeModulus);
 
             BInt powerm = util::ModExp(primitiveRootOfUnity, BInt(m), BMod(primeModulus));
-            ZJDebug("First Prime: {}, Root of Unity: {}", primeModulus, primitiveRootOfUnity);
+            ZJTrace("First Prime: {}, Root of Unity: {}", primeModulus, primitiveRootOfUnity);
             EXPECT_EQ(powerm, 1);
 
             BInt powermBy2 = util::ModExp(primitiveRootOfUnity, BInt(m / 2), BMod(primeModulus));

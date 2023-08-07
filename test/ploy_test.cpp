@@ -5,6 +5,7 @@
 #include "elem_param_factory.h"
 #include "nbtheory.h"
 #include "poly.h"
+#include "logger.h"
 #include <gtest/gtest.h>
 
 namespace zhejiangfhe {
@@ -167,15 +168,13 @@ namespace zhejiangfhe {
     }
 
     TEST(PolyTest, SwitchFormat) {
-        ZJ_DEBUG_FLAG(false);
 
         using BPoly = Poly<Vector<limbtype>>;
         using Params = typename BPoly::Params;
 
         uint32_t m = 16, nBits = 22;
         std::shared_ptr<Params> params = ElemParamFactory::GenElemParams<Params>(m, nBits);
-        ZJ_DEBUG("modulus: " << params->GetModulus() << ", root: " << params->GetRootOfUnity()
-                             << ", order: " << params->GetCyclotomicOrder());
+        ZJTrace("modulus: {}, root: {}, order: {}",params->GetModulus(), params->GetRootOfUnity(),  params->GetCyclotomicOrder());
 
         BPoly coeffPoly(params, Format::COEFFICIENT);
         coeffPoly = {431, 3414, 1234, 7845, 2145, 7415, 5471, 8452};
@@ -188,24 +187,22 @@ namespace zhejiangfhe {
         poly.SwitchFormat();
         EXPECT_EQ(poly, evalPoly) << "Switch format from coefficient format to "
                                      "evaluation format failed";
-        ZJ_DEBUG("Evalation poly: " << poly);
+        ZJTrace("Evalation poly: {}", poly);
 
         poly.SwitchFormat();
         EXPECT_EQ(poly, coeffPoly) << "Switch format from evaluation format to "
                                       "coefficient format failed";
-        ZJ_DEBUG("Coefficient poly: " << poly);
+        ZJTrace("Coefficient poly: {}", poly);
     }
 
     TEST(PolyTest, MultiplyPoly) {
-        ZJ_DEBUG_FLAG(false);
 
         using BPoly = Poly<Vector<limbtype>>;
         using Params = typename BPoly::Params;
 
         uint32_t m = 8, nBits = 14;
         std::shared_ptr<Params> params = ElemParamFactory::GenElemParams<Params>(m, nBits);
-        ZJ_DEBUG("modulus: " << params->GetModulus() << ", root: " << params->GetRootOfUnity()
-                             << ", order: " << params->GetCyclotomicOrder());
+        ZJTrace("modulus: {}, root: {}, order: {}", params->GetModulus(), params->GetRootOfUnity(), params->GetCyclotomicOrder());
 
         BPoly poly1(params, Format::COEFFICIENT);
         poly1 = {1, 2, 3, 4};
@@ -217,7 +214,7 @@ namespace zhejiangfhe {
         expectedPoly = {16401, 0, 16, 30};
 
         poly1.MultiplyPolyEq(poly2);
-        ZJ_DEBUG("Coefficient poly: " << poly1);
+        ZJTrace("Coefficient poly: {}", poly1);
 
         EXPECT_EQ(poly1, expectedPoly);
     }

@@ -10,6 +10,7 @@
 #include "int_lattice_param.h"
 #include "modulus.h"
 #include "vector.h"
+#include "logger.h"
 #include <cstdint>
 #include <iosfwd>
 
@@ -17,7 +18,7 @@ namespace zhejiangfhe {
     enum Format { EVALUATION = 0, COEFFICIENT = 1 };
 
     template<typename VecType>
-    class Poly {
+    class Poly: public FormatBase{
 
     public:
         using Integer = typename VecType::Integer;
@@ -150,6 +151,15 @@ namespace zhejiangfhe {
          * @return
          */
         Poly MultiplyForEvaluationEq(const Poly &element);
+
+
+        /**
+         *
+         * @return
+         */
+        const std::string ConvertToString() const {
+            return "";
+        }
 
         friend std::ostream &operator<<(std::ostream &os, const Poly &poly) {
             os << (poly.format == Format::EVALUATION ? "EVAL, " : "COEF, ") << poly.GetValue();

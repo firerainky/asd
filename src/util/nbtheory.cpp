@@ -8,6 +8,7 @@
 #include "big_integer.h"
 #include "big_integer_modop.h"
 #include "debug.h"
+#include "logger.h"
 #include <random>
 
 namespace zhejiangfhe {
@@ -68,15 +69,14 @@ namespace zhejiangfhe {
     template<typename IntType>
     static IntType FindGenerator(const IntType &q) {
         ZJ_DEBUG_FLAG(false);
-
         std::set<IntType> primeFactors;
 
         IntType qm1 = q - IntType(1);
         IntType qm2 = q - IntType(2);
         PrimeFactorize<IntType>(qm1, primeFactors);
 
-        ZJ_DEBUG("Find Generator(" << q << ")，calling prime factorization.");
-        ZJ_DEBUG("Prime factors of " << qm1);
+        ZJTrace("Find Generator({})，calling prime factorization.", q);
+        ZJTrace("Prime factors of {}", qm1);
         for (auto &v: primeFactors) { ZJ_DEBUG(v << " "); }
 
         bool generatorFound = false;
@@ -85,7 +85,7 @@ namespace zhejiangfhe {
             uint32_t count = 0;
             gen = RNG(qm2) + IntType(1);
 
-            ZJ_DEBUG("Generator " << gen);
+            ZJTrace("Generator {}", gen);
 
             for (auto it = primeFactors.begin(); it != primeFactors.end(); ++it) {
                 IntType t = qm1 / (*it);
@@ -218,7 +218,6 @@ namespace zhejiangfhe {
 
     template<typename IntType>
     IntType RootOfUnity(uint32_t m, const IntType &modulo) {
-        ZJ_DEBUG_FLAG(false);
 
         IntType M(m);
         if ((modulo - IntType(1)) % m != IntType(0)) {
@@ -228,10 +227,10 @@ namespace zhejiangfhe {
         IntType result;
         IntType gen = FindGenerator(modulo);
         IntType mid = (modulo - IntType(1)).DividedByEq(M);
-        ZJ_DEBUG("mid = " << mid);
+        ZJTrace("mid = {}", mid);
         result = util::ModExp(gen, mid, BMod(modulo));
         if (result == IntType(1)) { result = RootOfUnity(m, modulo); }
-        ZJ_DEBUG("result = " << result);
+        ZJTrace("result = {}", result);
 
         /**
           * At this point, result contains a primitive root of unity. However,
