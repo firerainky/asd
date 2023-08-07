@@ -4,7 +4,7 @@
 
 #ifndef ZJ_FHE_LIB_EXCEPTION_H
 #define ZJ_FHE_LIB_EXCEPTION_H
-#include <exception>
+
 #include <stdexcept>
 #include <string>
 
