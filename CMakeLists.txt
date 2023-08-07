@@ -19,10 +19,10 @@ include(Tools)
 add_cmake_format_target()
 add_clang_format_target()
 
-if(NOT TARGET spdlog)
-    # Stand-alone build
-    find_package(spdlog REQUIRED)
-endif()
+# if(NOT TARGET spdlog)
+#     # Stand-alone build
+#     find_package(spdlog REQUIRED)
+# endif()
 
 if(ENABLE_SANITIZE_ADDR OR ENABLE_SANITIZE_UNDEF)
     message(STATUS "Sanitizers enabled")
@@ -60,6 +60,20 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/google/benchmark.git
     GIT_TAG v1.7.1)
 FetchContent_MakeAvailable(googlebenchmark)
+
+FetchContent_Declare(
+    fmt
+    GIT_REPOSITORY https://github.com/fmtlib/fmt
+    GIT_TAG 9.1.0
+    GIT_SHALLOW TRUE)
+FetchContent_MakeAvailable(fmt)
+
+FetchContent_Declare(
+    spdlog
+    GIT_REPOSITORY https://github.com/gabime/spdlog
+    GIT_TAG v1.11.0
+    GIT_SHALLOW TRUE)
+FetchContent_MakeAvailable(spdlog)
 
 # If the option does not change after we changing, we can run `cmake -S . -B build -UFHE_BUILD_TEST to force cmake updating the option
 option(FHE_BUILD_TEST "IF BUILD TEST TARGET" ON)
