@@ -1,0 +1,21 @@
+stages:
+  - build
+  - test
+
+build MathFunctions:
+  stage: build
+  tags:
+    - a100
+  script:
+    - cmake -S . -B build
+    - cmake -build build
+  artifacts:
+    paths:
+      - build
+
+test MathFunctions:
+  stage: test
+  tags:
+    - a100
+  script:
+    - build/test/unittests
