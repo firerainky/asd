@@ -1,5 +1,7 @@
 # fhe_lib
 
+[![pipeline status](http://gitlab-crypto.zhejianglab.com/fhe/fhe_lib/badges/main/pipeline.svg)](http://gitlab-crypto.zhejianglab.com/fhe/fhe_lib/-/commits/main) [![coverage report](http://gitlab-crypto.zhejianglab.com/fhe/fhe_lib/badges/main/coverage.svg)](http://gitlab-crypto.zhejianglab.com/fhe/fhe_lib/-/commits/main)
+
 A foundational computation layer of the full homomorphic encryption algorithm library, developed by Zhejiang Lab.
 
 fhe_lib can be built and executed using gcc/clang compilers, but it has not been tested with the MSVC compiler yet.
@@ -8,6 +10,7 @@ fhe_lib can be built and executed using gcc/clang compilers, but it has not been
 
 ```bash
 cmake -S . -B build
+cmake --build build
 ```
 
 There are 3 executable targets in fhe_lib at the current stage:
