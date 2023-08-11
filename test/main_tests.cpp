@@ -13,7 +13,7 @@ int main(int argc, char **argv) {
      * 只不跑 Multiply 的可以写成："*:-*Multiply*"
      * 参考：https://github.com/google/googletest/blob/main/docs/advanced.md#running-a-subset-of-the-tests
      */
-    ::testing::GTEST_FLAG(filter) = "*";
+//    ::testing::GTEST_FLAG(filter) = "*";
 
     return RUN_ALL_TESTS();
 }

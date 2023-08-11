@@ -4,6 +4,7 @@
 
 #pragma
 #include "fft.h"
+#include "logger.h"
 #include <complex>
 #include <math.h>
 #include <memory>
@@ -69,12 +70,12 @@ namespace zhejiangfhe {
 
 
     template<typename IntType>
-    void FFT<IntType>::fft_iteration(std::vector<int> &index,
+    void FFT<IntType>::fft_iteration(std::vector<int> &indexVec,
                                      std::vector<std::complex<double>> &vector, int inverseFlag) {
 
         int length = vector.size();
         for (int i = 0; i < length; i++) {
-            if (i < index[i]) { std::swap(vector[i], vector[index[i]]); }
+            if (i < indexVec[i]) { std::swap(vector[i], vector[indexVec[i]]); }
         }
 
         std::vector<std::complex<double>> cacheW(length / 2);
@@ -90,11 +91,11 @@ namespace zhejiangfhe {
 
                 for (int k = 0, index = 0; k < i; k++, index += tableStep) {
                     p = cacheW[index];
-                    std::complex<double> x = vector[j + k];
-                    std::complex<double> y = p * vector[j + k + i];
+                    const std::complex<double> x = vector[j + k];
+                    const std::complex<double> y = p * vector[j + k + i];
                     vector[j + k] = x + y;
                     vector[j + k + i] = x - y;
-                    //                    printf( "vector[%d]:{%f, %f} vector[%d]: {%f, %f} \n",  j+k, vector[j+k].real(), vector[j+k].imag(), j+k+i, vector[j+k+i].real(), vector[j+k+i].imag());
+                    ZJTrace( "vector[{}]:({}, {}) vector[{}]: ({}, {})",  j+k, vector[j+k].real(), vector[j+k].imag(), j+k+i, vector[j+k+i].real(), vector[j+k+i].imag());
                 }
             }
         }

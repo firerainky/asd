@@ -50,9 +50,9 @@ namespace zhejiangfhe {
             sinkList.push_back(consoleSink);
 #endif
 
-            std::string filename = LOG_FILE_NAME;
-            std::string filePath = LOG_FILE_PATH;
-            std::string fileFullPath = filePath + filename;
+            const std::string filename = LOG_FILE_NAME;
+            const std::string filePath = LOG_FILE_PATH;
+            const std::string fileFullPath = filePath + filename;
             auto fileSink = std::make_shared<spdlog::sinks::daily_file_sink_mt>(fileFullPath, 1, 0);
             fileSink->set_level(FILE_LOG_LEVEL);
             fileSink->set_pattern(pattern);
