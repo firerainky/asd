@@ -1,5 +1,6 @@
 #include "big_integer.h"
 #include "big_integer_test.h"
+#include "logger.h"
 
 // 创建继承自 Test 的 test fixture
 template<typename T>
@@ -42,6 +43,7 @@ TYPED_TEST(BigIntegerTest, CreatesPositiveBigIntegersWithStringRepresentation) {
     bigInt = BInt("123456789012345678901234567890123456789012345678901234567890");
     EXPECT_EQ(bigInt.ConvertToString(),
               "123456789012345678901234567890123456789012345678901234567890");
+    ZJDebug("bigInt={}", bigInt);
 }
 
 TYPED_TEST(BigIntegerTest, CreatesNegativeBigIntegersWithStringRepresentation) {

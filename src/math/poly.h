@@ -18,7 +18,7 @@ namespace zhejiangfhe {
     enum Format { EVALUATION = 0, COEFFICIENT = 1 };
 
     template<typename VecType>
-    class Poly: public FormatBase{
+    class Poly: public FormatBase {
 
     public:
         using Integer = typename VecType::Integer;
@@ -158,14 +158,8 @@ namespace zhejiangfhe {
          * @return
          */
         const std::string ConvertToString() const {
-            return "";
+            return (format == Format::EVALUATION ? "EVAL, " : "COEF") + this->GetValue().ConvertToString();
         }
-
-        friend std::ostream &operator<<(std::ostream &os, const Poly &poly) {
-            os << (poly.format == Format::EVALUATION ? "EVAL, " : "COEF, ") << poly.GetValue();
-            return os;
-        }
-
 
         /**
          * @brief 系数模式下，进行多项式乘法

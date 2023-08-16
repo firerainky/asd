@@ -20,6 +20,8 @@ namespace zhejiangfhe {
         BPoly poly = BPoly(params);
         poly = {"1", "2", "0", "1"};
 
+        ZJTrace("poly={}", poly);
+
         EXPECT_EQ(poly.GetLength(), m / 2) << "Polynomial init with string list failed";
 
         BPoly poly2 = BPoly(params);

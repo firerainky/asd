@@ -79,7 +79,7 @@ namespace zhejiangfhe {
     typedef BigInteger<limbtype> BInt;
 
     template<typename NativeInt>
-    class BigInteger : public IntegerInterface<BigInteger<NativeInt>>, public FormatBase{
+    class BigInteger : public IntegerInterface<BigInteger<NativeInt>> {
 
     public:
         // CONSTRUCTORS
@@ -253,6 +253,8 @@ namespace zhejiangfhe {
          */
         uint32_t GetDigitAtIndexForBase(uint32_t index, uint32_t base) const;
 
+
+
     protected:
         std::vector<NativeInt> value;
         bool sign = false;
@@ -320,7 +322,16 @@ namespace zhejiangfhe {
         static uint32_t MSB2NLimbs(const uint32_t number);
     };
 
+    template<typename NativeInt>
+    std::ostream &operator<<(std::ostream &os, const BigInteger<NativeInt> &a) {
+        return os << a.ConvertToString();
+    }
+
 }// namespace zhejiangfhe
+
+template <typename NativeInt>
+struct fmt::formatter<BigInteger<NativeInt>> : ostream_formatter {};
+
 
 
 

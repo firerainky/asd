@@ -9,19 +9,23 @@
 #include <iosfwd>
 #include <iostream>
 #include <fmt/ostream.h>
-#include <concepts>
 namespace zhejiangfhe {
     class FormatBase {
 
     public:
-        virtual const std::string ConvertToString() const = 0;
+        virtual const std::string ConvertToString() const {
+            return "default str, please override this function!!!";
+        };
 
         virtual ~FormatBase() = default;
 
-        friend std::ostream &operator<<(std::ostream &os, const FormatBase &a) {
+        friend inline std::ostream &operator<<(std::ostream& os, const FormatBase &a) {
             return os << a.ConvertToString();
         }
+
     };
+
+
 }
 
 using namespace zhejiangfhe;

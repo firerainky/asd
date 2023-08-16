@@ -162,7 +162,7 @@ namespace zhejiangfhe {
 
         const std::string ConvertToString() const {
             auto len = data.size();
-            std::string str = "[";
+            std::string str = "value:[";
             for (size_t i = 0; i < len; ++i) {
                 str += data[i].ConvertToString() + ((i == (len - 1)) ? "]" : " ");
             }
