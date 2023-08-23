@@ -23,14 +23,14 @@ namespace zhejiangfhe {
 
 
     template<typename NativeInt>
-    const Modulus<NativeInt> &Modulus<NativeInt>::operator=(const Modulus<NativeInt> &val) {
+    Modulus<NativeInt> &Modulus<NativeInt>::operator=(const Modulus<NativeInt> &val) {
         if (this != &val) { this->set_value(val.value); }
         return *this;
     }
 
 
     template<typename NativeInt>
-    const Modulus<NativeInt> &Modulus<NativeInt>::operator=(Modulus<NativeInt> &&val) {
+    Modulus<NativeInt> &Modulus<NativeInt>::operator=(Modulus<NativeInt> &&val) noexcept {
         if (this != &val) { this->set_value(val.value); }
         return *this;
     }

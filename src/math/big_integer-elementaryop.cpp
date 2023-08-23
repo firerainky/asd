@@ -132,9 +132,7 @@ namespace zhejiangfhe {
     template<typename NativeInt>
     BigInteger<NativeInt> BigInteger<NativeInt>::Sub(const BigInteger<NativeInt> &num) const {
         int absoluteCompare = AbsoluteCompare(num);
-        if (sign == false && num.sign == true) {
-            return AddWithSameSign(num, sign);
-        } else if (sign == true && num.sign == false) {
+        if (sign != num.sign) {
             return AddWithSameSign(num, sign);
         } else {
             if (AbsoluteCompare(num) == 0) {
@@ -150,10 +148,7 @@ namespace zhejiangfhe {
     template<typename NativeInt>
     const BigInteger<NativeInt> &BigInteger<NativeInt>::SubEq(const BigInteger<NativeInt> &num) {
         int absoluteCompare = AbsoluteCompare(num);
-        if (sign == false && num.sign == true) {
-            // AssignObj(AddWithSameSign(num, sign));
-            *this = AddWithSameSign(num, sign);
-        } else if (sign == true && num.sign == false) {
+        if (sign != num.sign) {
             // AssignObj(AddWithSameSign(num, sign));
             *this = AddWithSameSign(num, sign);
         } else {
@@ -275,9 +270,9 @@ namespace zhejiangfhe {
         Dlimb_t rhat;   // remainder
         Dlimb_t product;// Product of two digits.
         SDlimb_t t, k;
-        int s, i, j;
+        int s = 0, i = 0, j = 0;
 
-        const Dlimb_t ffs = (Dlimb_t) m_MaxLimb;  // Number  (2**64)-1.
+        const auto ffs = (Dlimb_t) m_MaxLimb;     // Number  (2**64)-1.
         const Dlimb_t b = (Dlimb_t) m_MaxLimb + 1;// Number base (2**64).
 
 

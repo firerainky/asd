@@ -3,9 +3,9 @@
 //
 #include "debug.h"
 #include "elem_param_factory.h"
+#include "logger.h"
 #include "nbtheory.h"
 #include "poly.h"
-#include "logger.h"
 #include <gtest/gtest.h>
 
 namespace zhejiangfhe {
@@ -176,7 +176,8 @@ namespace zhejiangfhe {
 
         uint32_t m = 16, nBits = 22;
         std::shared_ptr<Params> params = ElemParamFactory::GenElemParams<Params>(m, nBits);
-        ZJTrace("modulus: {}, root: {}, order: {}",params->GetModulus(), params->GetRootOfUnity(),  params->GetCyclotomicOrder());
+        ZJTrace("modulus: {}, root: {}, order: {}", params->GetModulus(), params->GetRootOfUnity(),
+                params->GetCyclotomicOrder());
 
         BPoly coeffPoly(params, Format::COEFFICIENT);
         coeffPoly = {431, 3414, 1234, 7845, 2145, 7415, 5471, 8452};
@@ -204,7 +205,8 @@ namespace zhejiangfhe {
 
         uint32_t m = 8, nBits = 14;
         std::shared_ptr<Params> params = ElemParamFactory::GenElemParams<Params>(m, nBits);
-        ZJTrace("modulus: {}, root: {}, order: {}", params->GetModulus(), params->GetRootOfUnity(), params->GetCyclotomicOrder());
+        ZJTrace("modulus: {}, root: {}, order: {}", params->GetModulus(), params->GetRootOfUnity(),
+                params->GetCyclotomicOrder());
 
         BPoly poly1(params, Format::COEFFICIENT);
         poly1 = {1, 2, 3, 4};

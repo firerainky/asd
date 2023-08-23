@@ -2,9 +2,9 @@
 // Created by 赵启明 on 2023/6/26.
 //
 
+#include "poly.h"
 #include "debug.h"
 #include "ntt.h"
-#include "poly.h"
 
 namespace zhejiangfhe {
     template<typename VecType>
@@ -48,7 +48,7 @@ namespace zhejiangfhe {
     }
 
     template<typename VecType>
-    const Poly<VecType> &Poly<VecType>::operator=(std::initializer_list<std::string> rhs) {
+    Poly<VecType> &Poly<VecType>::operator=(std::initializer_list<std::string> rhs) {
         static Integer ZERO(0);
         uint32_t len = rhs.size();
         if (!IsEmpty()) {
@@ -71,7 +71,7 @@ namespace zhejiangfhe {
     }
 
     template<typename VecType>
-    const Poly<VecType> &Poly<VecType>::operator=(std::initializer_list<uint64_t> rhs) {
+    Poly<VecType> &Poly<VecType>::operator=(std::initializer_list<uint64_t> rhs) {
         static Integer ZERO(0);
         uint32_t len = rhs.size();
 
@@ -95,7 +95,7 @@ namespace zhejiangfhe {
     }
 
     template<typename VecType>
-    const Poly<VecType> &Poly<VecType>::operator=(std::vector<int64_t> rhs) {
+    Poly<VecType> &Poly<VecType>::operator=(std::vector<int64_t> rhs) {
         static Integer ZERO(0);
         uint32_t len = rhs.size();
         if (!IsEmpty()) {
@@ -104,7 +104,7 @@ namespace zhejiangfhe {
             for (uint32_t j = 0; j < vectorLength; ++j) {// loops within a tower
                 if (j < len) {
                     Integer tempBI;
-                    uint64_t tempInteger;
+                    uint64_t tempInteger = 0;
                     if (*(rhs.begin() + j) < 0) {
                         tempInteger = -*(rhs.begin() + j);
                         tempBI = params->GetModulus() - Integer(tempInteger);
@@ -124,7 +124,7 @@ namespace zhejiangfhe {
             for (uint32_t j = 0; j < vectorLength; ++j) {// loops within a tower
                 if (j < len) {
                     Integer tempBI;
-                    uint64_t tempInteger;
+                    uint64_t tempInteger = 0;
                     if (*(rhs.begin() + j) < 0) {
                         tempInteger = -*(rhs.begin() + j);
                         tempBI = params->GetModulus() - Integer(tempInteger);
@@ -144,7 +144,7 @@ namespace zhejiangfhe {
     }
 
     template<typename VecType>
-    const Poly<VecType> &Poly<VecType>::operator=(std::vector<int32_t> rhs) {
+    Poly<VecType> &Poly<VecType>::operator=(std::vector<int32_t> rhs) {
         static Integer ZERO(0);
         uint32_t len = rhs.size();
         if (!IsEmpty()) {
@@ -153,7 +153,7 @@ namespace zhejiangfhe {
             for (uint32_t j = 0; j < vectorLength; ++j) {// loops within a tower
                 if (j < len) {
                     Integer tempBI;
-                    uint64_t tempInteger;
+                    uint64_t tempInteger = 0;
                     if (*(rhs.begin() + j) < 0) {
                         tempInteger = -*(rhs.begin() + j);
                         tempBI = params->GetModulus() - Integer(tempInteger);
@@ -173,7 +173,7 @@ namespace zhejiangfhe {
             for (uint32_t j = 0; j < vectorLength; ++j) {// loops within a tower
                 if (j < len) {
                     Integer tempBI;
-                    uint64_t tempInteger;
+                    uint64_t tempInteger = 0;
                     if (*(rhs.begin() + j) < 0) {
                         tempInteger = -*(rhs.begin() + j);
                         tempBI = params->GetModulus() - Integer(tempInteger);
@@ -193,7 +193,7 @@ namespace zhejiangfhe {
     }
 
     template<typename VecType>
-    const Poly<VecType> &Poly<VecType>::operator=(const Poly &rhs) {
+    Poly<VecType> &Poly<VecType>::operator=(const Poly &rhs) {
         if (this != &rhs) {
             if (value == nullptr && rhs.value != nullptr) {
                 value = std::make_unique<VecType>(*rhs.value);
@@ -208,7 +208,7 @@ namespace zhejiangfhe {
     }
 
     template<typename VecType>
-    const Poly<VecType> &Poly<VecType>::operator=(Poly &&rhs) {
+    Poly<VecType> &Poly<VecType>::operator=(Poly &&rhs) noexcept {
         if (this != &rhs) {
             value = std::move(rhs.value);
             params = rhs.params;
@@ -219,7 +219,7 @@ namespace zhejiangfhe {
     }
 
     template<typename VecType>
-    const Poly<VecType> &Poly<VecType>::operator=(uint64_t val) {
+    Poly<VecType> &Poly<VecType>::operator=(uint64_t val) {
         format = Format::EVALUATION;
         if (value == nullptr) {
             value = std::make_unique<VecType>(params->GetRingDimension(), params->GetModulus());

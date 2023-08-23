@@ -3,8 +3,8 @@
 //
 #include "big_integer_test.h"
 #include "fft.h"
-#include "vector.h"
 #include "logger.h"
+#include "vector.h"
 
 namespace zhejiangfhe {
     // 创建继承自 Test 的 test fixture

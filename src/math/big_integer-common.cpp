@@ -28,7 +28,7 @@ namespace zhejiangfhe {
 
     template<typename NativeInt>
     BigInteger<NativeInt>::BigInteger(uint64_t val, bool signVal) {
-        sign = signVal;
+        this->sign = signVal;
         if (std::is_same<uint64_t, NativeInt>::value) {
             value.push_back(val);
         } else if (std::is_same<uint32_t, NativeInt>::value) {
@@ -55,8 +55,10 @@ namespace zhejiangfhe {
         if (v.empty()) {
             v = "0";// set to one zero
         }
-        size_t arr_size = v.length();
+        const size_t arr_size = v.length();
         std::unique_ptr<u_int8_t[]> dec_arr = std::make_unique<u_int8_t[]>(arr_size);
+        // std::array<uint8_t, arr_size> didi;
+        // std::unique_ptr<std::array<uint8_t, arr_size>> dec_arr = std::unique_ptr<std::array<uint8_t, arr_size>>();
         for (size_t i = 0; i < arr_size; i++)// store the string to decimal array
             dec_arr[i] = (uint8_t) stoi(v.substr(i, 1));
 
@@ -67,6 +69,7 @@ namespace zhejiangfhe {
         // index of highest non-zero number in decimal number
         // define  bit register array
         std::unique_ptr<u_int8_t[]> bit_arr = std::make_unique<u_int8_t[]>(m_limbBitLength);
+        // std::unique_ptr<std::array<uint8_t, m_limbBitLength>> bit_arr = std::unique_ptr<std::array<uint8_t, m_limbBitLength>>;
         int cnt = m_limbBitLength - 1;
         // cnt is a pointer to the bit position in bit_arr, when bit_arr is complete it
         // is ready to be transfered to Value
@@ -175,22 +178,19 @@ namespace zhejiangfhe {
             return std::string(negative ? "-" : "").append(std::to_string(value[0]));
         }
 
-        std::vector<uint8_t> decimalArr;
+        std::vector<char> decimalArr;
         decimalArr.push_back(0);
 
         for (int i = value.size() - 1; i >= 0; --i) {
             int maxBitIdx = m_limbBitLength - 1;
-            // if (i == m_value.size() - 1) {
-            //   maxBitIdx = __builtin_ctzll(m_value[i]) + 1;
-            // }
             for (int j = maxBitIdx; j >= 0; --j) {
-                uint8_t carry = 0;
-                for (int m = 0; m < decimalArr.size(); ++m) {
-                    decimalArr[m] *= 2;
-                    decimalArr[m] += carry;
+                char carry = 0;
+                for (auto &m: decimalArr) {
+                    m *= 2;
+                    m = (char) (m + carry);
                     carry = 0;
-                    if (decimalArr[m] > 9) {
-                        decimalArr[m] -= 10;
+                    if (m > 9) {
+                        m -= 10;
                         carry = 1;
                     }
                 }
@@ -207,8 +207,11 @@ namespace zhejiangfhe {
         }
 
         std::string printValue;
-        for (int i = decimalArr.size() - 1; i >= 0; --i) {
-            printValue.push_back(decimalArr[i] + '0');
+        for (auto it = decimalArr.rbegin(); it != decimalArr.rend(); ++it) {
+            // print type of *it
+            // print type of char
+
+            printValue.push_back((char) (*it + '0'));
         }
 
         return std::string(negative ? "-" : "").append(printValue);
@@ -240,7 +243,7 @@ namespace zhejiangfhe {
         }
     }
     template<typename NativeInt>
-    void BigInteger<NativeInt>::NormalizeLimbs(void) {
+    void BigInteger<NativeInt>::NormalizeLimbs() {
 
         for (uint32_t i = this->value.size() - 1; i >= 1; i--) {
             if (!this->value.back()) {

@@ -5,8 +5,8 @@
 #pragma
 #include "fft.h"
 #include "logger.h"
+#include <cmath>
 #include <complex>
-#include <math.h>
 #include <memory>
 
 namespace zhejiangfhe {
@@ -73,7 +73,7 @@ namespace zhejiangfhe {
     void FFT<IntType>::fft_iteration(std::vector<int> &indexVec,
                                      std::vector<std::complex<double>> &vector, int inverseFlag) {
 
-        int length = vector.size();
+        size_t length = vector.size();
         for (int i = 0; i < length; i++) {
             if (i < indexVec[i]) { std::swap(vector[i], vector[indexVec[i]]); }
         }

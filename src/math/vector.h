@@ -37,7 +37,7 @@ namespace zhejiangfhe {
 
         Vector(const Vector &bigVector);
 
-        Vector(Vector &&bigVector);
+        Vector(Vector &&bigVector) noexcept;
 
         Vector(uint32_t length, const IntegerType &modulus, std::initializer_list<std::string> rhs);
 
@@ -51,17 +51,17 @@ namespace zhejiangfhe {
         explicit Vector(const std::vector<std::string> &s, const std::string &modulus)
             : Vector(s, Modulus<IntegerType>(modulus)){};
 
-        const Vector &operator=(std::initializer_list<std::string> rhs);
-        const Vector &operator=(std::initializer_list<uint64_t> rhs);
+        Vector &operator=(std::initializer_list<std::string> rhs);
+        Vector &operator=(std::initializer_list<uint64_t> rhs);
 
         virtual ~Vector();
 
         bool operator==(const Vector &rhs) const;
         bool operator!=(const Vector &rhs) const;
 
-        Vector &operator=(Vector &rhs);
+        Vector &operator=(const Vector &rhs);
 
-        Vector &operator=(Vector &&rhs);
+        Vector &operator=(Vector &&rhs) noexcept;
 
         Integer *ConvertToIntList() {
             Integer *result = new Integer[GetLength()];

@@ -5,10 +5,12 @@
 #ifndef ZJ_FHE_LIB_FORMAT_BASE_H
 #define ZJ_FHE_LIB_FORMAT_BASE_H
 
+#include <concepts>
 #include <cstdint>
+#include <fmt/ostream.h>
 #include <iosfwd>
 #include <iostream>
-#include <fmt/ostream.h>
+
 namespace zhejiangfhe {
     class FormatBase {
 
@@ -24,16 +26,15 @@ namespace zhejiangfhe {
         }
 
     };
-
-
-}
+}// namespace zhejiangfhe
 
 using namespace zhejiangfhe;
 //template <> struct fmt::formatter<FormatBase> : ostream_formatter {};
 
 
-template <typename T>
-struct fmt::formatter<T, std::enable_if_t<std::is_base_of_v<FormatBase, T>, char>> : ostream_formatter {};
+template<typename T>
+struct fmt::formatter<T, std::enable_if_t<std::is_base_of_v<FormatBase, T>, char>>
+    : ostream_formatter {};
 
 
 //template <typename T>
@@ -43,7 +44,6 @@ struct fmt::formatter<T, std::enable_if_t<std::is_base_of_v<FormatBase, T>, char
 //        return fmt::formatter<std::string>::format(a.ConvertToString(), ctx);
 //    }
 //};
-
 
 
 #endif//ZJ_FHE_LIB_FORMAT_BASE_H

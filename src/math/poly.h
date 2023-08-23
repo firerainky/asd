@@ -8,9 +8,9 @@
 #include "big_integer_modop.h"
 #include "exception.h"
 #include "int_lattice_param.h"
+#include "logger.h"
 #include "modulus.h"
 #include "vector.h"
-#include "logger.h"
 #include <cstdint>
 #include <iosfwd>
 
@@ -18,7 +18,7 @@ namespace zhejiangfhe {
     enum Format { EVALUATION = 0, COEFFICIENT = 1 };
 
     template<typename VecType>
-    class Poly: public FormatBase {
+    class Poly : public FormatBase {
 
     public:
         using Integer = typename VecType::Integer;
@@ -35,24 +35,24 @@ namespace zhejiangfhe {
          */
         Poly(const Poly &element);
 
-        const Poly &operator=(const Poly &rhs);
+        Poly &operator=(const Poly &rhs);
 
-        const Poly &operator=(Poly &&rhs);
+        Poly &operator=(Poly &&rhs) noexcept;
 
-        const Poly &operator=(std::initializer_list<std::string> rhs);
+        Poly &operator=(std::initializer_list<std::string> rhs);
 
         /**
          * @param rhs The list of coefficients to set for the poly.
          * @return The resulting poly.
          */
-        const Poly &operator=(std::initializer_list<uint64_t> rhs);
+        Poly &operator=(std::initializer_list<uint64_t> rhs);
 
-        const Poly &operator=(std::vector<int64_t> rhs);
+        Poly &operator=(std::vector<int64_t> rhs);
 
 
-        const Poly &operator=(std::vector<int32_t> rhs);
+        Poly &operator=(std::vector<int32_t> rhs);
 
-        const Poly &operator=(uint64_t val);
+        Poly &operator=(uint64_t val);
 
         bool operator==(const Poly &rhs) const {
             if (GetFormat() != rhs.GetFormat()) { return false; }
@@ -157,6 +157,7 @@ namespace zhejiangfhe {
          *
          * @return
          */
+
         const std::string ConvertToString() const {
             return (format == Format::EVALUATION ? "EVAL, " : "COEF") + this->GetValue().ConvertToString();
         }

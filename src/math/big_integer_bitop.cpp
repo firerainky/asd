@@ -104,15 +104,14 @@ namespace zhejiangfhe {
         NativeInt remainingShift = (shift & (m_limbBitLength - 1));
         // first shift by the # remainingShift bits
         if (remainingShift != 0) {
-            size_t i;
-            for (i = ceilIntByUInt(m_MSB) - 1; i > 0; i--) {
+            for (size_t i = ceilIntByUInt(m_MSB) - 1; i > 0; i--) {
                 ans.value[i] = (ans.value[i] << remainingShift) |
                                ans.value[i - 1] >> (m_limbBitLength - remainingShift);
             }
             ans.value[0] = ans.value[0] << remainingShift;
         }
         if (shiftByLimb != 0) {
-            uint32_t currentSize = ans.value.size();
+            int currentSize = ans.value.size();
             ans.value.resize(currentSize + shiftByLimb);// allocate more storage
             for (int i = currentSize - 1; i >= 0; i--) {// shift limbs required # of indicies
                 ans.value[i + shiftByLimb] = ans.value[i];
@@ -132,7 +131,7 @@ namespace zhejiangfhe {
         NativeInt remainingShift = (shift & (m_limbBitLength - 1));
         NativeInt negativeShift = m_limbBitLength - remainingShift;
         if (shiftByLimb != 0) {
-            for (auto i = shiftByLimb; i < ans.value.size(); ++i) {
+            for (size_t i = shiftByLimb; i < ans.value.size(); ++i) {
                 ans.value[i - shiftByLimb] = ans.value[i];
             }
             for (uint32_t i = 0; i < shiftByLimb; ++i) { ans.value.pop_back(); }

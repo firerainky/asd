@@ -11,40 +11,39 @@ namespace zhejiangfhe {
 
 
     template<typename IntegerType>
-    Vector<IntegerType>::Vector(const uint32_t length) {
+    Vector<IntegerType>::Vector(const uint32_t length) : state(GARBAGE) {
+        // this->state = ;
         this->data.resize(length);
         for (uint32_t i = 0; i < length; i++) { this->data[i] = 0; }
         this->modulus = Modulus<IntegerType>("");
-        this->state = GARBAGE;
     }
 
     template<typename IntegerType>
-    Vector<IntegerType>::Vector(const uint32_t length, const Modulus<IntegerType> &modulus) {
+    Vector<IntegerType>::Vector(const uint32_t length, const Modulus<IntegerType> &modulus)
+        : state(INITIALIZED) {
         this->data.resize(length);
         for (uint32_t i = 0; i < length; i++) { this->data[i] = 0; }
         this->modulus = modulus;
-        this->state = INITIALIZED;
     }
 
     template<typename IntegerType>
-    Vector<IntegerType>::Vector(const Vector &inVector) {
+    Vector<IntegerType>::Vector(const Vector &inVector) : state(INITIALIZED) {
         size_t length = inVector.data.size();
         this->data.resize(length);
         for (size_t i = 0; i < length; i++) { this->data[i] = inVector.data[i]; }
         this->modulus = inVector.modulus;
-        this->state = INITIALIZED;
     }
 
     template<typename IntegerType>
-    Vector<IntegerType>::Vector(Vector &&inVector) {
+    Vector<IntegerType>::Vector(Vector &&inVector) noexcept : state(INITIALIZED) {
         this->data = std::move(inVector.data);
         this->modulus = std::move(inVector.modulus);
-        this->state = INITIALIZED;
     }
 
     template<typename IntegerType>
     Vector<IntegerType>::Vector(const uint32_t length, const IntegerType &modulus,
-                                std::initializer_list<std::string> rhs) {
+                                std::initializer_list<std::string> rhs)
+        : state(INITIALIZED) {
         this->data.resize(length);
         this->modulus = modulus;
         uint32_t len = rhs.size();
@@ -56,12 +55,12 @@ namespace zhejiangfhe {
                 this->data[i] = 0;
             }
         }
-        this->state = INITIALIZED;
     }
 
     template<typename IntegerType>
     Vector<IntegerType>::Vector(const uint32_t length, const IntegerType &modulus,
-                                std::initializer_list<uint64_t> rhs) {
+                                std::initializer_list<uint64_t> rhs)
+        : state(INITIALIZED) {
         this->data.resize(length);
         this->modulus = modulus;
         uint32_t len = rhs.size();
@@ -73,19 +72,18 @@ namespace zhejiangfhe {
                 this->data[i] = BigInteger<IntegerType>(0);
             }
         }
-        this->state = INITIALIZED;
     }
 
     template<typename IntegerType>
     Vector<IntegerType>::Vector(const std::vector<std::string> &s,
-                                const Modulus<IntegerType> &modulus) {
+                                const Modulus<IntegerType> &modulus)
+        : state(INITIALIZED) {
         this->data.resize(s.size());
         this->modulus = modulus;
         for (uint32_t i = 0; i < s.size(); i++) {
-            BigInteger<IntegerType> val = (BigInteger<IntegerType>) s[i];
+            auto val = (BigInteger<IntegerType>) s[i];
             this->data[i] = util::Mod(val, this->modulus);
         }
-        this->state = INITIALIZED;
     }
 
     template<typename IntegerType>
@@ -110,7 +108,7 @@ namespace zhejiangfhe {
     }
 
     template<class IntegerType>
-    Vector<IntegerType> &Vector<IntegerType>::operator=(Vector<IntegerType> &rhs) {
+    Vector<IntegerType> &Vector<IntegerType>::operator=(const Vector<IntegerType> &rhs) {
         if (this != &rhs) {
             if (this->data.size() == rhs.data.size()) {
                 for (uint32_t i = 0; i < this->data.size(); i++) { this->data[i] = rhs.data[i]; }
@@ -125,7 +123,7 @@ namespace zhejiangfhe {
     }
 
     template<class IntegerType>
-    Vector<IntegerType> &Vector<IntegerType>::operator=(Vector &&rhs) {
+    Vector<IntegerType> &Vector<IntegerType>::operator=(Vector &&rhs) noexcept {
         if (this != &rhs) {
             this->data.swap(rhs.data);// swap the two vector contents,
             if (rhs.data.size() > 0) { rhs.data.clear(); }
@@ -136,8 +134,7 @@ namespace zhejiangfhe {
     }
 
     template<class IntegerType>
-    const Vector<IntegerType> &
-    Vector<IntegerType>::operator=(std::initializer_list<std::string> rhs) {
+    Vector<IntegerType> &Vector<IntegerType>::operator=(std::initializer_list<std::string> rhs) {
         size_t len = rhs.size();
         if (this->data.size() < len) { this->data.resize(len); }
         for (uint32_t i = 0; i < this->data.size(); i++) {// this loops over each entry
@@ -152,7 +149,7 @@ namespace zhejiangfhe {
     }
 
     template<class IntegerType>
-    const Vector<IntegerType> &Vector<IntegerType>::operator=(std::initializer_list<uint64_t> rhs) {
+    Vector<IntegerType> &Vector<IntegerType>::operator=(std::initializer_list<uint64_t> rhs) {
         size_t len = rhs.size();
         if (this->data.size() < len) { this->data.resize(len); }
         for (uint32_t i = 0; i < this->data.size(); i++) {// this loops over each entry

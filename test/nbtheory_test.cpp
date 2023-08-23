@@ -7,8 +7,8 @@
 #include "big_integer.h"
 #include "big_integer_modop.h"
 #include "debug.h"
-#include "nbtheory.h"
 #include "logger.h"
+#include "nbtheory.h"
 #include <gtest/gtest.h>
 
 namespace zhejiangfhe {

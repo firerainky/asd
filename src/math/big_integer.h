@@ -334,5 +334,4 @@ struct fmt::formatter<BigInteger<NativeInt>> : ostream_formatter {};
 
 
 
-
 #endif//ZJ_FHE_LIB_BigInteger_H

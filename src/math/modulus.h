@@ -15,7 +15,7 @@ namespace zhejiangfhe {
     public:
         Modulus() {}
 
-        Modulus(BigInteger<NativeInt> value) {set_value(value);}
+        Modulus(BigInteger<NativeInt> value) { set_value(value); }
 
 
         Modulus(NativeInt val) { set_value(BigInteger<NativeInt>(val)); }
@@ -27,9 +27,9 @@ namespace zhejiangfhe {
         inline const BigInteger<NativeInt> GetValue() const { return value; };
 
 
-        const Modulus &operator=(const Modulus &val);
+        Modulus &operator=(const Modulus &val);
 
-        const Modulus &operator=(Modulus &&val);
+        Modulus &operator=(Modulus &&val) noexcept;
 
     private:
         BigInteger<NativeInt> value;

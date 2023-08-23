@@ -7,8 +7,8 @@
 #include "ntt.h"
 #include "big_integer_modop.h"
 #include "debug.h"
-#include "nbtheory.h"
 #include "logger.h"
+#include "nbtheory.h"
 
 namespace zhejiangfhe {
 
@@ -35,7 +35,7 @@ namespace zhejiangfhe {
 
         // NTT
         uint32_t n = halfOrder;
-        uint32_t i, m, j1, j2, indexOmega, indexLo, indexHi;
+        uint32_t i = 0, m = 0, j1 = 0, j2 = 0, indexOmega = 0, indexLo = 0, indexHi = 0;
         IntType omega, omegaFactor, loVal, hiVal, zero(0);
 
         uint32_t t = (n >> 1);
@@ -91,7 +91,7 @@ namespace zhejiangfhe {
 
         // Inverse NTT
         uint32_t n = halfOrder;
-        uint32_t i, m, j1, j2, indexOmega, indexLo, indexHi;
+        uint32_t i = 0, m = 0, j1 = 0, j2 = 0, indexOmega = 0, indexLo = 0, indexHi = 0;
         IntType omega, omegaFactor, loVal, hiVal, zero(0);
 
         uint32_t t = 1;
